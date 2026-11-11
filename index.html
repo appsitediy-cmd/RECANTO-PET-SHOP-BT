@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recanto Petshop - Painel de Balcão</title>
+    <title>Recanto Petshop - Sistema de Gestão</title>
     <style>
         :root {
             --primary: #5e72e4;
             --primary-dark: #324cdd;
             --success: #2dce89;
             --info: #11cdef;
+            --warning: #fb6340;
             --bg-color: #f8f9fe;
             --card-bg: #ffffff;
             --text-main: #525f7f;
@@ -35,12 +36,18 @@
         header {
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
             background: var(--card-bg);
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
             margin-bottom: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .logo-box {
@@ -71,6 +78,22 @@
             font-weight: 600;
         }
 
+        .btn-toggle-admin {
+            background: #f4f5f7;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle-admin:hover {
+            background: #e9ecef;
+        }
+
         .main-card {
             background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
             color: white;
@@ -93,23 +116,25 @@
 
         .nav-tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
             background: #e9ecef;
             padding: 5px;
             border-radius: 12px;
+            overflow-x: auto;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px 12px;
             border: none;
             border-radius: 10px;
             background: transparent;
             color: var(--text-main);
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
+            white-space: nowrap;
             transition: all 0.2s ease;
         }
 
@@ -247,24 +272,36 @@
             font-weight: 600;
             cursor: pointer;
         }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-box">R</div>
-        <div class="brand-info">
-            <h1>Recanto</h1>
-            <p>Petshop</p>
+        <div class="header-left">
+            <div class="logo-box">R</div>
+            <div class="brand-info">
+                <h1>Recanto</h1>
+                <p>Petshop</p>
+            </div>
         </div>
+        <button class="btn-toggle-admin" onclick="toggleModoAdmin()" id="btnAdminText">🔒 Painel Dono</button>
     </header>
 
     <div class="main-card">
-        <h2>Painel de Balcão – Banho & Tosa</h2>
-        <p>Gerenciamento e controle de atendimento</p>
+        <h2 id="cardTitle">Painel de Balcão – Banho & Tosa</h2>
+        <p id="cardSub">Gerenciamento e controle de atendimento</p>
     </div>
 
-    <div class="nav-tabs">
+    <!-- ABAS DE NAVEGAÇÃO DO BALCÃO -->
+    <div class="nav-tabs" id="balcaoNav">
         <button class="tab-btn active" onclick="switchTab('registrar', event)">📝 Registrar</button>
         <button class="tab-btn" onclick="switchTab('fila', event)">⏳ Em Andamento</button>
         <button class="tab-btn" onclick="switchTab('caixa', event)">💰 Caixa do Dia</button>
@@ -318,13 +355,37 @@
         <div id="caixaList" class="empty-state">Nenhum atendimento finalizado hoje.</div>
     </div>
 
+    <!-- SEÇÃO: PAINEL DO DONO (ADMIN) -->
+    <div id="tab-admin" class="section hidden">
+        <div class="section-title">⚙️ Configurações e Preços</div>
+        
+        <div class="form-group">
+            <label>Preço do Banho (R$)</label>
+            <input type="number" id="precoBanho" value="50.00">
+        </div>
+
+        <div class="form-group">
+            <label>Preço do Banho e Tosa (R$)</label>
+            <input type="number" id="precoBanhoTosa" value="80.00">
+        </div>
+
+        <div class="form-group">
+            <label>Preço da Tosa Higiênica (R$)</label>
+            <input type="number" id="precoTosaHig" value="40.00">
+        </div>
+
+        <button class="btn-submit" onclick="salvarConfiguracoes()" style="background: var(--primary);">Salvar Configurações</button>
+    </div>
+
     <script>
         let atendimentos = JSON.parse(localStorage.getItem('recanto_atendimentos')) || [];
+        let modoAdmin = false;
 
         function switchTab(tabName, event) {
             document.getElementById('tab-registrar').classList.add('hidden');
             document.getElementById('tab-fila').classList.add('hidden');
             document.getElementById('tab-caixa').classList.add('hidden');
+            document.getElementById('tab-admin').classList.add('hidden');
             
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
@@ -335,9 +396,35 @@
                 atualizarFila();
             } else if(tabName === 'caixa') {
                 document.getElementById('tab-caixa').classList.remove('hidden');
+                atualizarCaixa();
+            } else if(tabName === 'admin') {
+                document.getElementById('tab-admin').classList.remove('hidden');
             }
+            
             if(event && event.currentTarget) {
                 event.currentTarget.classList.add('active');
+            }
+        }
+
+        function toggleModoAdmin() {
+            modoAdmin = !modoAdmin;
+            const btnText = document.getElementById('btnAdminText');
+            const cardTitle = document.getElementById('cardTitle');
+            const cardSub = document.getElementById('cardSub');
+            const balcaoNav = document.getElementById('balcaoNav');
+
+            if(modoAdmin) {
+                btnText.innerHTML = '🚪 Sair do Painel';
+                cardTitle.innerHTML = 'Painel do Dono – Gestão';
+                cardSub.innerHTML = 'Configurações de preços e serviços';
+                balcaoNav.classList.add('hidden');
+                switchTab('admin');
+            } else {
+                btnText.innerHTML = '🔒 Painel Dono';
+                cardTitle.innerHTML = 'Painel de Balcão – Banho & Tosa';
+                cardSub.innerHTML = 'Gerenciamento e controle de atendimento';
+                balcaoNav.classList.remove('hidden');
+                switchTab('registrar');
             }
         }
 
@@ -358,7 +445,8 @@
                 tutor,
                 phone,
                 service,
-                status: 'Em Andamento'
+                status: 'Em Andamento',
+                data: new Date().toLocaleDateString()
             };
 
             atendimentos.push(novoItem);
@@ -400,7 +488,34 @@
             });
             localStorage.setItem('recanto_atendimentos', JSON.stringify(atendimentos));
             atualizarFila();
-            alert('Atendimento concluído com sucesso!');
+            alert('Atendimento concluído e enviado para o Caixa do Dia!');
+        }
+
+        function atualizarCaixa() {
+            const container = document.getElementById('caixaList');
+            const concluidos = atendimentos.filter(item => item.status === 'Concluído');
+
+            if(concluidos.length === 0) {
+                container.innerHTML = '<div class="empty-state">Nenhum atendimento finalizado hoje.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            concluidos.forEach(item => {
+                container.innerHTML += `
+                    <div class="atendimento-card">
+                        <div class="atendimento-info">
+                            <h4>✅ ${item.pet} (${item.service})</h4>
+                            <p>Tutor: ${item.tutor} • Status: Finalizado</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function salvarConfiguracoes() {
+            alert('Configurações salvas com sucesso!');
+            toggleModoAdmin();
         }
 
         function buscarCliente() {}
