@@ -263,4 +263,51 @@
     <!-- SEÇÃO: EM ANDAMENTO -->
     <div id="tab-fila" class="section hidden">
         <div class="section-title">⏳ Pets em Andamento</div>
-        <div id="filaList" class="empty-state">N
+        <div id="filaList" class="empty-state">Nenhum pet no momento.</div>
+    </div>
+
+    <!-- SEÇÃO: CAIXA DO DIA -->
+    <div id="tab-caixa" class="section hidden">
+        <div class="section-title">💰 Fechamento do Dia</div>
+        <div class="empty-state">Nenhum atendimento finalizado hoje.</div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.getElementById('tab-registrar').classList.add('hidden');
+            document.getElementById('tab-fila').classList.add('hidden');
+            document.getElementById('tab-caixa').classList.add('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if(tabName === 'registrar') {
+                document.getElementById('tab-registrar').classList.remove('hidden');
+                event.currentTarget.classList.add('active');
+            } else if(tabName === 'fila') {
+                document.getElementById('tab-fila').classList.remove('hidden');
+                event.currentTarget.classList.add('active');
+            } else if(tabName === 'caixa') {
+                document.getElementById('tab-caixa').classList.remove('hidden');
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function buscarCliente() {}
+
+        function salvarAtendimento() {
+            const pet = document.getElementById('petName').value;
+            const tutor = document.getElementById('tutorName').value;
+            
+            if(!pet || !tutor) {
+                alert('Por favor, preencha o nome do pet e do tutor!');
+                return;
+            }
+
+            alert('Atendimento cadastrado com sucesso!');
+            document.getElementById('petName').value = '';
+            document.getElementById('tutorName').value = '';
+            document.getElementById('tutorPhone').value = '';
+        }
+    </script>
+</body>
+</html>
