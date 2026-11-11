@@ -17,73 +17,92 @@
     .service-card.selected { border-color: #23B5C8; background-color: #ECFEFF; box-shadow: 0 0 0 2px #23B5C8; }
     .size-btn.selected { background-color: #23B5C8; color: white; border-color: #23B5C8; }
     .time-btn.selected { background-color: #EE3E80; color: white; border-color: #EE3E80; }
-    input, select, textarea { transition: all 0.3s ease; }
+    input, select, textarea { transition: all 0.2s ease; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
   <div class="brand-gradient-bar w-full sticky top-0 z-50"></div>
 
-  <!-- Cabeçalho -->
-  <header class="bg-white shadow-sm sticky top-1.5 z-40">
-    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+  <!-- Cabeçalho com Altura Fixa (Não deforma com o Zoom da Logo) -->
+  <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center">
+    <div class="max-w-3xl w-full mx-auto px-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div id="header-logo-container" class="flex items-center gap-3">
-          <div id="default-logo-elements" class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full border-2 border-[#23B5C8] flex items-center justify-center bg-cyan-50 shadow-sm shrink-0">
-              <span class="font-brand text-2xl font-bold text-[#23B5C8] leading-none">R</span>
-            </div>
-            <div>
-              <div class="font-brand text-2xl tracking-tight leading-none flex items-center">
-                <span class="text-[#EE3E80]">R</span>
-                <span class="text-[#6AB43E]">e</span>
-                <span class="text-[#23B5C8]">c</span>
-                <span class="text-[#FDD815] drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">a</span>
-                <span class="text-[#EE3E80]">n</span>
-                <span class="text-[#6AB43E]">t</span>
-                <span class="text-[#23B5C8]">o</span>
-              </div>
-              <span class="block text-[10px] font-bold tracking-[0.28em] text-slate-600 uppercase mt-0.5">PETSHOP</span>
-            </div>
+        <!-- Moldura Fixa da Logo Customizada -->
+        <div id="custom-logo-frame" class="hidden overflow-hidden flex items-center justify-center bg-white border border-slate-200 shrink-0">
+          <img id="custom-logo-img" class="w-full h-full object-contain transition-transform duration-150" alt="Logo" />
+        </div>
+
+        <!-- Logo Padrão R -->
+        <div id="default-logo-circle" class="w-11 h-11 rounded-full border-2 border-[#23B5C8] flex items-center justify-center bg-cyan-50 shadow-sm shrink-0">
+          <span class="font-brand text-2xl font-bold text-[#23B5C8] leading-none">R</span>
+        </div>
+
+        <!-- Nome colorido Recanto Petshop -->
+        <div id="brand-text-block">
+          <div class="font-brand text-2xl tracking-tight leading-none flex items-center">
+            <span class="text-[#EE3E80]">R</span>
+            <span class="text-[#6AB43E]">e</span>
+            <span class="text-[#23B5C8]">c</span>
+            <span class="text-[#FDD815] drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">a</span>
+            <span class="text-[#EE3E80]">n</span>
+            <span class="text-[#6AB43E]">t</span>
+            <span class="text-[#23B5C8]">o</span>
           </div>
-          <img id="custom-logo-img" class="object-contain hidden rounded-lg" alt="Logo" />
+          <span class="block text-[10px] font-bold tracking-[0.28em] text-slate-600 uppercase mt-0.5">PETSHOP</span>
         </div>
       </div>
+
       <button id="btn-exit-admin" onclick="exitAdmin()" class="hidden px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5">
-        ⬅️ Voltar
+        ⬅️ Voltar ao Balcão
       </button>
     </div>
   </header>
 
-  <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-5 space-y-5">
+  <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-5 space-y-4">
 
-    <!-- ==================== TELA 1: BALCÃO (COM ABAS) ==================== -->
+    <!-- ==================== TELA 1: BALCÃO ==================== -->
     <section id="view-client" class="space-y-4">
       
-      <div class="bg-gradient-to-r from-[#23B5C8] to-[#1ba0b2] rounded-2xl p-5 text-white shadow-md">
+      <div class="bg-gradient-to-r from-[#23B5C8] to-[#1ba0b2] rounded-2xl p-4 sm:p-5 text-white shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h1 class="font-brand text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
+        <!-- Sinalização Rápida de Agendamentos -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button type="button" onclick="switchClientTab('fila')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1">
+            📍 Hoje: <span id="top-count-today">0</span>
+          </button>
+          <button type="button" onclick="openAgendaFilter('amanha')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1">
+            📅 Amanhã: <span id="top-count-tomorrow">0</span>
+          </button>
+          <button type="button" onclick="openAgendaFilter('futuros')" class="bg-amber-400 text-slate-900 hover:bg-amber-300 px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1">
+            🗓️ Agenda: <span id="top-count-future">0</span>
+          </button>
+        </div>
       </div>
 
-      <!-- ABAS DO BALCÃO -->
-      <div class="grid grid-cols-3 gap-1 bg-slate-200 p-1.5 rounded-xl">
+      <!-- ABAS DO BALCÃO (4 ABAS) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-slate-200 p-1.5 rounded-xl">
         <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8]">
           📝 Registrar
         </button>
         <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
-          📋 Fila Ativa
+          🐾 Pets na Fila
+        </button>
+        <button onclick="switchClientTab('agenda')" id="tab-cli-agenda" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
+          📅 Agenda
         </button>
         <button onclick="switchClientTab('fechamento')" id="tab-cli-fechamento" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
           ✅ Caixa do Dia
         </button>
       </div>
 
-      <!-- ABA A: NOVO REGISTRO -->
+      <!-- ABA A: NOVO ATENDIMENTO -->
       <div id="client-sec-novo" class="space-y-4">
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
           <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
             🔍 Buscar Cliente Cadastrado
           </h3>
-          <input type="text" id="counter-search-input" oninput="filterCounterClients(this.value)" placeholder="Digite nome do pet, tutor ou telefone..." 
+          <input type="text" id="counter-search-input" oninput="filterCounterClients(this.value)" placeholder="Digite nome do pet, tutor, telefone ou endereço..." 
             class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#23B5C8]" />
           <div id="counter-search-results" class="hidden space-y-2 max-h-48 overflow-y-auto pt-1"></div>
         </div>
@@ -125,7 +144,12 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Serviço Principal (Toque para desmarcar)</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Endereço / Bairro (Opcional)</label>
+            <input type="text" id="owner-address" placeholder="Ex: Rua Lorena, 120 - Jd. Dom José" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Serviço Principal (Toque para selecionar)</label>
             <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
           </div>
 
@@ -135,7 +159,7 @@
               <span class="font-bold text-xs text-amber-900">💡 Serviço Variável / Sob Avaliação na Hora</span>
             </label>
             <div id="custom-service-box" class="hidden space-y-2.5 pt-1">
-              <input type="text" id="custom-service-desc" oninput="clearError(this)" placeholder="O que foi feito? (ex: Limpeza extra)" class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs bg-white" />
+              <input type="text" id="custom-service-desc" oninput="clearError(this)" placeholder="O que foi feito? (ex: Tosa específica, desembolo extra)" class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs bg-white" />
               <div>
                 <label class="block text-[10px] font-bold text-amber-900 mb-1">Valor Cobrado na Hora (R$)</label>
                 <input type="number" step="0.5" id="custom-service-price" oninput="clearError(this); updateSummary()" placeholder="Ex: 15.00" class="w-full sm:w-40 px-3 py-2 rounded-lg border border-amber-300 text-sm font-bold text-[#EE3E80] bg-white" />
@@ -150,8 +174,9 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Data *</label>
-              <input type="date" id="booking-date" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Data do Atendimento *</label>
+              <input type="date" id="booking-date" onchange="clearError(this); renderTimeSlots()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold" />
+              <span class="text-[11px] text-slate-400 mt-1 block">Se escolher data futura, irá para a aba 📅 Agenda.</span>
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
@@ -160,8 +185,8 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Observações</label>
-            <input type="text" id="booking-notes" placeholder="Ex: pele sensível..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Observações / Recomendações</label>
+            <input type="text" id="booking-notes" placeholder="Ex: pele sensível, alérgico a perfume..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
           </div>
 
           <div class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -173,24 +198,45 @@
               </div>
             </div>
             <button type="submit" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
-              ✅ Incluir na Fila
+              ✅ Salvar Atendimento
             </button>
           </div>
         </form>
       </div>
 
-      <!-- ABA B: FILA ATIVA -->
+      <!-- ABA B: PETS NA FILA (HOJE) -->
       <div id="client-sec-fila" class="hidden space-y-3">
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
-            <h3 class="font-bold text-slate-800 text-sm sm:text-base">📋 Pets na Loja (Aguardando / Banho)</h3>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm sm:text-base">🐾 Pets na Fila (Hoje)</h3>
+              <p class="text-[11px] text-slate-400">Pets agendados para hoje aguardando, no banho ou prontos</p>
+            </div>
             <span id="counter-badge-active" class="text-xs bg-[#23B5C8] text-white px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
           <div id="counter-bookings-active" class="space-y-3"></div>
         </div>
       </div>
 
-      <!-- ABA C: FECHAMENTO / CAIXA -->
+      <!-- ABA C: AGENDA (AMANHÃ E PRÓXIMOS DIAS) -->
+      <div id="client-sec-agenda" class="hidden space-y-3">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm sm:text-base">📅 Agenda de Horários Marcados</h3>
+              <p class="text-[11px] text-slate-500">Consulte agendamentos futuros ou filtre por dia</p>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button onclick="setAgendaFilter('amanha')" id="btn-ag-amanha" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">Amanhã</button>
+              <button onclick="setAgendaFilter('futuros')" id="btn-ag-futuros" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#23B5C8] text-white">Todos Futuros</button>
+              <input type="date" id="agenda-date-picker" onchange="setAgendaFilter('data')" class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-bold" />
+            </div>
+          </div>
+          <div id="counter-bookings-agenda" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- ABA D: FECHAMENTO / CAIXA DO DIA -->
       <div id="client-sec-fechamento" class="hidden space-y-3">
         <div class="grid grid-cols-2 gap-2.5">
           <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm text-center">
@@ -198,18 +244,21 @@
             <p id="counter-stat-done" class="font-brand text-xl font-bold text-slate-800">0</p>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[11px] text-slate-500 font-semibold">Caixa (Faturamento)</span>
+            <span class="text-[11px] text-slate-500 font-semibold">Caixa de Hoje (Faturamento)</span>
             <p id="counter-stat-rev" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
           </div>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2.5 mb-3">✅ Histórico de Pets Finalizados</h3>
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2.5 mb-3">✅ Histórico de Pets Finalizados Hoje</h3>
           <div id="counter-bookings-done" class="space-y-3 mb-4"></div>
           
-          <button onclick="encerrarDia()" class="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow">
-            🌙 Encerrar Expediente e Limpar Fila
+          <button onclick="encerrarDia()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow">
+            🌙 Encerrar Expediente (Salvar no Histórico Geral)
           </button>
+          <p class="text-[11px] text-center text-slate-400 mt-2">
+            Ao encerrar, os finalizados de hoje ficam salvos nos Relatórios do Gestor e os agendamentos dos próximos dias continuam intactos na Agenda.
+          </p>
         </div>
       </div>
     </section>
@@ -224,14 +273,14 @@
             <h2 class="font-brand text-xl font-bold mt-0.5" id="admin-store-title">Controle Recanto Petshop</h2>
           </div>
           <button onclick="resetToFactory()" class="text-[11px] text-slate-400 underline hover:text-white">
-            Restaurar Padrão
+            Restaurar Tabelas Padrão
           </button>
         </div>
 
         <!-- ABAS DO DONO -->
         <div class="grid grid-cols-2 sm:grid-cols-6 gap-1 bg-slate-800 p-1 rounded-xl">
           <button onclick="switchAdminTab('fila')" id="adm-tab-fila" class="px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white">
-            📋 Resumo
+            📊 Relatórios
           </button>
           <button onclick="switchAdminTab('clientes')" id="adm-tab-clientes" class="px-2 py-2 rounded-lg text-xs font-bold text-slate-300">
             👥 Clientes
@@ -251,19 +300,40 @@
         </div>
       </div>
 
-      <!-- SUB-ABA 1: RESUMO -->
+      <!-- SUB-ABA 1: RELATÓRIOS, HISTÓRICO E RAIO-X -->
       <div id="admin-sec-fila" class="space-y-4">
+        
+        <!-- Filtro de Período / Data -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 class="font-bold text-sm text-slate-800">📅 Período de Análise do Histórico</h3>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button onclick="setReportPeriod('hoje')" id="rep-btn-hoje" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#23B5C8] text-white">Hoje</button>
+              <button onclick="setReportPeriod('7dias')" id="rep-btn-7dias" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">Últimos 7 dias</button>
+              <button onclick="setReportPeriod('30dias')" id="rep-btn-30dias" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">Últimos 30 dias</button>
+              <button onclick="setReportPeriod('tudo')" id="rep-btn-tudo" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">Todo Histórico</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+            <span class="font-semibold text-slate-600">Ou puxar data específica:</span>
+            <input type="date" id="rep-custom-date" onchange="setReportPeriod('data')" class="px-3 py-1.5 rounded-lg border border-slate-300 font-bold text-slate-800" />
+            <span id="rep-active-label" class="ml-auto text-[11px] font-bold text-[#23B5C8]">Exibindo: Hoje</span>
+          </div>
+        </div>
+
+        <!-- Cards de Faturamento e Ticket -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Na Loja (Fila)</span>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Na Fila Hoje</span>
             <p id="stat-total" class="font-brand text-xl font-bold text-slate-800">0</p>
           </div>
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Finalizados</span>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Atendidos no Período</span>
             <p id="stat-ready" class="font-brand text-xl font-bold text-[#23B5C8]">0</p>
           </div>
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Caixa Finalizados</span>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Faturamento Período</span>
             <p id="stat-revenue" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
           </div>
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center border-b-4 border-b-[#EE3E80]">
@@ -272,19 +342,82 @@
           </div>
         </div>
 
+        <!-- RAIO-X DO NEGÓCIO (Análise Inteligente) -->
         <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
-          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2.5">Todas as Fichas (Dia)</h3>
-          <div id="admin-bookings-list" class="space-y-3"></div>
+          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2">📈 Raio-X de Movimento e Serviços (Baseado no Período)</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="p-3 rounded-xl bg-cyan-50/70 border border-cyan-100">
+              <span class="text-[10px] font-bold uppercase text-cyan-800">📅 Dia Mais Movimentado</span>
+              <p id="insight-best-day" class="font-bold text-sm text-slate-800 mt-1">—</p>
+            </div>
+            <div class="p-3 rounded-xl bg-pink-50/70 border border-pink-100">
+              <span class="text-[10px] font-bold uppercase text-pink-800">⏰ Horário de Pico</span>
+              <p id="insight-best-hour" class="font-bold text-sm text-slate-800 mt-1">—</p>
+            </div>
+            <div class="p-3 rounded-xl bg-green-50/70 border border-green-100">
+              <span class="text-[10px] font-bold uppercase text-green-800">🏆 Serviço Campeão</span>
+              <p id="insight-best-service" class="font-bold text-sm text-slate-800 mt-1">—</p>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <span class="block text-xs font-bold text-slate-600 mb-2">Detalhamento: O que mais fazemos no período</span>
+            <div id="insight-services-breakdown" class="space-y-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Lista de Fichas do Período -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
+          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2.5">📋 Fichas Registradas no Período</h3>
+          <div id="admin-bookings-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
         </div>
       </div>
 
-      <!-- SUB-ABA 2: CLIENTES -->
+      <!-- SUB-ABA 2: CLIENTES (COM BUSCA, ORDEM, EDIÇÃO E BACKUP) -->
       <div id="admin-sec-clientes" class="hidden space-y-4">
+        
+        <!-- Barra de Exportação e Backup -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">💾 Segurança e Planilha de Clientes</h4>
+              <p class="text-[11px] text-slate-500">Os dados ficam salvos neste aparelho. Baixe sua planilha ou salve uma cópia de segurança.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="exportClientsCSV()" class="px-3 py-2 rounded-xl bg-[#6AB43E] text-white text-xs font-bold shadow-sm">
+                📥 Baixar Planilha (Excel)
+              </button>
+              <button onclick="downloadFullBackup()" class="px-3 py-2 rounded-xl bg-[#23B5C8] text-white text-xs font-bold shadow-sm">
+                💾 Baixar Backup Completo
+              </button>
+              <label class="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold shadow-sm cursor-pointer">
+                📂 Restaurar Backup
+                <input type="file" accept=".json" onchange="restoreFullBackup(event)" class="hidden" />
+              </label>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="font-bold text-slate-800 text-base">👥 Base de Clientes Cadastrados</h3>
             <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 cadastrados</span>
           </div>
+
+          <!-- Busca e Ordenação -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div class="sm:col-span-2">
+              <input type="text" id="admin-client-search" oninput="renderClientsList()" placeholder="🔍 Buscar por nome, pet, telefone ou endereço..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs" />
+            </div>
+            <div>
+              <select id="admin-client-sort" onchange="renderClientsList()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 bg-slate-50">
+                <option value="az">🔤 Ordem Alfabética (A-Z)</option>
+                <option value="recentes">📅 Visita Mais Recente</option>
+                <option value="frequentes">🏆 Clientes Mais Frequentes</option>
+              </select>
+            </div>
+          </div>
+
           <div id="admin-clients-list" class="space-y-3"></div>
         </div>
       </div>
@@ -314,14 +447,31 @@
         </div>
       </div>
 
-      <!-- SUB-ABA 4: PORTES -->
+      <!-- SUB-ABA 4: PORTES (COM EDIÇÃO CLARA E NOVO PORTE) -->
       <div id="admin-sec-portes" class="hidden space-y-5">
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <h3 class="font-bold text-slate-800 text-base">🐶 Categorias de Cães e Gatos</h3>
+          <div>
+            <h3 class="font-bold text-slate-800 text-base">🐶 Categorias de Portes (Editar ou Criar)</h3>
+            <p class="text-xs text-slate-500">Toque dentro das caixas abaixo para editar o nome ou a faixa de peso/exemplos de cada porte.</p>
+          </div>
+
           <div id="admin-sizes-editor" class="space-y-2.5"></div>
-          <button onclick="saveSizesChanges()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">
-            💾 Salvar Alterações nas Categorias
+
+          <button onclick="saveSizesChanges()" class="w-full py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-sm shadow">
+            💾 Salvar Alterações nos Portes
           </button>
+
+          <!-- Adicionar Novo Porte -->
+          <div class="pt-4 border-t border-slate-200 space-y-2.5 bg-slate-50 p-3.5 rounded-xl border">
+            <span class="block text-xs font-bold text-slate-700">➕ Cadastrar Nova Categoria de Porte</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input type="text" id="new-size-name" placeholder="Nome (ex: Pelo Longo / Extra G)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold" />
+              <input type="text" id="new-size-sub" placeholder="Descrição (ex: Acima de 45kg)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
+            </div>
+            <button onclick="addNewSizeCategory()" class="w-full py-2.5 rounded-xl bg-[#23B5C8] hover:bg-[#1ba0b2] text-white font-bold text-xs shadow-sm">
+              + Adicionar Novo Porte
+            </button>
+          </div>
         </div>
       </div>
 
@@ -330,7 +480,7 @@
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
             <h3 class="font-bold text-slate-800 text-base">💰 Tabela de Preços dos Serviços (R$)</h3>
-            <button onclick="openNewServiceModal()" class="px-3 py-1.5 bg-[#23B5C8] text-white rounded-xl text-xs font-bold">+ Novo</button>
+            <button onclick="openNewServiceModal()" class="px-3 py-1.5 bg-[#23B5C8] text-white rounded-xl text-xs font-bold">+ Novo Serviço</button>
           </div>
           <div id="admin-services-editor" class="space-y-4"></div>
           <button onclick="savePricesFromEditor()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">
@@ -357,40 +507,57 @@
         </div>
       </div>
 
-      <!-- SUB-ABA 6: LOJA -->
+      <!-- SUB-ABA 6: LOJA & LOGO COM LUPA INTERNA -->
       <div id="admin-sec-horarios" class="hidden space-y-5">
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <h3 class="font-bold text-slate-800 text-base">📍 Dados, Logo e Zoom</h3>
+          <h3 class="font-bold text-slate-800 text-base">📍 Dados da Loja e Ajuste de Logo</h3>
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">🖼️ Enviar Logo da Loja</label>
             <input type="file" id="cfg-logo-file" accept="image/*" onchange="handleLogoUpload(event)"
               class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-[#23B5C8]" />
           </div>
+
           <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
-            <span class="block text-xs font-bold text-slate-700">🔎 Pré-visualização e Zoom da Logo</span>
-            <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 h-24">
-              <img id="preview-logo-box" class="object-contain max-h-16 hidden" alt="Preview" />
-              <span id="preview-logo-placeholder" class="text-xs text-slate-400">Nenhuma logo enviada</span>
+            <div class="flex items-center justify-between">
+              <span class="block text-xs font-bold text-slate-700">🔎 Zoom Interno da Logo (Sem deformar o topo)</span>
+              <button type="button" onclick="removeCustomLogo()" class="text-[11px] text-red-500 font-bold underline">Usar Logo Padrão</button>
             </div>
-            <div class="flex items-center justify-between gap-3">
-              <button type="button" onclick="adjustLogoZoom(-10)" class="px-3 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖ Menor</button>
-              <span id="zoom-level-label" class="text-xs font-bold text-slate-600">Altura: 45px</span>
-              <button type="button" onclick="adjustLogoZoom(10)" class="px-3 py-1.5 bg-[#23B5C8] text-white font-bold rounded-lg text-xs">➕ Maior</button>
+
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="setLogoShape('circle')" id="btn-shape-circle" class="py-1.5 rounded-lg border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]">⭕ Moldura Redonda</button>
+              <button type="button" onclick="setLogoShape('rect')" id="btn-shape-rect" class="py-1.5 rounded-lg border text-xs font-bold bg-white text-slate-600 border-slate-300">▭ Moldura Retangular</button>
+            </div>
+
+            <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 h-20">
+              <div id="preview-logo-frame" class="w-12 h-12 rounded-full overflow-hidden border border-slate-200 flex items-center justify-center">
+                <img id="preview-logo-box" class="w-full h-full object-contain hidden" alt="Preview" />
+              </div>
+              <span id="preview-logo-placeholder" class="text-xs text-slate-400 ml-2">Nenhuma logo enviada</span>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold text-slate-600">
+                <span>Afastar (50%)</span>
+                <span id="zoom-level-label">Zoom: 100%</span>
+                <span>Aproximar Lupa (250%)</span>
+              </div>
+              <input type="range" id="logo-scale-slider" min="50" max="250" step="5" value="100" oninput="adjustLogoScale(this.value)" class="w-full accent-[#23B5C8]" />
             </div>
           </div>
+
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome da Loja</label><input type="text" id="cfg-store-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título do Banner</label><input type="text" id="cfg-banner-title" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Endereço Completo</label><input type="text" id="cfg-store-address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp da Loja (com DDD)</label><input type="text" id="cfg-whatsapp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Senha PIN do Painel</label><input type="text" id="cfg-pin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
-          <button onclick="saveStoreDataConfig()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">💾 Salvar Dados</button>
+          <button onclick="saveStoreDataConfig()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">💾 Salvar Dados da Loja</button>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- MODAIS (Novo Serviço e PIN) -->
+  <!-- MODAL: NOVO SERVIÇO PRINCIPAL -->
   <div id="service-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl">
       <h3 class="font-bold text-slate-800 text-base">➕ Adicionar Novo Serviço Principal</h3>
@@ -404,6 +571,35 @@
     </div>
   </div>
 
+  <!-- MODAL: EDITAR CLIENTE -->
+  <div id="edit-client-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-xl">
+      <h3 class="font-bold text-slate-800 text-base">✏️ Editar Cadastro do Cliente</h3>
+      <input type="hidden" id="edit-cli-id" />
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Tutor *</label>
+        <input type="text" id="edit-cli-owner" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Pet *</label>
+        <input type="text" id="edit-cli-pet" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp *</label>
+        <input type="text" id="edit-cli-phone" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Endereço / Bairro</label>
+        <input type="text" id="edit-cli-address" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-2">
+        <button onclick="closeEditClientModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
+        <button onclick="saveEditedClient()" class="py-2.5 rounded-xl bg-[#6AB43E] text-white text-xs font-bold">Salvar Cliente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SENHA PIN -->
   <div id="pin-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xs w-full p-5 space-y-4 text-center shadow-xl">
       <div class="w-12 h-12 rounded-full bg-pink-50 text-[#EE3E80] flex items-center justify-center mx-auto font-bold text-xl">🔒</div>
@@ -437,7 +633,8 @@
       whatsapp: '5511999999999',
       pin: '1234',
       logoBase64: '',
-      logoHeight: 45,
+      logoScale: 100,
+      logoShape: 'circle',
       sizes: [
         { id: 'mini', name: 'Mini', subtitle: 'Até 5kg (Pinscher...)' },
         { id: 'pequeno', name: 'Pequeno', subtitle: '5 a 10kg (Shih Tzu...)' },
@@ -458,11 +655,29 @@
       timeSlots: ['09:00', '10:00', '11:00', '13:30', '14:30', '15:30', '16:30', '17:30']
     };
 
+    // Data Local (Evita virar o dia às 21h no fuso de Brasília)
+    function getLocalISODate(offsetDays = 0) {
+      const d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function formatDateBR(isoStr) {
+      if (!isoStr || !isoStr.includes('-')) return isoStr || '';
+      const [y, m, d] = isoStr.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
     let config = JSON.parse(localStorage.getItem('recanto_cfg_v25')) || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-    if (!config.logoHeight) config.logoHeight = 45;
+    if (!config.logoScale) config.logoScale = 100;
+    if (!config.logoShape) config.logoShape = 'circle';
 
     let bookings = JSON.parse(localStorage.getItem('recanto_bookings_v25') || '[]');
     let clientsDb = JSON.parse(localStorage.getItem('recanto_clients_v25') || '[]');
+    let historyDb = JSON.parse(localStorage.getItem('recanto_history_v25') || '[]');
 
     let clientState = {
       species: 'Cachorro',
@@ -473,6 +688,9 @@
       isCustomService: false
     };
 
+    let agendaFilterMode = 'futuros';
+    let reportPeriodMode = 'hoje';
+
     function saveConfig() {
       localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
       applyStoreBranding();
@@ -481,28 +699,37 @@
     }
 
     function resetToFactory() {
-      if (confirm('Deseja restaurar o padrão? Todos os preços e portes voltarão ao original.')) {
+      if (confirm('Deseja restaurar as tabelas de preços e portes para o padrão de fábrica? (Seus clientes e histórico serão mantidos)')) {
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         saveConfig();
       }
     }
 
     function formatMoney(value) {
-      return value.toFixed(2).replace('.', ',');
+      return (Number(value) || 0).toFixed(2).replace('.', ',');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('booking-date').value = getLocalISODate(0);
+      document.getElementById('agenda-date-picker').value = getLocalISODate(1);
+      document.getElementById('rep-custom-date').value = getLocalISODate(0);
       applyStoreBranding();
       renderAllClient();
       switchClientTab('novo');
+      refreshAllViews();
+      renderAdminEditors();
+    });
+
+    function refreshAllViews() {
+      updateTopScheduleCounters();
       renderCounterFila();
+      renderCounterAgenda();
       renderCounterFechamento();
       renderAdminBookings();
       renderClientsList();
       renderReheatList();
-      renderAdminEditors();
-    });
+      renderTimeSlots();
+    }
 
     function clearError(el) {
       el.classList.remove('border-red-500', 'bg-red-50');
@@ -513,33 +740,57 @@
       }
     }
 
+    // ================= LOGO & IDENTIDADE SEM DEFORMAR CABEÇALHO =================
     function applyStoreBranding() {
       document.getElementById('banner-title').textContent = config.bannerTitle || 'Painel de Balcão — Banho & Tosa';
       document.getElementById('admin-store-title').textContent = `Controle ${config.storeName}`;
       document.getElementById('footer-store-name').textContent = `${config.storeName} — Banho, Tosa e Casa de Ração`;
       document.getElementById('footer-store-address').textContent = `📍 ${config.storeAddress}`;
 
-      const defLogo = document.getElementById('default-logo-elements');
-      const customLogo = document.getElementById('custom-logo-img');
+      const defCircle = document.getElementById('default-logo-circle');
+      const customFrame = document.getElementById('custom-logo-frame');
+      const customImg = document.getElementById('custom-logo-img');
+      const previewFrame = document.getElementById('preview-logo-frame');
       const previewBox = document.getElementById('preview-logo-box');
       const previewPlaceholder = document.getElementById('preview-logo-placeholder');
 
+      const isRect = config.logoShape === 'rect';
+      customFrame.className = isRect
+        ? 'w-24 h-11 rounded-lg overflow-hidden flex items-center justify-center bg-white border border-slate-200 shrink-0'
+        : 'w-11 h-11 rounded-full overflow-hidden flex items-center justify-center bg-white border-2 border-[#23B5C8] shrink-0';
+
+      previewFrame.className = isRect
+        ? 'w-28 h-14 rounded-lg overflow-hidden border border-slate-200 flex items-center justify-center bg-white'
+        : 'w-14 h-14 rounded-full overflow-hidden border-2 border-[#23B5C8] flex items-center justify-center bg-white';
+
+      document.getElementById('btn-shape-circle').className = !isRect
+        ? 'py-1.5 rounded-lg border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
+        : 'py-1.5 rounded-lg border text-xs font-bold bg-white text-slate-600 border-slate-300';
+      document.getElementById('btn-shape-rect').className = isRect
+        ? 'py-1.5 rounded-lg border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
+        : 'py-1.5 rounded-lg border text-xs font-bold bg-white text-slate-600 border-slate-300';
+
+      const scaleVal = (config.logoScale || 100) / 100;
+
       if (config.logoBase64) {
-        defLogo.classList.add('hidden');
-        customLogo.src = config.logoBase64;
-        customLogo.style.height = `${config.logoHeight}px`;
-        customLogo.classList.remove('hidden');
+        defCircle.classList.add('hidden');
+        customFrame.classList.remove('hidden');
+        customImg.src = config.logoBase64;
+        customImg.style.transform = `scale(${scaleVal})`;
+
         previewBox.src = config.logoBase64;
-        previewBox.style.height = `${config.logoHeight}px`;
+        previewBox.style.transform = `scale(${scaleVal})`;
         previewBox.classList.remove('hidden');
         previewPlaceholder.classList.add('hidden');
       } else {
-        defLogo.classList.remove('hidden');
-        customLogo.classList.add('hidden');
+        defCircle.classList.remove('hidden');
+        customFrame.classList.add('hidden');
         previewBox.classList.add('hidden');
         previewPlaceholder.classList.remove('hidden');
       }
-      document.getElementById('zoom-level-label').textContent = `Altura: ${config.logoHeight}px`;
+
+      document.getElementById('zoom-level-label').textContent = `Zoom: ${config.logoScale || 100}%`;
+      document.getElementById('logo-scale-slider').value = config.logoScale || 100;
     }
 
     function handleLogoUpload(event) {
@@ -548,19 +799,31 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         config.logoBase64 = e.target.result;
-        applyStoreBranding();
+        config.logoScale = 100;
+        saveConfig();
       };
       reader.readAsDataURL(file);
     }
 
-    function adjustLogoZoom(amount) {
-      if (!config.logoBase64) return;
-      config.logoHeight = Math.min(100, Math.max(25, config.logoHeight + amount));
+    function adjustLogoScale(val) {
+      config.logoScale = Number(val) || 100;
       applyStoreBranding();
     }
 
+    function setLogoShape(shape) {
+      config.logoShape = shape;
+      applyStoreBranding();
+    }
+
+    function removeCustomLogo() {
+      config.logoBase64 = '';
+      config.logoScale = 100;
+      saveConfig();
+    }
+
+    // ================= NAVEGAÇÃO DO BALCÃO =================
     function switchClientTab(tab) {
-      ['novo', 'fila', 'fechamento'].forEach(t => {
+      ['novo', 'fila', 'agenda', 'fechamento'].forEach(t => {
         document.getElementById('client-sec-' + t).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById('tab-cli-' + t);
         if (t === tab) {
@@ -569,6 +832,36 @@
           btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors';
         }
       });
+    }
+
+    function openAgendaFilter(mode) {
+      switchClientTab('agenda');
+      setAgendaFilter(mode);
+    }
+
+    function setAgendaFilter(mode) {
+      agendaFilterMode = mode;
+      document.getElementById('btn-ag-amanha').className = mode === 'amanha'
+        ? 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#23B5C8] text-white'
+        : 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
+      document.getElementById('btn-ag-futuros').className = mode === 'futuros'
+        ? 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#23B5C8] text-white'
+        : 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
+      renderCounterAgenda();
+    }
+
+    function updateTopScheduleCounters() {
+      const today = getLocalISODate(0);
+      const tomorrow = getLocalISODate(1);
+      const activeList = bookings.filter(b => b.status !== 'Finalizado');
+
+      const countToday = activeList.filter(b => !b.date || b.date <= today).length;
+      const countTomorrow = activeList.filter(b => b.date === tomorrow).length;
+      const countFuture = activeList.filter(b => b.date > today).length;
+
+      document.getElementById('top-count-today').textContent = countToday;
+      document.getElementById('top-count-tomorrow').textContent = countTomorrow;
+      document.getElementById('top-count-future').textContent = countFuture;
     }
 
     function renderAllClient() {
@@ -612,8 +905,7 @@
     }
 
     function selectService(id) {
-      if (clientState.selectedService === id) clientState.selectedService = '';
-      else clientState.selectedService = id;
+      clientState.selectedService = clientState.selectedService === id ? '' : id;
       renderServices();
       updateSummary();
     }
@@ -675,11 +967,17 @@
 
     function renderTimeSlots() {
       const grid = document.getElementById('time-slots');
-      grid.innerHTML = config.timeSlots.map(t => `
-        <button type="button" onclick="selectTime('${t}')" class="time-btn ${clientState.selectedTime === t ? 'selected' : 'border-slate-200 text-slate-700'} py-2 rounded-xl border text-xs font-bold bg-white">
-          ${t}
-        </button>
-      `).join('');
+      const selectedDate = document.getElementById('booking-date')?.value || getLocalISODate(0);
+      grid.innerHTML = config.timeSlots.map(t => {
+        const countSlot = bookings.filter(b => b.date === selectedDate && b.time === t && b.status !== 'Finalizado').length;
+        const isSelected = clientState.selectedTime === t;
+        return `
+          <button type="button" onclick="selectTime('${t}')" class="time-btn ${isSelected ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2 px-1 rounded-xl border text-xs font-bold flex flex-col items-center justify-center leading-tight">
+            <span>${t}</span>
+            ${countSlot > 0 ? `<span class="text-[9px] mt-0.5 px-1.5 rounded-full ${isSelected ? 'bg-white text-[#EE3E80]' : 'bg-amber-100 text-amber-800'}">${countSlot} pet${countSlot > 1 ? 's' : ''}</span>` : ''}
+          </button>
+        `;
+      }).join('');
     }
 
     function calculateTotal() {
@@ -712,12 +1010,18 @@
       document.getElementById('summary-desc').textContent = descParts.join(' ');
     }
 
+    // Busca Rápida no Balcão
     function filterCounterClients(query) {
       const box = document.getElementById('counter-search-results');
       const q = query.trim().toLowerCase();
       if (!q || q.length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
       
-      const matches = clientsDb.filter(c => c.ownerName.toLowerCase().includes(q) || c.petName.toLowerCase().includes(q) || c.phone.includes(q));
+      const matches = clientsDb.filter(c =>
+        (c.ownerName || '').toLowerCase().includes(q) ||
+        (c.petName || '').toLowerCase().includes(q) ||
+        (c.phone || '').includes(q) ||
+        (c.address || '').toLowerCase().includes(q)
+      );
       
       if (matches.length === 0) {
         box.innerHTML = `<div class="p-2.5 text-xs text-slate-400 bg-slate-50 rounded-xl">Nenhum cliente encontrado.</div>`;
@@ -725,25 +1029,26 @@
         return;
       }
       
-      box.innerHTML = matches.map(c => {
-        const safeOwner = c.ownerName.replace(/'/g, "\\'");
-        const safePet = c.petName.replace(/'/g, "\\'");
-        return `
-          <div onclick="selectClientForBooking('${safeOwner}', '${c.phone}', '${safePet}')" class="p-2.5 rounded-xl border border-cyan-200 bg-cyan-50/50 hover:bg-cyan-100 cursor-pointer flex items-center justify-between text-xs">
-            <div><strong>🐶 ${c.petName}</strong> (${c.ownerName}) — 📞 ${c.phone}</div>
-            <span class="bg-[#23B5C8] text-white px-2 py-1 rounded-lg font-bold">Usar</span>
+      box.innerHTML = matches.map(c => `
+        <div onclick="selectClientForBooking(${c.id})" class="p-2.5 rounded-xl border border-cyan-200 bg-cyan-50/50 hover:bg-cyan-100 cursor-pointer flex items-center justify-between text-xs">
+          <div>
+            <strong>🐶 ${c.petName}</strong> (${c.ownerName}) — 📞 ${c.phone}
+            ${c.address ? `<div class="text-[10px] text-slate-500">📍 ${c.address}</div>` : ''}
           </div>
-        `;
-      }).join('');
+          <span class="bg-[#23B5C8] text-white px-2.5 py-1 rounded-lg font-bold shrink-0">Usar</span>
+        </div>
+      `).join('');
       
-      box.classList.add('block');
       box.classList.remove('hidden');
     }
 
-    function selectClientForBooking(ownerName, phone, petName) {
-      document.getElementById('owner-name').value = ownerName;
-      document.getElementById('owner-phone').value = phone;
-      document.getElementById('pet-name').value = petName;
+    function selectClientForBooking(clientId) {
+      const c = clientsDb.find(x => x.id === clientId);
+      if (!c) return;
+      document.getElementById('owner-name').value = c.ownerName || '';
+      document.getElementById('owner-phone').value = c.phone || '';
+      document.getElementById('pet-name').value = c.petName || '';
+      document.getElementById('owner-address').value = c.address || '';
       
       clearError(document.getElementById('owner-name'));
       clearError(document.getElementById('owner-phone'));
@@ -762,7 +1067,6 @@
       }
 
       let firstInvalid = null;
-
       requiredFields.forEach(id => {
         const el = document.getElementById(id);
         if (!el.value.trim()) {
@@ -796,6 +1100,7 @@
       const petName = document.getElementById('pet-name').value.trim();
       const ownerName = document.getElementById('owner-name').value.trim();
       const ownerPhone = document.getElementById('owner-phone').value.trim();
+      const ownerAddress = document.getElementById('owner-address').value.trim();
       const dateVal = document.getElementById('booking-date').value;
       const notes = document.getElementById('booking-notes').value.trim();
 
@@ -809,7 +1114,8 @@
         species: clientState.species, 
         sizeName: sz ? sz.name : 'Padrão',
         ownerName, 
-        ownerPhone, 
+        ownerPhone,
+        ownerAddress,
         serviceName: combinedServiceName, 
         extras: extrasNames,
         date: dateVal, 
@@ -821,16 +1127,10 @@
 
       bookings.unshift(newItem);
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-      upsertClientRecord(ownerName, ownerPhone, petName, combinedServiceName, dateVal);
-
-      renderCounterFila();
-      renderCounterFechamento();
-      renderAdminBookings();
-      renderClientsList();
-      renderReheatList();
+      upsertClientRecord(ownerName, ownerPhone, petName, ownerAddress, combinedServiceName, dateVal);
 
       document.getElementById('booking-form').reset();
-      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('booking-date').value = getLocalISODate(0);
       document.getElementById('custom-service-box').classList.add('hidden');
       clientState.isCustomService = false; 
       clientState.selectedService = ''; 
@@ -838,39 +1138,56 @@
       renderServices(); 
       renderExtras(); 
       updateSummary();
-      
-      switchClientTab('fila');
+      refreshAllViews();
+
+      // Se agendou para hoje, abre Pets na Fila. Se agendou para data futura, abre a Agenda!
+      if (dateVal > getLocalISODate(0)) {
+        openAgendaFilter('futuros');
+      } else {
+        switchClientTab('fila');
+      }
     }
 
-    function upsertClientRecord(ownerName, phone, petName, serviceName, dateStr) {
-      let client = clientsDb.find(c => c.phone === phone || c.ownerName.toLowerCase() === ownerName.toLowerCase());
+    function upsertClientRecord(ownerName, phone, petName, address, serviceName, dateStr) {
+      let client = clientsDb.find(c =>
+        (c.phone === phone && c.petName.toLowerCase() === petName.toLowerCase()) ||
+        (c.ownerName.toLowerCase() === ownerName.toLowerCase() && c.petName.toLowerCase() === petName.toLowerCase())
+      );
       if (client) {
         client.visitsCount = (client.visitsCount || 1) + 1;
         client.lastVisitDate = dateStr; 
         client.lastService = serviceName; 
         client.petName = petName; 
         client.ownerName = ownerName;
+        client.phone = phone;
+        if (address) client.address = address;
       } else {
-        clientsDb.push({ id: Date.now(), ownerName, phone, petName, visitsCount: 1, lastVisitDate: dateStr, lastService: serviceName });
+        clientsDb.push({
+          id: Date.now() + Math.floor(Math.random() * 1000),
+          ownerName,
+          phone,
+          petName,
+          address: address || '',
+          visitsCount: 1,
+          lastVisitDate: dateStr,
+          lastService: serviceName
+        });
       }
       localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
     }
 
-    // ================= ROTINAS DE FILA E CAIXA =================
+    // ================= FILA DE HOJE, AGENDA E CAIXA =================
     function changeStatus(id, st) {
       bookings = bookings.map(b => b.id === id ? { ...b, status: st } : b);
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-      renderCounterFila();
-      renderCounterFechamento();
-      renderAdminBookings();
+      refreshAllViews();
     }
 
     function removeBooking(id) {
+      if (!confirm('Deseja realmente excluir este agendamento?')) return;
       bookings = bookings.filter(b => b.id !== id);
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-      renderCounterFila();
-      renderCounterFechamento();
-      renderAdminBookings();
+      refreshAllViews();
     }
 
     function notifyReady(id) {
@@ -882,16 +1199,59 @@
       window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    function renderCounterFila() {
-      const activeBookings = bookings.filter(b => b.status !== 'Finalizado');
-      const list = document.getElementById('counter-bookings-active');
-      document.getElementById('counter-badge-active').textContent = activeBookings.length;
+    function confirmScheduleWhatsApp(id) {
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      const phone = b.ownerPhone.replace(/\D/g, '');
+      const fullPhone = phone.startsWith('55') ? phone : '55' + phone;
+      const msg = `Olá, *${b.ownerName}*! 🐾 Passando para confirmar o agendamento do(a) *${b.petName}* (${b.serviceName}) para o dia *${formatDateBR(b.date)} às ${b.time}* aqui no *${config.storeName}*. Podemos confirmar? ✨`;
+      window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
-      if (activeBookings.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet aguardando ou no banho.</p>`;
+    function moveToTodayQueue(id) {
+      const today = getLocalISODate(0);
+      bookings = bookings.map(b => b.id === id ? { ...b, date: today } : b);
+      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      refreshAllViews();
+      switchClientTab('fila');
+    }
+
+    function renderCounterFila() {
+      const today = getLocalISODate(0);
+      const activeToday = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= today));
+      const list = document.getElementById('counter-bookings-active');
+      document.getElementById('counter-badge-active').textContent = activeToday.length;
+
+      if (activeToday.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet na fila de hoje no momento.</p>`;
         return;
       }
-      list.innerHTML = activeBookings.map(b => buildBookingCardHtml(b, false)).join('');
+      list.innerHTML = activeToday.map(b => buildBookingCardHtml(b, 'fila')).join('');
+    }
+
+    function renderCounterAgenda() {
+      const today = getLocalISODate(0);
+      const tomorrow = getLocalISODate(1);
+      const customDate = document.getElementById('agenda-date-picker')?.value;
+      const list = document.getElementById('counter-bookings-agenda');
+
+      let scheduled = bookings.filter(b => b.status !== 'Finalizado');
+      if (agendaFilterMode === 'amanha') {
+        scheduled = scheduled.filter(b => b.date === tomorrow);
+      } else if (agendaFilterMode === 'data' && customDate) {
+        scheduled = scheduled.filter(b => b.date === customDate);
+      } else {
+        scheduled = scheduled.filter(b => b.date > today);
+      }
+
+      scheduled.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+      if (scheduled.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum agendamento encontrado para este filtro.</p>`;
+        return;
+      }
+
+      list.innerHTML = scheduled.map(b => buildBookingCardHtml(b, 'agenda')).join('');
     }
 
     function renderCounterFechamento() {
@@ -903,7 +1263,7 @@
       
       const list = document.getElementById('counter-bookings-done');
       if (doneBookings.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet finalizado ainda.</p>`;
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet finalizado hoje ainda.</p>`;
         return;
       }
       
@@ -911,7 +1271,8 @@
         <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
           <div>
             <span class="font-bold text-sm text-slate-800">${b.petName}</span>
-            <span class="text-[10px] ml-1 text-slate-500">${b.serviceName}</span>
+            <span class="text-[11px] text-slate-500">(${b.ownerName})</span>
+            <div class="text-[11px] text-slate-500">${b.serviceName} • 📅 ${formatDateBR(b.date)} às ${b.time}</div>
           </div>
           <div class="text-right">
             <span class="font-brand text-sm font-bold text-[#6AB43E]">R$ ${formatMoney(b.total)}</span>
@@ -922,18 +1283,32 @@
     }
 
     function encerrarDia() {
-      if(confirm('Encerrar o dia? Isso limpará a Fila e o Caixa do Balcão para o dia seguinte. O histórico dos clientes continuará salvo!')) {
-        bookings = [];
+      const doneBookings = bookings.filter(b => b.status === 'Finalizado');
+      const futureBookings = bookings.filter(b => b.status !== 'Finalizado');
+
+      if (doneBookings.length === 0 && futureBookings.length === 0) {
+        return alert('Não há atendimentos finalizados para arquivar hoje.');
+      }
+
+      if (confirm(`Encerrar o expediente de hoje?\n\n• ${doneBookings.length} atendimento(s) finalizado(s) serão salvos no Histórico Permanente do Gestor.\n• ${futureBookings.length} agendamento(s) em aberto/futuros serão mantidos na Agenda.`)) {
+        doneBookings.forEach(item => {
+          if (!historyDb.some(h => h.id === item.id)) {
+            historyDb.unshift({ ...item, closedAt: getLocalISODate(0) });
+          }
+        });
+        localStorage.setItem('recanto_history_v25', JSON.stringify(historyDb));
+
+        // Mantém apenas os agendamentos não finalizados / futuros
+        bookings = futureBookings;
         localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-        renderCounterFila();
-        renderCounterFechamento();
-        renderAdminBookings();
+
+        refreshAllViews();
         switchClientTab('novo');
-        alert('Caixa encerrado com sucesso! Um ótimo descanso para a equipe.');
+        alert('✅ Expediente encerrado! Os relatórios ficaram salvos no Painel Gestor e a Agenda futura foi preservada.');
       }
     }
 
-    function buildBookingCardHtml(b, isAdmin = false) {
+    function buildBookingCardHtml(b, mode = 'fila') {
       const statusColors = {
         'Aguardando': 'bg-amber-100 text-amber-800',
         'No Banho / Tosa': 'bg-cyan-100 text-cyan-800',
@@ -943,70 +1318,224 @@
       
       const isPronto = b.status === 'Pronto';
 
-      const controlsHtml = isAdmin ? '' : `
-        <div class="flex items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
-          <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1">
-            <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
-            <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
-            <option value="Pronto" ${b.status === 'Pronto' ? 'selected' : ''}>✨ Pronto (Na Loja)</option>
-            <option value="Finalizado">✅ Finalizado (Entregue/Pago)</option>
-          </select>
-          
-          ${isPronto ? `<button onclick="notifyReady(${b.id})" class="px-2.5 py-2 rounded-lg bg-green-500 text-white text-[11px] font-bold flex shrink-0" title="Avisar WhatsApp">📲 Avisar</button>` : ''}
-          
-          <button onclick="removeBooking(${b.id})" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0">🗑️</button>
-        </div>
-      `;
+      let controlsHtml = '';
+      if (mode === 'fila') {
+        controlsHtml = `
+          <div class="flex items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
+            <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1">
+              <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
+              <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
+              <option value="Pronto" ${b.status === 'Pronto' ? 'selected' : ''}>✨ Pronto (Na Loja)</option>
+              <option value="Finalizado">✅ Finalizado (Entregue/Pago)</option>
+            </select>
+            ${isPronto ? `<button onclick="notifyReady(${b.id})" class="px-2.5 py-2 rounded-lg bg-green-500 text-white text-[11px] font-bold flex shrink-0">📲 Avisar Pronto</button>` : ''}
+            <button onclick="removeBooking(${b.id})" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0">🗑️</button>
+          </div>
+        `;
+      } else if (mode === 'agenda') {
+        controlsHtml = `
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
+            <button onclick="confirmScheduleWhatsApp(${b.id})" class="px-3 py-1.5 rounded-lg bg-[#6AB43E] text-white text-[11px] font-bold flex-1">📲 Confirmar no WhatsApp</button>
+            <button onclick="moveToTodayQueue(${b.id})" class="px-3 py-1.5 rounded-lg bg-[#23B5C8] text-white text-[11px] font-bold">🐾 Puxar p/ Fila de Hoje</button>
+            <button onclick="removeBooking(${b.id})" class="px-2 py-1.5 text-xs text-red-500 hover:bg-red-50 rounded-lg">🗑️</button>
+          </div>
+        `;
+      }
 
       return `
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
           <div class="flex items-center justify-between">
             <div>
               <span class="font-bold text-sm text-slate-800">${b.petName}</span>
+              <span class="text-xs text-slate-500">(${b.ownerName})</span>
               <span class="text-[11px] px-2 py-0.5 rounded-full font-bold ml-1 ${statusColors[b.status] || ''}">${b.status}</span>
             </div>
             <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
           </div>
-          <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
+          <div class="text-[11px] text-slate-600 flex flex-wrap gap-x-3 gap-y-1">
+            <span>📅 <strong>Data:</strong> ${formatDateBR(b.date)} às <strong>${b.time}</strong></span>
+            <span>🐶 <strong>Porte:</strong> ${b.sizeName || 'Padrão'}</span>
+            <span>📞 ${b.ownerPhone}</span>
+          </div>
+          <p class="text-xs text-slate-700"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
+          ${b.ownerAddress ? `<p class="text-[11px] text-slate-500">📍 ${b.ownerAddress}</p>` : ''}
           ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded mt-1">⚠️ Obs: ${b.notes}</p>` : ''}
           ${controlsHtml}
         </div>
       `;
     }
 
-    // ================= ROTINAS DO PAINEL DO DONO =================
-    function renderAdminBookings() {
-      const list = document.getElementById('admin-bookings-list');
-      const doneBookings = bookings.filter(b => b.status === 'Finalizado');
-      
-      const inStore = bookings.length - doneBookings.length;
-      const rev = doneBookings.reduce((sum, b) => sum + (Number(b.total) || 0), 0);
-      const ticket = doneBookings.length ? (rev / doneBookings.length) : 0;
+    // ================= PAINEL DO DONO: RELATÓRIOS E RAIO-X =================
+    function setReportPeriod(mode) {
+      reportPeriodMode = mode;
+      ['hoje', '7dias', '30dias', 'tudo'].forEach(m => {
+        const btn = document.getElementById('rep-btn-' + m);
+        if (btn) {
+          btn.className = m === mode
+            ? 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[#23B5C8] text-white'
+            : 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
+        }
+      });
+      renderAdminBookings();
+    }
 
-      document.getElementById('stat-total').textContent = inStore;
-      document.getElementById('stat-ready').textContent = doneBookings.length;
+    function getCombinedHistoryRecords() {
+      const map = new Map();
+      historyDb.forEach(item => map.set(item.id, item));
+      bookings.forEach(item => map.set(item.id, item));
+      return Array.from(map.values());
+    }
+
+    function renderAdminBookings() {
+      const today = getLocalISODate(0);
+      const customDate = document.getElementById('rep-custom-date')?.value || today;
+      const allRecords = getCombinedHistoryRecords();
+
+      let filtered = [];
+      let labelText = '';
+
+      if (reportPeriodMode === 'hoje') {
+        filtered = allRecords.filter(b => b.date === today);
+        labelText = `Hoje (${formatDateBR(today)})`;
+      } else if (reportPeriodMode === '7dias') {
+        const limit = getLocalISODate(-7);
+        filtered = allRecords.filter(b => b.date >= limit && b.date <= today);
+        labelText = 'Últimos 7 dias';
+      } else if (reportPeriodMode === '30dias') {
+        const limit = getLocalISODate(-30);
+        filtered = allRecords.filter(b => b.date >= limit && b.date <= today);
+        labelText = 'Últimos 30 dias';
+      } else if (reportPeriodMode === 'data') {
+        filtered = allRecords.filter(b => b.date === customDate);
+        labelText = `Data: ${formatDateBR(customDate)}`;
+      } else {
+        filtered = allRecords;
+        labelText = 'Todo o Histórico';
+      }
+
+      document.getElementById('rep-active-label').textContent = `Exibindo: ${labelText}`;
+
+      const doneInPeriod = filtered.filter(b => b.status === 'Finalizado');
+      const inStoreToday = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= today)).length;
+      const rev = doneInPeriod.reduce((sum, b) => sum + (Number(b.total) || 0), 0);
+      const ticket = doneInPeriod.length ? (rev / doneInPeriod.length) : 0;
+
+      document.getElementById('stat-total').textContent = inStoreToday;
+      document.getElementById('stat-ready').textContent = doneInPeriod.length;
       document.getElementById('stat-revenue').textContent = `R$ ${formatMoney(rev)}`;
       document.getElementById('stat-ticket').textContent = `R$ ${formatMoney(ticket)}`;
 
-      if (bookings.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum atendimento registrado hoje.</p>`;
+      // Cálculo do Raio-X (usa os finalizados do período ou todos do período se ainda estiverem na fila)
+      const baseAnalytics = doneInPeriod.length > 0 ? doneInPeriod : filtered;
+      renderBusinessInsights(baseAnalytics);
+
+      const list = document.getElementById('admin-bookings-list');
+      if (filtered.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhuma ficha encontrada neste período.</p>`;
         return;
       }
-      list.innerHTML = bookings.map(b => buildBookingCardHtml(b, true)).join('');
+      filtered.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+      list.innerHTML = filtered.map(b => buildBookingCardHtml(b, 'admin')).join('');
     }
 
+    function renderBusinessInsights(records) {
+      const bestDayEl = document.getElementById('insight-best-day');
+      const bestHourEl = document.getElementById('insight-best-hour');
+      const bestSrvEl = document.getElementById('insight-best-service');
+      const breakdownEl = document.getElementById('insight-services-breakdown');
+
+      if (!records || records.length === 0) {
+        bestDayEl.textContent = 'Sem dados no período';
+        bestHourEl.textContent = 'Sem dados no período';
+        bestSrvEl.textContent = 'Sem dados no período';
+        breakdownEl.innerHTML = `<p class="text-xs text-slate-400">Registre atendimentos para visualizar as estatísticas.</p>`;
+        return;
+      }
+
+      const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+      const dayCounts = {};
+      const hourCounts = {};
+      const srvCounts = {};
+
+      records.forEach(r => {
+        if (r.date) {
+          const dt = new Date(r.date + 'T12:00:00');
+          if (!isNaN(dt)) {
+            const dName = diasSemana[dt.getDay()];
+            dayCounts[dName] = (dayCounts[dName] || 0) + 1;
+          }
+        }
+        if (r.time) {
+          hourCounts[r.time] = (hourCounts[r.time] || 0) + 1;
+        }
+        if (r.serviceName) {
+          srvCounts[r.serviceName] = (srvCounts[r.serviceName] || 0) + 1;
+        }
+      });
+
+      const topDay = Object.entries(dayCounts).sort((a, b) => b[1] - a[1])[0];
+      const topHour = Object.entries(hourCounts).sort((a, b) => b[1] - a[1])[0];
+      const sortedSrvs = Object.entries(srvCounts).sort((a, b) => b[1] - a[1]);
+      const topSrv = sortedSrvs[0];
+
+      bestDayEl.textContent = topDay ? `${topDay[0]} (${topDay[1]} pets)` : '—';
+      bestHourEl.textContent = topHour ? `Às ${topHour[0]} (${topHour[1]} pets)` : '—';
+      bestSrvEl.textContent = topSrv ? `${topSrv[0]} (${topSrv[1]}x)` : '—';
+
+      const totalSrvs = records.length;
+      breakdownEl.innerHTML = sortedSrvs.map(([name, count]) => {
+        const pct = Math.round((count / totalSrvs) * 100);
+        return `
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="font-semibold text-slate-700">${name}</span>
+              <span class="font-bold text-slate-900">${count} atendimento(s) (${pct}%)</span>
+            </div>
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+              <div class="bg-[#23B5C8] h-full rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ================= ABA CLIENTES: BUSCA, ORDEM, EDIÇÃO E BACKUP =================
     function renderClientsList() {
       const list = document.getElementById('admin-clients-list');
       const badge = document.getElementById('client-total-badge');
       if (badge) badge.textContent = `${clientsDb.length} cadastrados`;
       
       if (clientsDb.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente cadastrado ainda.</p>`; return;
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente cadastrado ainda.</p>`;
+        return;
+      }
+
+      const searchVal = (document.getElementById('admin-client-search')?.value || '').trim().toLowerCase();
+      const sortMode = document.getElementById('admin-client-sort')?.value || 'az';
+
+      let filtered = clientsDb.filter(c =>
+        (c.ownerName || '').toLowerCase().includes(searchVal) ||
+        (c.petName || '').toLowerCase().includes(searchVal) ||
+        (c.phone || '').includes(searchVal) ||
+        (c.address || '').toLowerCase().includes(searchVal)
+      );
+
+      if (sortMode === 'az') {
+        filtered.sort((a, b) => (a.ownerName || '').localeCompare(b.ownerName || ''));
+      } else if (sortMode === 'frequentes') {
+        filtered.sort((a, b) => (b.visitsCount || 0) - (a.visitsCount || 0));
+      } else if (sortMode === 'recentes') {
+        filtered.sort((a, b) => (b.lastVisitDate || '').localeCompare(a.lastVisitDate || ''));
+      }
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente encontrado para essa busca.</p>`;
+        return;
       }
       
-      list.innerHTML = clientsDb.map(c => {
-        const safeOwner = c.ownerName.replace(/'/g, "\\'");
-        const safePet = c.petName.replace(/'/g, "\\'");
+      list.innerHTML = filtered.map(c => {
+        const safeOwner = (c.ownerName || '').replace(/'/g, "\\'");
+        const safePet = (c.petName || '').replace(/'/g, "\\'");
         return `
           <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
             <div class="flex items-center justify-between">
@@ -1015,16 +1544,143 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 text-xs text-slate-600 pt-1">
               <div>📞 <strong>Tel:</strong> ${c.phone}</div>
-              <div>🔄 <strong>Frequência:</strong> ${c.visitsCount} visita(s)</div>
-              <div>📅 <strong>Última Visita:</strong> ${c.lastVisitDate || 'N/A'}</div>
+              <div>🔄 <strong>Frequência:</strong> ${c.visitsCount || 1} visita(s)</div>
+              <div>📅 <strong>Última Visita:</strong> ${formatDateBR(c.lastVisitDate) || 'N/A'}</div>
             </div>
-            <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
+            ${c.address ? `<div class="text-xs text-slate-600">📍 <strong>Endereço:</strong> ${c.address}</div>` : ''}
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 text-xs">
               <span class="text-slate-500"><strong>Último Serviço:</strong> ${c.lastService || 'Banho'}</span>
-              <button onclick="callClientWhatsApp('${c.phone}', '${safeOwner}', '${safePet}')" class="px-3 py-1 bg-[#6AB43E] text-white font-bold rounded-lg">💬 Enviar WhatsApp</button>
+              <div class="flex items-center gap-1.5">
+                <button onclick="openEditClientModal(${c.id})" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg">✏️ Editar</button>
+                <button onclick="deleteClientRecord(${c.id})" class="px-2 py-1 bg-red-50 text-red-600 font-bold rounded-lg">🗑️</button>
+                <button onclick="callClientWhatsApp('${c.phone}', '${safeOwner}', '${safePet}')" class="px-3 py-1 bg-[#6AB43E] text-white font-bold rounded-lg">💬 WhatsApp</button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    function openEditClientModal(id) {
+      const c = clientsDb.find(x => x.id === id);
+      if (!c) return;
+      document.getElementById('edit-cli-id').value = c.id;
+      document.getElementById('edit-cli-owner').value = c.ownerName || '';
+      document.getElementById('edit-cli-pet').value = c.petName || '';
+      document.getElementById('edit-cli-phone').value = c.phone || '';
+      document.getElementById('edit-cli-address').value = c.address || '';
+      document.getElementById('edit-client-modal').classList.remove('hidden');
+      document.getElementById('edit-client-modal').classList.add('flex');
+    }
+
+    function closeEditClientModal() {
+      document.getElementById('edit-client-modal').classList.add('hidden');
+      document.getElementById('edit-client-modal').classList.remove('flex');
+    }
+
+    function saveEditedClient() {
+      const id = Number(document.getElementById('edit-cli-id').value);
+      const owner = document.getElementById('edit-cli-owner').value.trim();
+      const pet = document.getElementById('edit-cli-pet').value.trim();
+      const phone = document.getElementById('edit-cli-phone').value.trim();
+      const address = document.getElementById('edit-cli-address').value.trim();
+
+      if (!owner || !pet || !phone) return alert('Preencha nome do tutor, pet e WhatsApp.');
+
+      const c = clientsDb.find(x => x.id === id);
+      if (c) {
+        c.ownerName = owner;
+        c.petName = pet;
+        c.phone = phone;
+        c.address = address;
+        localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+        renderClientsList();
+        renderReheatList();
+        closeEditClientModal();
+      }
+    }
+
+    function deleteClientRecord(id) {
+      if (!confirm('Deseja excluir este cliente da base de cadastrados?')) return;
+      clientsDb = clientsDb.filter(c => c.id !== id);
+      localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+      renderClientsList();
+      renderReheatList();
+    }
+
+    // Exportar Planilha CSV (Abre no Excel perfeitamente)
+    function exportClientsCSV() {
+      if (clientsDb.length === 0) return alert('Nenhum cliente cadastrado para exportar.');
+      const headers = ['Nome do Tutor', 'Nome do Pet', 'WhatsApp', 'Endereco', 'Total de Visitas', 'Ultima Visita', 'Ultimo Servico'];
+      const rows = clientsDb.map(c => [
+        `"${(c.ownerName || '').replace(/"/g, '""')}"`,
+        `"${(c.petName || '').replace(/"/g, '""')}"`,
+        `"${(c.phone || '').replace(/"/g, '""')}"`,
+        `"${(c.address || '').replace(/"/g, '""')}"`,
+        c.visitsCount || 1,
+        c.lastVisitDate || '',
+        `"${(c.lastService || '').replace(/"/g, '""')}"`
+      ].join(';'));
+
+      const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `clientes_recanto_petshop_${getLocalISODate(0)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Backup Completo JSON (Clientes + Histórico + Fila + Configurações)
+    function downloadFullBackup() {
+      const backupObj = {
+        version: 25,
+        exportedAt: new Date().toISOString(),
+        config,
+        clientsDb,
+        bookings,
+        historyDb
+      };
+      const blob = new Blob([JSON.stringify(backupObj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `backup_recanto_petshop_${getLocalISODate(0)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function restoreFullBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!data.config && !data.clientsDb) throw new Error('Formato inválido');
+          if (!confirm('Restaurar este backup substituirá os dados atuais pelos dados do arquivo. Confirmar?')) return;
+
+          if (data.config) config = data.config;
+          if (data.clientsDb) clientsDb = data.clientsDb;
+          if (data.bookings) bookings = data.bookings;
+          if (data.historyDb) historyDb = data.historyDb;
+
+          localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
+          localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+          localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+          localStorage.setItem('recanto_history_v25', JSON.stringify(historyDb));
+
+          applyStoreBranding();
+          renderAllClient();
+          refreshAllViews();
+          renderAdminEditors();
+          alert('✅ Backup restaurado com sucesso!');
+        } catch (err) {
+          alert('❌ Erro ao ler o arquivo de backup. Verifique se escolheu o arquivo .json correto.');
+        }
+      };
+      reader.readAsText(file);
     }
 
     // ================= ABA CLIENTES SUMIDOS (REAQUECER) =================
@@ -1037,7 +1693,6 @@
       const container = document.getElementById('admin-reheat-list');
       const inputVal = document.getElementById('reheat-days-input').value;
       const daysLimit = parseInt(inputVal) || 30;
-      
       const today = new Date();
       
       const inactiveClients = clientsDb.filter(c => {
@@ -1062,7 +1717,7 @@
                 <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
                 <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold ml-1">🐾 Pet: ${c.petName}</span>
               </div>
-              <span class="text-xs text-slate-500">Última visita: <strong>${c.lastVisitDate || 'Desconhecida'}</strong></span>
+              <span class="text-xs text-slate-500">Última visita: <strong>${formatDateBR(c.lastVisitDate) || 'Desconhecida'}</strong></span>
             </div>
             
             <div class="space-y-1">
@@ -1093,7 +1748,7 @@
       window.open(`https://wa.me/${full}?text=${encodeURIComponent(`Olá, *${ownerName}*! Passando para saber como está o(a) *${petName}*! 🐾`)}`, '_blank');
     }
 
-    // ================= MENUS E CONFIGURAÇÕES =================
+    // ================= MENUS E CONFIGURAÇÕES DO DONO =================
     function openPinModal() { 
       document.getElementById('pin-input').value = ''; 
       document.getElementById('pin-modal').classList.remove('hidden'); 
@@ -1112,9 +1767,7 @@
         document.getElementById('view-client').classList.add('hidden'); 
         document.getElementById('view-admin').classList.remove('hidden'); 
         document.getElementById('btn-exit-admin').classList.remove('hidden');
-        renderAdminBookings(); 
-        renderClientsList(); 
-        renderReheatList(); 
+        refreshAllViews();
         renderAdminEditors(); 
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else { 
@@ -1132,20 +1785,27 @@
     function switchAdminTab(tab) {
       ['fila', 'clientes', 'reaquecer', 'portes', 'precos', 'horarios'].forEach(t => {
         document.getElementById('admin-sec-' + t).classList.toggle('hidden', t !== tab);
-        document.getElementById('adm-tab-' + t).className = t === tab ? 'px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white' : 'px-2 py-2 rounded-lg text-xs font-bold text-slate-300';
+        document.getElementById('adm-tab-' + t).className = t === tab
+          ? 'px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white'
+          : 'px-2 py-2 rounded-lg text-xs font-bold text-slate-300';
       });
-      if (tab === 'reaquecer') {
-        renderReheatList();
-      }
+      if (tab === 'reaquecer') renderReheatList();
+      if (tab === 'fila') renderAdminBookings();
     }
 
     function renderAdminEditors() {
-      // Editor de Portes
+      // Editor de Portes com rótulos visíveis
       document.getElementById('admin-sizes-editor').innerHTML = config.sizes.map((sz, idx) => `
-        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
-          <input type="text" id="edit-sz-name-${idx}" value="${sz.name}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white w-1/3" />
-          <input type="text" id="edit-sz-sub-${idx}" value="${sz.subtitle}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white flex-1" />
-          <button onclick="deleteSizeCategory('${sz.id}')" class="text-xs text-red-500 font-bold px-2 py-1">🗑️</button>
+        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center gap-2">
+          <div class="sm:w-1/3">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Nome do Porte</label>
+            <input type="text" id="edit-sz-name-${idx}" value="${sz.name}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white" />
+          </div>
+          <div class="flex-1">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Peso / Exemplos de Raça</label>
+            <input type="text" id="edit-sz-sub-${idx}" value="${sz.subtitle}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white" />
+          </div>
+          <button onclick="deleteSizeCategory('${sz.id}')" class="text-xs text-red-500 hover:bg-red-50 rounded-lg font-bold px-2.5 py-2 self-end sm:self-center" title="Excluir Porte">🗑️</button>
         </div>
       `).join('');
       
@@ -1173,7 +1833,7 @@
           <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-slate-50" />
           <div class="flex items-center gap-1 shrink-0">
             <span class="text-[10px] text-slate-500 font-bold">R$</span>
-            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold text-[#EE3E80] bg-slate-50 text-center" />
+            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-14 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold text-[#EE3E80] bg-slate-50 text-center" />
           </div>
           <button onclick="deleteExtra('${ex.id}')" class="text-red-500 hover:bg-red-50 rounded-lg shrink-0 px-1" title="Excluir">🗑️</button>
         </div>
@@ -1184,6 +1844,23 @@
       document.getElementById('cfg-store-address').value = config.storeAddress;
       document.getElementById('cfg-whatsapp').value = config.whatsapp;
       document.getElementById('cfg-pin').value = config.pin;
+    }
+
+    function addNewSizeCategory() {
+      const name = document.getElementById('new-size-name').value.trim();
+      const subtitle = document.getElementById('new-size-sub').value.trim() || 'Personalizado';
+      if (!name) return alert('Digite o nome do novo porte!');
+
+      const newId = 'sz_' + Date.now();
+      config.sizes.push({ id: newId, name, subtitle });
+      config.services.forEach(srv => {
+        srv.prices[newId] = 60;
+      });
+
+      document.getElementById('new-size-name').value = '';
+      document.getElementById('new-size-sub').value = '';
+      saveConfig();
+      alert('✅ Novo porte adicionado! Você já pode ajustar o preço dele na aba Preços.');
     }
 
     function openNewServiceModal() { 
@@ -1256,7 +1933,7 @@
         if (s) sz.subtitle = s.value.trim();
       }); 
       saveConfig(); 
-      alert('✅ Categorias salvas!');
+      alert('✅ Categorias de portes salvas!');
     }
     
     function savePricesFromEditor() {
@@ -1269,7 +1946,7 @@
         });
       }); 
       saveConfig(); 
-      alert('✅ Preços salvos!');
+      alert('✅ Tabela de preços salva!');
     }
     
     function saveStoreDataConfig() {
@@ -1279,7 +1956,7 @@
       config.whatsapp = document.getElementById('cfg-whatsapp').value.trim();
       config.pin = document.getElementById('cfg-pin').value.trim(); 
       saveConfig(); 
-      alert('✅ Configurações salvas!');
+      alert('✅ Configurações da loja e logo salvas!');
     }
   </script>
 </body>
