@@ -1,1228 +1,1286 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recanto Petshop - Painel de Balcão</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --pink: #ff007a;
-            --green: #22c55e;
-            --cyan: #00a8b5;
-            --yellow: #eab308;
-            --orange: #ff7b00;
-            --bg: #f4f7fa;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #dce3ec;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Barra Superior 4 Cores */
-        .top-color-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            height: 6px;
-            width: 100%;
-        }
-        .bar-pink { background-color: var(--pink); }
-        .bar-green { background-color: var(--green); }
-        .bar-cyan { background-color: var(--cyan); }
-        .bar-yellow { background-color: var(--yellow); }
-
-        /* Cabeçalho */
-        header {
-            background: var(--card-bg);
-            padding: 14px 20px;
-            border-bottom: 1px solid #e8eef5;
-        }
-
-        .header-container {
-            max-width: 520px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .brand-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-circle {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            border: 2.5px solid var(--cyan);
-            background-color: #e6f7f8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--cyan);
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .logo-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform-origin: center;
-        }
-
-        .brand-text-wrap {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-title {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-subtitle {
-            font-size: 11px;
-            font-weight: 700;
-            color: #475569;
-            letter-spacing: 3.5px;
-            margin-top: 3px;
-            text-transform: uppercase;
-        }
-
-        /* Container Principal */
-        .main-container {
-            max-width: 520px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 18px 16px 40px;
-            flex: 1;
-        }
-
-        /* Banner Principal */
-        .hero-banner {
-            background-color: var(--cyan);
-            color: #ffffff;
-            border-radius: 18px;
-            padding: 22px 20px;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 12px rgba(0, 168, 181, 0.18);
-        }
-
-        .hero-banner h1 {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 25px;
-            font-weight: 700;
-            line-height: 1.25;
-        }
-
-        /* Abas de Navegação do Balcão */
-        .tabs-nav {
-            background-color: #e9eef5;
-            border-radius: 16px;
-            padding: 6px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 18px;
-        }
-
-        .tab-btn {
-            border: none;
-            background: transparent;
-            padding: 10px 8px;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: #334155;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        .tab-btn.active {
-            background-color: #ffffff;
-            color: var(--cyan);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-        }
-
-        /* Cards Brancos */
-        .card {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 16px;
-            border: 1px solid #e8eef5;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-        }
-
-        /* Busca de Cliente */
-        .search-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 10px;
-        }
-
-        .input-control {
-            width: 100%;
-            padding: 13px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            background-color: #ffffff;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .input-control::placeholder {
-            color: #94a3b8;
-        }
-
-        .input-control:focus {
-            outline: none;
-            border-color: var(--cyan);
-            box-shadow: 0 0 0 3px rgba(0, 168, 181, 0.12);
-        }
-
-        .input-error {
-            border-color: var(--pink) !important;
-            box-shadow: 0 0 0 3px rgba(255, 0, 122, 0.15) !important;
-        }
-
-        /* Cabeçalho da Seção Novo Atendimento */
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .plus-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--pink);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        /* Campos do Formulário */
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-
-        /* Resultados da Busca Rápida */
-        .search-results {
-            margin-top: 8px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            display: none;
-            max-height: 210px;
-            overflow-y: auto;
-            background: #fff;
-        }
-
-        .search-item {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .search-item:hover {
-            background-color: #f0fdfa;
-        }
-
-        /* Lista de Adicionais Checkbox */
-        .addons-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .addon-chip {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .addon-chip input {
-            accent-color: var(--cyan);
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Resumo de Valor */
-        .price-summary {
-            background: #f0fdfa;
-            border: 1.5px solid #99f6e4;
-            border-radius: 14px;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 16px 0;
-        }
-
-        .price-summary span {
-            font-size: 13px;
-            font-weight: 700;
-            color: #0f766e;
-        }
-
-        .price-summary strong {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 22px;
-            color: #0f766e;
-        }
-
-        /* Botões Principais */
-        .btn-primary {
-            width: 100%;
-            background-color: var(--pink);
-            color: #ffffff;
-            border: none;
-            border-radius: 14px;
-            padding: 15px;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(255, 0, 122, 0.25);
-            transition: transform 0.1s, opacity 0.2s;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        /* Cards da Fila / Em Andamento */
-        .queue-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-        }
-
-        .queue-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .badge {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .badge-waiting { background: #fef3c7; color: #b45309; }
-        .badge-doing { background: #e0f2fe; color: #0369a1; }
-        .badge-ready { background: #dcfce7; color: #15803d; }
-
-        .queue-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .btn-sm {
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .btn-wa { background: #22c55e; color: #fff; }
-        .btn-finish { background: var(--cyan); color: #fff; }
-        .btn-status { background: #f1f5f9; color: #334155; }
-        .btn-del { background: #fee2e2; color: #b91c1c; }
-
-        /* Rodapé e Painel do Dono */
-        footer {
-            text-align: center;
-            padding: 20px 16px 30px;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        .owner-trigger-btn {
-            background: #e2e8f0;
-            color: #475569;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 8px;
-        }
-
-        .hidden { display: none !important; }
-
-        /* Modal Painel do Dono */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            z-index: 1000;
-        }
-
-        .modal-box {
-            background: #fff;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            border-radius: 20px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .owner-tabs {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 14px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .owner-tab-btn {
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
-            padding: 7px 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .owner-tab-btn.active {
-            background: var(--cyan);
-            color: #fff;
-            border-color: var(--cyan);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recanto Petshop | CRM e Gestão Completa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+    .font-brand { font-family: 'Fredoka', sans-serif; }
+    .brand-gradient-bar {
+      background: linear-gradient(90deg, #EE3E80 0%, #EE3E80 25%, #6AB43E 25%, #6AB43E 50%, #23B5C8 50%, #23B5C8 75%, #FDD815 75%, #FDD815 100%);
+      height: 6px;
+    }
+    .service-card.selected { border-color: #23B5C8; background-color: #ECFEFF; box-shadow: 0 0 0 2px #23B5C8; }
+    .size-btn.selected { background-color: #23B5C8; color: white; border-color: #23B5C8; }
+    .time-btn.selected { background-color: #EE3E80; color: white; border-color: #EE3E80; }
+    input, select, textarea { transition: all 0.3s ease; }
+  </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-    <!-- Barra Colorida no Topo -->
-    <div class="top-color-bar">
-        <div class="bar-pink"></div>
-        <div class="bar-green"></div>
-        <div class="bar-cyan"></div>
-        <div class="bar-yellow"></div>
+  <div class="brand-gradient-bar w-full sticky top-0 z-50"></div>
+
+  <!-- Cabeçalho -->
+  <header class="bg-white shadow-sm sticky top-1.5 z-40">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div id="header-logo-container" class="flex items-center gap-3">
+          <div id="default-logo-elements" class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full border-2 border-[#23B5C8] flex items-center justify-center bg-cyan-50 shadow-sm shrink-0">
+              <span class="font-brand text-2xl font-bold text-[#23B5C8] leading-none">R</span>
+            </div>
+            <div>
+              <div class="font-brand text-2xl tracking-tight leading-none flex items-center">
+                <span class="text-[#EE3E80]">R</span>
+                <span class="text-[#6AB43E]">e</span>
+                <span class="text-[#23B5C8]">c</span>
+                <span class="text-[#FDD815] drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">a</span>
+                <span class="text-[#EE3E80]">n</span>
+                <span class="text-[#6AB43E]">t</span>
+                <span class="text-[#23B5C8]">o</span>
+              </div>
+              <span class="block text-[10px] font-bold tracking-[0.28em] text-slate-600 uppercase mt-0.5">PETSHOP</span>
+            </div>
+          </div>
+          <img id="custom-logo-img" class="object-contain hidden rounded-lg" alt="Logo" />
+        </div>
+      </div>
+      <button id="btn-exit-admin" onclick="exitAdmin()" class="hidden px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5">
+        ⬅️ Voltar
+      </button>
     </div>
+  </header>
 
-    <!-- Cabeçalho Simplificado -->
-    <header>
-        <div class="header-container">
-            <div class="brand-box">
-                <div class="logo-circle" id="header-logo-box">R</div>
-                <div class="brand-text-wrap">
-                    <div class="brand-title" id="header-store-title">
-                        <span style="color:#ff007a">R</span><span style="color:#ff007a">e</span><span style="color:#ff7b00">c</span><span style="color:#eab308">a</span><span style="color:#22c55e">n</span><span style="color:#00a8b5">t</span><span style="color:#00a8b5">o</span>
-                    </div>
-                    <div class="brand-subtitle" id="header-store-subtitle">PETSHOP</div>
-                </div>
+  <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-5 space-y-5">
+
+    <!-- ==================== TELA 1: BALCÃO (COM ABAS) ==================== -->
+    <section id="view-client" class="space-y-4">
+      
+      <div class="bg-gradient-to-r from-[#23B5C8] to-[#1ba0b2] rounded-2xl p-5 text-white shadow-md">
+        <h1 class="font-brand text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
+      </div>
+
+      <!-- ABAS DO BALCÃO -->
+      <div class="grid grid-cols-3 gap-1 bg-slate-200 p-1.5 rounded-xl">
+        <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8]">
+          📝 Registrar
+        </button>
+        <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
+          📋 Fila Ativa
+        </button>
+        <button onclick="switchClientTab('fechamento')" id="tab-cli-fechamento" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
+          ✅ Caixa do Dia
+        </button>
+      </div>
+
+      <!-- ABA A: NOVO REGISTRO -->
+      <div id="client-sec-novo" class="space-y-4">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
+          <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
+            🔍 Buscar Cliente Cadastrado
+          </h3>
+          <input type="text" id="counter-search-input" oninput="filterCounterClients(this.value)" placeholder="Digite nome do pet, tutor ou telefone..." 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#23B5C8]" />
+          <div id="counter-search-results" class="hidden space-y-2 max-h-48 overflow-y-auto pt-1"></div>
+        </div>
+
+        <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100 space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-2.5">
+            <span class="w-6 h-6 rounded-full bg-[#EE3E80] text-white text-xs font-bold flex items-center justify-center">+</span>
+            <h2 class="font-bold text-slate-800 text-sm sm:text-base">Dados do Atendimento</h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Pet *</label>
+              <input type="text" id="pet-name" oninput="clearError(this)" placeholder="Ex: Thor..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
             </div>
-        </div>
-    </header>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Espécie *</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="selectSpecies('Cachorro')" id="sp-dog" class="py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]">🐶 Cachorro</button>
+                <button type="button" onclick="selectSpecies('Gato')" id="sp-cat" class="py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold">🐱 Gato</button>
+              </div>
+            </div>
+          </div>
 
-    <!-- Conteúdo Principal -->
-    <main class="main-container">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Porte, Peso ou Raça *</label>
+            <div id="sizes-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+          </div>
 
-        <!-- Banner -->
-        <div class="hero-banner">
-            <h1>Painel de Balcão – Banho &amp; Tosa</h1>
-        </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Tutor *</label>
+              <input type="text" id="owner-name" oninput="clearError(this)" placeholder="Nome do cliente" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp do Tutor *</label>
+              <input type="tel" id="owner-phone" oninput="clearError(this)" placeholder="(11) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+            </div>
+          </div>
 
-        <!-- Abas de Navegação -->
-        <div class="tabs-nav">
-            <button type="button" class="tab-btn active" id="tab-btn-registrar" onclick="mostrarAba('registrar')">
-                📝 Registrar
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Serviço Principal (Toque para desmarcar)</label>
+            <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+          </div>
+
+          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 space-y-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="custom-service-check" onchange="toggleCustomService(this)" class="w-4 h-4 text-[#EE3E80] rounded" />
+              <span class="font-bold text-xs text-amber-900">💡 Serviço Variável / Sob Avaliação na Hora</span>
+            </label>
+            <div id="custom-service-box" class="hidden space-y-2.5 pt-1">
+              <input type="text" id="custom-service-desc" oninput="clearError(this)" placeholder="O que foi feito? (ex: Limpeza extra)" class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs bg-white" />
+              <div>
+                <label class="block text-[10px] font-bold text-amber-900 mb-1">Valor Cobrado na Hora (R$)</label>
+                <input type="number" step="0.5" id="custom-service-price" oninput="clearError(this); updateSummary()" placeholder="Ex: 15.00" class="w-full sm:w-40 px-3 py-2 rounded-lg border border-amber-300 text-sm font-bold text-[#EE3E80] bg-white" />
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-1">
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Adicionais (Opcional)</label>
+            <div id="extras-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Data *</label>
+              <input type="date" id="booking-date" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
+              <div id="time-slots" class="grid grid-cols-4 gap-1.5"></div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Observações</label>
+            <input type="text" id="booking-notes" placeholder="Ex: pele sensível..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+          </div>
+
+          <div class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+              <span class="text-[11px] text-slate-400 uppercase font-semibold">Total Calculado</span>
+              <div class="flex items-baseline gap-2">
+                <span id="total-price-display" class="font-brand text-2xl font-bold text-[#FDD815]">R$ 0,00</span>
+                <span id="summary-desc" class="text-xs text-slate-300 line-clamp-1"></span>
+              </div>
+            </div>
+            <button type="submit" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
+              ✅ Incluir na Fila
             </button>
-            <button type="button" class="tab-btn" id="tab-btn-fila" onclick="mostrarAba('fila')">
-                📋 Em Andamento
+          </div>
+        </form>
+      </div>
+
+      <!-- ABA B: FILA ATIVA -->
+      <div id="client-sec-fila" class="hidden space-y-3">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
+            <h3 class="font-bold text-slate-800 text-sm sm:text-base">📋 Pets na Loja (Aguardando / Banho)</h3>
+            <span id="counter-badge-active" class="text-xs bg-[#23B5C8] text-white px-2.5 py-1 rounded-full font-bold">0</span>
+          </div>
+          <div id="counter-bookings-active" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- ABA C: FECHAMENTO / CAIXA -->
+      <div id="client-sec-fechamento" class="hidden space-y-3">
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm text-center">
+            <span class="text-[11px] text-slate-500 font-semibold">Pets Finalizados Hoje</span>
+            <p id="counter-stat-done" class="font-brand text-xl font-bold text-slate-800">0</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm text-center">
+            <span class="text-[11px] text-slate-500 font-semibold">Caixa (Faturamento)</span>
+            <p id="counter-stat-rev" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2.5 mb-3">✅ Histórico de Pets Finalizados</h3>
+          <div id="counter-bookings-done" class="space-y-3 mb-4"></div>
+          
+          <button onclick="encerrarDia()" class="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow">
+            🌙 Encerrar Expediente e Limpar Fila
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TELA 2: PAINEL DO DONO ==================== -->
+    <section id="view-admin" class="hidden space-y-5">
+      
+      <div class="bg-slate-900 text-white rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] bg-[#EE3E80] px-2.5 py-0.5 rounded-full font-bold uppercase">Painel Gestor</span>
+            <h2 class="font-brand text-xl font-bold mt-0.5" id="admin-store-title">Controle Recanto Petshop</h2>
+          </div>
+          <button onclick="resetToFactory()" class="text-[11px] text-slate-400 underline hover:text-white">
+            Restaurar Padrão
+          </button>
+        </div>
+
+        <!-- ABAS DO DONO -->
+        <div class="grid grid-cols-2 sm:grid-cols-6 gap-1 bg-slate-800 p-1 rounded-xl">
+          <button onclick="switchAdminTab('fila')" id="adm-tab-fila" class="px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white">
+            📋 Resumo
+          </button>
+          <button onclick="switchAdminTab('clientes')" id="adm-tab-clientes" class="px-2 py-2 rounded-lg text-xs font-bold text-slate-300">
+            👥 Clientes
+          </button>
+          <button onclick="switchAdminTab('reaquecer')" id="adm-tab-reaquecer" class="px-2 py-2 rounded-lg text-xs font-bold text-amber-300">
+            🔥 Sumidos
+          </button>
+          <button onclick="switchAdminTab('portes')" id="adm-tab-portes" class="px-2 py-2 rounded-lg text-xs font-bold text-slate-300">
+            🐶 Portes
+          </button>
+          <button onclick="switchAdminTab('precos')" id="adm-tab-precos" class="px-2 py-2 rounded-lg text-xs font-bold text-slate-300">
+            💰 Preços
+          </button>
+          <button onclick="switchAdminTab('horarios')" id="adm-tab-horarios" class="px-2 py-2 rounded-lg text-xs font-bold text-slate-300">
+            ⚙️ Loja
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-ABA 1: RESUMO -->
+      <div id="admin-sec-fila" class="space-y-4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Na Loja (Fila)</span>
+            <p id="stat-total" class="font-brand text-xl font-bold text-slate-800">0</p>
+          </div>
+          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Finalizados</span>
+            <p id="stat-ready" class="font-brand text-xl font-bold text-[#23B5C8]">0</p>
+          </div>
+          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Caixa Finalizados</span>
+            <p id="stat-revenue" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
+          </div>
+          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center border-b-4 border-b-[#EE3E80]">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Ticket Médio</span>
+            <p id="stat-ticket" class="font-brand text-xl font-bold text-[#EE3E80]">R$ 0,00</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
+          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2.5">Todas as Fichas (Dia)</h3>
+          <div id="admin-bookings-list" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- SUB-ABA 2: CLIENTES -->
+      <div id="admin-sec-clientes" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-800 text-base">👥 Base de Clientes Cadastrados</h3>
+            <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 cadastrados</span>
+          </div>
+          <div id="admin-clients-list" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- SUB-ABA 3: CLIENTES SUMIDOS (REAQUECER) -->
+      <div id="admin-sec-reaquecer" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3 space-y-2">
+            <h3 class="font-bold text-slate-800 text-base">🔥 Clientes Sumidos (Reaquecimento)</h3>
+            <p class="text-xs text-slate-500">Selecione quantos dias sem vir para encontrar clientes sumidos, escolha ou edite a mensagem e envie direto no WhatsApp.</p>
+            
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <span class="text-xs font-bold text-slate-600">Filtro Rápido:</span>
+              <button onclick="setReheatDays(7)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">7 dias</button>
+              <button onclick="setReheatDays(15)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">15 dias</button>
+              <button onclick="setReheatDays(30)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">30 dias</button>
+              <button onclick="setReheatDays(45)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">45 dias</button>
+              <button onclick="setReheatDays(60)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">60 dias</button>
+              <div class="flex items-center gap-1 ml-auto">
+                <input type="number" id="reheat-days-input" value="30" oninput="renderReheatList()" class="w-16 px-2 py-1 rounded border border-slate-300 text-xs font-bold text-center" />
+                <span class="text-xs text-slate-600">dias</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="admin-reheat-list" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- SUB-ABA 4: PORTES -->
+      <div id="admin-sec-portes" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <h3 class="font-bold text-slate-800 text-base">🐶 Categorias de Cães e Gatos</h3>
+          <div id="admin-sizes-editor" class="space-y-2.5"></div>
+          <button onclick="saveSizesChanges()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">
+            💾 Salvar Alterações nas Categorias
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-ABA 5: PREÇOS -->
+      <div id="admin-sec-precos" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <h3 class="font-bold text-slate-800 text-base">💰 Tabela de Preços dos Serviços (R$)</h3>
+            <button onclick="openNewServiceModal()" class="px-3 py-1.5 bg-[#23B5C8] text-white rounded-xl text-xs font-bold">+ Novo</button>
+          </div>
+          <div id="admin-services-editor" class="space-y-4"></div>
+          <button onclick="savePricesFromEditor()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">
+            💾 Salvar Tabela de Preços
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <h3 class="font-bold text-slate-800 text-base">✨ Gerenciar Serviços Adicionais</h3>
+          <div id="admin-extras-editor" class="space-y-3"></div>
+          <div class="pt-3 border-t border-slate-200 space-y-2.5 bg-slate-50 p-3.5 rounded-xl border">
+            <span class="block text-xs font-bold text-slate-700">➕ Cadastrar Novo Adicional</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input type="text" id="new-extra-name" placeholder="Nome (ex: Escovação de Dentes)" class="min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
+              <input type="number" step="0.5" id="new-extra-price" placeholder="Valor (R$)" class="min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold text-[#EE3E80]" />
+            </div>
+            <button onclick="addNewExtra()" class="w-full py-2.5 rounded-xl bg-[#23B5C8] hover:bg-[#1ba0b2] text-white font-bold text-xs shadow-sm">
+              + Adicionar Serviço Adicional
             </button>
-            <button type="button" class="tab-btn" id="tab-btn-caixa" onclick="mostrarAba('caixa')">
-                ✅ Caixa do Dia
-            </button>
+          </div>
+          <button onclick="saveExtrasFromEditor()" class="w-full py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-sm shadow">
+            💾 Salvar Alterações dos Adicionais
+          </button>
         </div>
+      </div>
 
-        <!-- ABA 1: REGISTRAR -->
-        <div id="aba-registrar">
-            <!-- Card de Busca -->
-            <div class="card">
-                <label class="search-label">🔍 Buscar Cliente Cadastrado</label>
-                <input type="text" id="input-busca-cliente" class="input-control" placeholder="Digite nome do pet, tutor ou telefone..." oninput="buscarClienteRapido(this.value)">
-                <div id="lista-busca-rapida" class="search-results"></div>
+      <!-- SUB-ABA 6: LOJA -->
+      <div id="admin-sec-horarios" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <h3 class="font-bold text-slate-800 text-base">📍 Dados, Logo e Zoom</h3>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">🖼️ Enviar Logo da Loja</label>
+            <input type="file" id="cfg-logo-file" accept="image/*" onchange="handleLogoUpload(event)"
+              class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-[#23B5C8]" />
+          </div>
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+            <span class="block text-xs font-bold text-slate-700">🔎 Pré-visualização e Zoom da Logo</span>
+            <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 h-24">
+              <img id="preview-logo-box" class="object-contain max-h-16 hidden" alt="Preview" />
+              <span id="preview-logo-placeholder" class="text-xs text-slate-400">Nenhuma logo enviada</span>
             </div>
-
-            <!-- Card Novo Atendimento -->
-            <div class="card">
-                <div class="section-header">
-                    <div class="plus-badge">+</div>
-                    <h2 class="section-title">Novo Atendimento</h2>
-                </div>
-
-                <form id="form-atendimento" onsubmit="registrarAtendimento(event)" novalidate>
-                    <div class="form-group">
-                        <label class="form-label">Nome do Pet *</label>
-                        <input type="text" id="pet-nome" class="input-control" placeholder="Ex: Thor" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label class="form-label">Espécie</label>
-                            <select id="pet-especie" class="input-control">
-                                <option value="Cão">🐶 Cão</option>
-                                <option value="Gato">🐱 Gato</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label">Porte do Pet *</label>
-                            <select id="pet-porte" class="input-control" onchange="atualizarPrecosFormulario()"></select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Raça / Pelagem (Opcional)</label>
-                        <input type="text" id="pet-raca" class="input-control" placeholder="Ex: Shih Tzu, Pelo Longo...">
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label class="form-label">Nome do Tutor *</label>
-                            <input type="text" id="tutor-nome" class="input-control" placeholder="Ex: Maria" required>
-                        </div>
-                        <div>
-                            <label class="form-label">WhatsApp *</label>
-                            <input type="tel" id="tutor-zap" class="input-control" placeholder="(11) 99999-9999" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label class="form-label">Serviço Principal *</label>
-                            <select id="servico-principal" class="input-control" onchange="calcularTotalAtendimento()"></select>
-                        </div>
-                        <div>
-                            <label class="form-label">Horário</label>
-                            <input type="time" id="atendimento-hora" class="input-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Serviços Adicionais</label>
-                        <div id="lista-adicionais-form" class="addons-grid"></div>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label class="form-label">Pagamento</label>
-                            <select id="pagamento-metodo" class="input-control">
-                                <option value="A Pagar">⏳ Pagar na Retirada</option>
-                                <option value="Pix">💠 Pix</option>
-                                <option value="Cartão">💳 Cartão</option>
-                                <option value="Dinheiro">💵 Dinheiro</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label">Valor Final (R$)</label>
-                            <input type="number" step="0.01" id="valor-final" class="input-control" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Observações / Alergias</label>
-                        <input type="text" id="atendimento-obs" class="input-control" placeholder="Ex: Alergia a perfume, cuidado com ouvido...">
-                    </div>
-
-                    <div class="price-summary">
-                        <span>Total Estimado:</span>
-                        <strong id="display-total">R$ 0,00</strong>
-                    </div>
-
-                    <button type="submit" class="btn-primary">Registrar Atendimento</button>
-                </form>
+            <div class="flex items-center justify-between gap-3">
+              <button type="button" onclick="adjustLogoZoom(-10)" class="px-3 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖ Menor</button>
+              <span id="zoom-level-label" class="text-xs font-bold text-slate-600">Altura: 45px</span>
+              <button type="button" onclick="adjustLogoZoom(10)" class="px-3 py-1.5 bg-[#23B5C8] text-white font-bold rounded-lg text-xs">➕ Maior</button>
             </div>
+          </div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome da Loja</label><input type="text" id="cfg-store-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título do Banner</label><input type="text" id="cfg-banner-title" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Endereço Completo</label><input type="text" id="cfg-store-address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp da Loja (com DDD)</label><input type="text" id="cfg-whatsapp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Senha PIN do Painel</label><input type="text" id="cfg-pin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
+          <button onclick="saveStoreDataConfig()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">💾 Salvar Dados</button>
         </div>
+      </div>
+    </section>
 
-        <!-- ABA 2: EM ANDAMENTO -->
-        <div id="aba-fila" class="hidden">
-            <div id="container-fila"></div>
-        </div>
+  </main>
 
-        <!-- ABA 3: CAIXA DO DIA -->
-        <div id="aba-caixa" class="hidden">
-            <div class="card">
-                <h3 class="section-title" style="margin-bottom: 12px;">💰 Resumo do Caixa de Hoje</h3>
-                <div class="price-summary" style="margin-top:0;">
-                    <span>Total Recebido Hoje:</span>
-                    <strong id="caixa-total-valor">R$ 0,00</strong>
-                </div>
-                <div id="caixa-resumo-metodos" style="font-size: 13px; color: #475569; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;"></div>
-            </div>
-
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <h3 class="section-title" style="font-size:16px;">Atendimentos Concluídos</h3>
-                    <button onclick="limparCaixaDia()" class="btn-sm btn-del" style="padding:6px 10px;">Limpar Dia</button>
-                </div>
-                <div id="lista-caixa-concluidos"></div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Rodapé com Acesso ao Painel do Dono -->
-    <footer>
-        <button type="button" class="owner-trigger-btn" onclick="abrirPainelDono()">⚙️ Painel do Dono</button>
-        <p>Recanto Petshop – Sistema de Gestão Local</p>
-    </footer>
-
-    <!-- MODAL: PAINEL DO DONO (PIN 1234) -->
-    <div id="modal-dono" class="modal-overlay hidden">
-        <div class="modal-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                <h2 class="section-title">⚙️ Painel de Gestão do Dono</h2>
-                <button onclick="fecharPainelDono()" class="btn-sm btn-del">✕ Fechar</button>
-            </div>
-
-            <div class="owner-tabs">
-                <button class="owner-tab-btn active" id="otab-btn-precos" onclick="mostrarAbaDono('precos')">💲 Preços e Portes</button>
-                <button class="owner-tab-btn" id="otab-btn-adicionais" onclick="mostrarAbaDono('adicionais')">➕ Adicionais</button>
-                <button class="owner-tab-btn" id="otab-btn-sumidos" onclick="mostrarAbaDono('sumidos')">📢 Clientes Sumidos</button>
-                <button class="owner-tab-btn" id="otab-btn-loja" onclick="mostrarAbaDono('loja')">🏪 Loja &amp; Logo</button>
-            </div>
-
-            <!-- Aba Dono: Preços por Porte -->
-            <div id="otab-precos">
-                <p style="font-size:12px; color:#64748b; margin-bottom:12px;">Edite os valores base de cada serviço conforme o porte:</p>
-                <div id="editor-precos-portes"></div>
-                <button onclick="salvarConfiguracoesDono()" class="btn-primary" style="margin-top:12px;">Salvar Tabela de Preços</button>
-            </div>
-
-            <!-- Aba Dono: Adicionais -->
-            <div id="otab-adicionais" class="hidden">
-                <div id="editor-lista-adicionais" style="margin-bottom:12px;"></div>
-                <div class="form-row">
-                    <input type="text" id="novo-adicional-nome" class="input-control" placeholder="Nome (ex: Hidratação)">
-                    <input type="number" id="novo-adicional-preco" class="input-control" placeholder="Valor R$">
-                </div>
-                <button onclick="adicionarNovoAdicional()" class="btn-primary" style="background:var(--cyan);">+ Incluir Adicional</button>
-            </div>
-
-            <!-- Aba Dono: Clientes Sumidos (CRM Reaquecimento) -->
-            <div id="otab-sumidos" class="hidden">
-                <div class="form-group">
-                    <label class="form-label">Mensagem de Reaquecimento (WhatsApp)</label>
-                    <textarea id="config-msg-sumidos" class="input-control" rows="3"></textarea>
-                    <small style="color:#64748b; font-size:11px;">Use {pet} para o nome do pet e {tutor} para o nome do cliente.</small>
-                </div>
-                <button onclick="salvarConfiguracoesDono()" class="btn-sm btn-finish" style="width:100%; margin-bottom:14px;">💾 Salvar Modelo de Mensagem</button>
-                <div id="lista-clientes-crm"></div>
-            </div>
-
-            <!-- Aba Dono: Loja & Logo -->
-            <div id="otab-loja" class="hidden">
-                <div class="form-group">
-                    <label class="form-label">Foto / Logo da Loja (Opcional)</label>
-                    <input type="file" accept="image/*" class="input-control" onchange="carregarNovaLogo(event)">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Ajuste de Zoom da Logo (<span id="zoom-val-label">100%</span>)</label>
-                    <input type="range" id="config-logo-zoom" min="80" max="200" value="100" style="width:100%;" oninput="ajustarZoomLogo(this.value)">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Mensagem Automática "Pet Pronto"</label>
-                    <textarea id="config-msg-pronto" class="input-control" rows="3"></textarea>
-                </div>
-                <div style="display:flex; gap:8px;">
-                    <button onclick="salvarConfiguracoesDono()" class="btn-primary">Salvar Configurações</button>
-                    <button onclick="removerLogoCustom()" class="btn-sm btn-del">Resetar Logo</button>
-                </div>
-            </div>
-        </div>
+  <!-- MODAIS (Novo Serviço e PIN) -->
+  <div id="service-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl">
+      <h3 class="font-bold text-slate-800 text-base">➕ Adicionar Novo Serviço Principal</h3>
+      <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Serviço *</label><input type="text" id="new-srv-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" /></div>
+      <div><label class="block text-xs font-semibold text-slate-600 mb-1">Descrição Curta</label><input type="text" id="new-srv-desc" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" /></div>
+      <div><label class="block text-xs font-semibold text-slate-600 mb-1">Preço Inicial Padrão (R$)</label><input type="number" id="new-srv-base" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-[#EE3E80]" /></div>
+      <div class="grid grid-cols-2 gap-2 pt-2">
+        <button onclick="closeNewServiceModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
+        <button onclick="saveNewService()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold">Adicionar</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Dados Padrão do Sistema
-        const CONFIG_PADRAO = {
-            pin: "1234",
-            logoBase64: "",
-            logoZoom: 100,
-            msgPronto: "Olá {tutor}! 🐾 Passando para avisar que o(a) *{pet}* já está prontinho(a), cheiroso(a) e esperando por você aqui no *Recanto Petshop*! ✨",
-            msgSumidos: "Oi {tutor}, tudo bem? Sentimos falta do(a) *{pet}* aqui no *Recanto Petshop*! 🐶🚿 Que tal agendar o próximo banho essa semana?",
-            portes: [
-                { nome: "Mini", banho: 40, banhoTosaHig: 55, banhoTosaTotal: 70 },
-                { nome: "Pequeno", banho: 45, banhoTosaHig: 60, banhoTosaTotal: 75 },
-                { nome: "Médio", banho: 55, banhoTosaHig: 70, banhoTosaTotal: 90 },
-                { nome: "Grande", banho: 75, banhoTosaHig: 95, banhoTosaTotal: 120 },
-                { nome: "Gigante", banho: 95, banhoTosaHig: 120, banhoTosaTotal: 150 }
-            ],
-            adicionais: [
-                { id: 1, nome: "Hidratação", preco: 20 },
-                { id: 2, nome: "Corte de Unha", preco: 10 },
-                { id: 3, nome: "Tosa Higiênica Avulsa", preco: 20 },
-                { id: 4, nome: "Desembolo", preco: 25 }
-            ]
-        };
+  <div id="pin-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xs w-full p-5 space-y-4 text-center shadow-xl">
+      <div class="w-12 h-12 rounded-full bg-pink-50 text-[#EE3E80] flex items-center justify-center mx-auto font-bold text-xl">🔒</div>
+      <div>
+        <h3 class="font-bold text-slate-800 text-base">Acesso Restrito — Gestor</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Digite sua senha (Padrão: <strong>1234</strong>)</p>
+      </div>
+      <input type="password" id="pin-input" placeholder="••••" maxlength="8" class="w-full text-center text-xl tracking-widest font-bold px-3 py-2.5 rounded-xl border border-slate-300" />
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="closePinModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
+        <button onclick="verifyPin()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold">Entrar</button>
+      </div>
+    </div>
+  </div>
 
-        let config = JSON.parse(localStorage.getItem('recanto_config_v2')) || CONFIG_PADRAO;
-        let clientes = JSON.parse(localStorage.getItem('recanto_clientes_v2')) || [];
-        let atendimentos = JSON.parse(localStorage.getItem('recanto_atendimentos_v2')) || [];
+  <footer class="bg-white border-t border-slate-200 mt-10 py-5 px-4 text-center text-xs text-slate-500 space-y-2">
+    <p class="font-bold text-slate-700" id="footer-store-name">Recanto Petshop</p>
+    <p id="footer-store-address">📍 Endereço</p>
+    <div class="pt-2">
+      <button onclick="openPinModal()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-slate-800 border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50">
+        🔒 Painel de Controle do Dono (Senha: 1234)
+      </button>
+    </div>
+  </footer>
 
-        function salvarDados() {
-            localStorage.setItem('recanto_config_v2', JSON.stringify(config));
-            localStorage.setItem('recanto_clientes_v2', JSON.stringify(clientes));
-            localStorage.setItem('recanto_atendimentos_v2', JSON.stringify(atendimentos));
+  <script>
+    const DEFAULT_CONFIG = {
+      storeName: 'Recanto Petshop',
+      bannerTitle: 'Painel de Balcão — Banho & Tosa',
+      storeAddress: 'Rua Lorena, 237 - Jardim Dom José, Embu das Artes - SP',
+      whatsapp: '5511999999999',
+      pin: '1234',
+      logoBase64: '',
+      logoHeight: 45,
+      sizes: [
+        { id: 'mini', name: 'Mini', subtitle: 'Até 5kg (Pinscher...)' },
+        { id: 'pequeno', name: 'Pequeno', subtitle: '5 a 10kg (Shih Tzu...)' },
+        { id: 'medio', name: 'Médio', subtitle: '10 a 25kg (Bulldog...)' },
+        { id: 'grande', name: 'Grande', subtitle: '25 a 40kg (Golden...)' },
+        { id: 'gigante', name: 'Gigante', subtitle: '+ de 40kg (Pastor...)' }
+      ],
+      services: [
+        { id: 'banho', name: 'Banho Completo', desc: 'Banho e secagem.', prices: { 'mini': 45, 'pequeno': 55, 'medio': 70, 'grande': 95, 'gigante': 120 } },
+        { id: 'banho_hig', name: 'Banho + Tosa Higiênica', desc: 'Banho + higienização.', prices: { 'mini': 60, 'pequeno': 70, 'medio': 85, 'grande': 115, 'gigante': 140 } },
+        { id: 'banho_tosa', name: 'Banho + Tosa Completa', desc: 'Banho + tosa geral.', prices: { 'mini': 80, 'pequeno': 95, 'medio': 115, 'grande': 150, 'gigante': 180 } }
+      ],
+      extras: [
+        { id: 'hidratacao', name: 'Hidratação na Pelagem', price: 25 },
+        { id: 'desembolo', name: 'Taxa de Desembolo', price: 25 },
+        { id: 'dentes', name: 'Escovação de Dentes', price: 15 }
+      ],
+      timeSlots: ['09:00', '10:00', '11:00', '13:30', '14:30', '15:30', '16:30', '17:30']
+    };
+
+    let config = JSON.parse(localStorage.getItem('recanto_cfg_v25')) || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    if (!config.logoHeight) config.logoHeight = 45;
+
+    let bookings = JSON.parse(localStorage.getItem('recanto_bookings_v25') || '[]');
+    let clientsDb = JSON.parse(localStorage.getItem('recanto_clients_v25') || '[]');
+
+    let clientState = {
+      species: 'Cachorro',
+      sizeId: config.sizes[0]?.id || 'mini',
+      selectedService: '',
+      selectedExtras: [],
+      selectedTime: config.timeSlots[0] || '09:00',
+      isCustomService: false
+    };
+
+    function saveConfig() {
+      localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
+      applyStoreBranding();
+      renderAllClient();
+      renderAdminEditors();
+    }
+
+    function resetToFactory() {
+      if (confirm('Deseja restaurar o padrão? Todos os preços e portes voltarão ao original.')) {
+        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        saveConfig();
+      }
+    }
+
+    function formatMoney(value) {
+      return value.toFixed(2).replace('.', ',');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      applyStoreBranding();
+      renderAllClient();
+      switchClientTab('novo');
+      renderCounterFila();
+      renderCounterFechamento();
+      renderAdminBookings();
+      renderClientsList();
+      renderReheatList();
+      renderAdminEditors();
+    });
+
+    function clearError(el) {
+      el.classList.remove('border-red-500', 'bg-red-50');
+      if (el.id.includes('custom-service')) {
+        el.classList.add('border-amber-300');
+      } else {
+        el.classList.add('border-slate-200');
+      }
+    }
+
+    function applyStoreBranding() {
+      document.getElementById('banner-title').textContent = config.bannerTitle || 'Painel de Balcão — Banho & Tosa';
+      document.getElementById('admin-store-title').textContent = `Controle ${config.storeName}`;
+      document.getElementById('footer-store-name').textContent = `${config.storeName} — Banho, Tosa e Casa de Ração`;
+      document.getElementById('footer-store-address').textContent = `📍 ${config.storeAddress}`;
+
+      const defLogo = document.getElementById('default-logo-elements');
+      const customLogo = document.getElementById('custom-logo-img');
+      const previewBox = document.getElementById('preview-logo-box');
+      const previewPlaceholder = document.getElementById('preview-logo-placeholder');
+
+      if (config.logoBase64) {
+        defLogo.classList.add('hidden');
+        customLogo.src = config.logoBase64;
+        customLogo.style.height = `${config.logoHeight}px`;
+        customLogo.classList.remove('hidden');
+        previewBox.src = config.logoBase64;
+        previewBox.style.height = `${config.logoHeight}px`;
+        previewBox.classList.remove('hidden');
+        previewPlaceholder.classList.add('hidden');
+      } else {
+        defLogo.classList.remove('hidden');
+        customLogo.classList.add('hidden');
+        previewBox.classList.add('hidden');
+        previewPlaceholder.classList.remove('hidden');
+      }
+      document.getElementById('zoom-level-label').textContent = `Altura: ${config.logoHeight}px`;
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        config.logoBase64 = e.target.result;
+        applyStoreBranding();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function adjustLogoZoom(amount) {
+      if (!config.logoBase64) return;
+      config.logoHeight = Math.min(100, Math.max(25, config.logoHeight + amount));
+      applyStoreBranding();
+    }
+
+    function switchClientTab(tab) {
+      ['novo', 'fila', 'fechamento'].forEach(t => {
+        document.getElementById('client-sec-' + t).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById('tab-cli-' + t);
+        if (t === tab) {
+          btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8] transition-colors';
+        } else {
+          btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors';
         }
+      });
+    }
 
-        function inicializarApp() {
-            aplicarLogoHeader();
-            popularSelectPortes();
-            renderizarAdicionaisFormulario();
-            atualizarPrecosFormulario();
-            const agora = new Date();
-            document.getElementById('atendimento-hora').value = agora.toTimeString().slice(0,5);
+    function renderAllClient() {
+      if (!config.sizes.find(sz => sz.id === clientState.sizeId)) clientState.sizeId = config.sizes[0]?.id || '';
+      if (!config.timeSlots.includes(clientState.selectedTime)) clientState.selectedTime = config.timeSlots[0] || '';
+      renderSizesClient();
+      renderServices();
+      renderExtras();
+      renderTimeSlots();
+      updateSummary();
+    }
+
+    function selectSpecies(sp) {
+      clientState.species = sp;
+      document.getElementById('sp-dog').className = sp === 'Cachorro'
+        ? 'py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
+        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold';
+      document.getElementById('sp-cat').className = sp === 'Gato'
+        ? 'py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
+        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold';
+    }
+
+    function renderSizesClient() {
+      const grid = document.getElementById('sizes-grid');
+      grid.innerHTML = config.sizes.map(sz => {
+        const isSel = clientState.sizeId === sz.id;
+        return `
+          <button type="button" onclick="selectSize('${sz.id}')" class="size-btn ${isSel ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2.5 px-2.5 rounded-xl border text-left transition-all">
+            <span class="block text-xs font-bold leading-tight">${sz.name}</span>
+            <span class="block text-[10px] opacity-80 mt-0.5 leading-tight">${sz.subtitle}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectSize(id) {
+      clientState.sizeId = id;
+      renderSizesClient();
+      renderServices();
+      updateSummary();
+    }
+
+    function selectService(id) {
+      if (clientState.selectedService === id) clientState.selectedService = '';
+      else clientState.selectedService = id;
+      renderServices();
+      updateSummary();
+    }
+
+    function toggleCustomService(checkbox) {
+      clientState.isCustomService = checkbox.checked;
+      const box = document.getElementById('custom-service-box');
+      if (checkbox.checked) box.classList.remove('hidden');
+      else {
+        box.classList.add('hidden');
+        document.getElementById('custom-service-desc').value = '';
+        document.getElementById('custom-service-price').value = '';
+        clearError(document.getElementById('custom-service-desc'));
+        clearError(document.getElementById('custom-service-price'));
+      }
+      updateSummary();
+    }
+
+    function toggleExtra(id) {
+      if (clientState.selectedExtras.includes(id)) clientState.selectedExtras = clientState.selectedExtras.filter(e => e !== id);
+      else clientState.selectedExtras.push(id);
+      renderExtras();
+      updateSummary();
+    }
+
+    function selectTime(t) {
+      clientState.selectedTime = t;
+      renderTimeSlots();
+    }
+
+    function renderServices() {
+      const grid = document.getElementById('services-grid');
+      grid.innerHTML = config.services.map(srv => {
+        const selected = clientState.selectedService === srv.id;
+        const price = srv.prices[clientState.sizeId] ?? 0;
+        return `
+          <div onclick="selectService('${srv.id}')" class="service-card ${selected ? 'selected' : ''} cursor-pointer p-3.5 rounded-xl border border-slate-200 transition-all bg-white">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-sm text-slate-800">${srv.name}</h3>
+              <span class="font-brand text-base font-bold text-[#EE3E80]">R$ ${formatMoney(price)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderExtras() {
+      const grid = document.getElementById('extras-grid');
+      grid.innerHTML = config.extras.map(ex => {
+        const active = clientState.selectedExtras.includes(ex.id);
+        return `
+          <div onclick="toggleExtra('${ex.id}')" class="cursor-pointer p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${active ? 'border-[#6AB43E] bg-green-50 text-slate-800' : 'border-slate-200 text-slate-600 bg-white'}">
+            <span>+ ${ex.name}</span>
+            <span class="font-bold text-[#6AB43E]">R$ ${formatMoney(ex.price)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTimeSlots() {
+      const grid = document.getElementById('time-slots');
+      grid.innerHTML = config.timeSlots.map(t => `
+        <button type="button" onclick="selectTime('${t}')" class="time-btn ${clientState.selectedTime === t ? 'selected' : 'border-slate-200 text-slate-700'} py-2 rounded-xl border text-xs font-bold bg-white">
+          ${t}
+        </button>
+      `).join('');
+    }
+
+    function calculateTotal() {
+      let total = 0;
+      if (clientState.selectedService) {
+        const srv = config.services.find(s => s.id === clientState.selectedService);
+        if (srv) total += (Number(srv.prices[clientState.sizeId]) || 0);
+      }
+      if (clientState.isCustomService) total += (Number(document.getElementById('custom-service-price').value) || 0);
+      clientState.selectedExtras.forEach(id => {
+        const ex = config.extras.find(e => e.id === id);
+        if (ex) total += Number(ex.price) || 0;
+      });
+      return total;
+    }
+
+    function updateSummary() {
+      const total = calculateTotal();
+      document.getElementById('total-price-display').textContent = `R$ ${formatMoney(total)}`;
+      
+      let descParts = [];
+      if (clientState.selectedService) {
+        const srv = config.services.find(s => s.id === clientState.selectedService);
+        if (srv) descParts.push(srv.name);
+      }
+      if (clientState.isCustomService) {
+        const customDesc = document.getElementById('custom-service-desc').value.trim();
+        descParts.push(customDesc ? `+ ${customDesc}` : '+ Avulso');
+      }
+      document.getElementById('summary-desc').textContent = descParts.join(' ');
+    }
+
+    function filterCounterClients(query) {
+      const box = document.getElementById('counter-search-results');
+      const q = query.trim().toLowerCase();
+      if (!q || q.length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+      
+      const matches = clientsDb.filter(c => c.ownerName.toLowerCase().includes(q) || c.petName.toLowerCase().includes(q) || c.phone.includes(q));
+      
+      if (matches.length === 0) {
+        box.innerHTML = `<div class="p-2.5 text-xs text-slate-400 bg-slate-50 rounded-xl">Nenhum cliente encontrado.</div>`;
+        box.classList.remove('hidden'); 
+        return;
+      }
+      
+      box.innerHTML = matches.map(c => {
+        const safeOwner = c.ownerName.replace(/'/g, "\\'");
+        const safePet = c.petName.replace(/'/g, "\\'");
+        return `
+          <div onclick="selectClientForBooking('${safeOwner}', '${c.phone}', '${safePet}')" class="p-2.5 rounded-xl border border-cyan-200 bg-cyan-50/50 hover:bg-cyan-100 cursor-pointer flex items-center justify-between text-xs">
+            <div><strong>🐶 ${c.petName}</strong> (${c.ownerName}) — 📞 ${c.phone}</div>
+            <span class="bg-[#23B5C8] text-white px-2 py-1 rounded-lg font-bold">Usar</span>
+          </div>
+        `;
+      }).join('');
+      
+      box.classList.add('block');
+      box.classList.remove('hidden');
+    }
+
+    function selectClientForBooking(ownerName, phone, petName) {
+      document.getElementById('owner-name').value = ownerName;
+      document.getElementById('owner-phone').value = phone;
+      document.getElementById('pet-name').value = petName;
+      
+      clearError(document.getElementById('owner-name'));
+      clearError(document.getElementById('owner-phone'));
+      clearError(document.getElementById('pet-name'));
+      
+      document.getElementById('counter-search-results').classList.add('hidden');
+      document.getElementById('counter-search-input').value = '';
+    }
+
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+
+      let requiredFields = ['pet-name', 'owner-name', 'owner-phone', 'booking-date'];
+      if (clientState.isCustomService) {
+        requiredFields.push('custom-service-desc', 'custom-service-price');
+      }
+
+      let firstInvalid = null;
+
+      requiredFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.classList.remove('border-slate-200', 'border-amber-300');
+          el.classList.add('border-red-500', 'bg-red-50');
+          if (!firstInvalid) firstInvalid = el;
         }
+      });
 
-        function aplicarLogoHeader() {
-            const box = document.getElementById('header-logo-box');
-            if (config.logoBase64) {
-                box.innerHTML = `<img src="${config.logoBase64}" style="transform: scale(${config.logoZoom / 100})">`;
-            } else {
-                box.innerHTML = 'R';
-            }
-        }
+      if (firstInvalid) {
+        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => firstInvalid.focus(), 300);
+        return; 
+      }
 
-        function mostrarAba(aba) {
-            ['registrar', 'fila', 'caixa'].forEach(a => {
-                document.getElementById(`aba-${a}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${a}`).classList.remove('active');
-            });
-            document.getElementById(`aba-${aba}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${aba}`).classList.add('active');
+      let finalServiceNames = [];
+      if (clientState.selectedService) {
+        const srv = config.services.find(s => s.id === clientState.selectedService);
+        if (srv) finalServiceNames.push(srv.name);
+      }
+      if (clientState.isCustomService) {
+        const customDesc = document.getElementById('custom-service-desc').value.trim();
+        finalServiceNames.push(`[Extra] ${customDesc}`);
+      }
+      
+      if (finalServiceNames.length === 0) {
+        document.getElementById('services-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return alert('⚠️ Selecione o Serviço Principal ou marque o Serviço Variável.');
+      }
 
-            if (aba === 'fila') renderizarFila();
-            if (aba === 'caixa') renderizarCaixa();
-        }
+      const petName = document.getElementById('pet-name').value.trim();
+      const ownerName = document.getElementById('owner-name').value.trim();
+      const ownerPhone = document.getElementById('owner-phone').value.trim();
+      const dateVal = document.getElementById('booking-date').value;
+      const notes = document.getElementById('booking-notes').value.trim();
 
-        function popularSelectPortes() {
-            const sel = document.getElementById('pet-porte');
-            sel.innerHTML = config.portes.map((p, idx) => `<option value="${idx}">${p.nome}</option>`).join('');
-            sel.value = "1"; // Pequeno por padrão
-        }
+      const combinedServiceName = finalServiceNames.join(' + ');
+      const sz = config.sizes.find(x => x.id === clientState.sizeId);
+      const extrasNames = clientState.selectedExtras.map(id => config.extras.find(x => x.id === id)?.name).filter(Boolean);
+      
+      const newItem = {
+        id: Date.now(), 
+        petName, 
+        species: clientState.species, 
+        sizeName: sz ? sz.name : 'Padrão',
+        ownerName, 
+        ownerPhone, 
+        serviceName: combinedServiceName, 
+        extras: extrasNames,
+        date: dateVal, 
+        time: clientState.selectedTime, 
+        notes, 
+        total: calculateTotal(), 
+        status: 'Aguardando'
+      };
 
-        function atualizarPrecosFormulario() {
-            const idxPorte = document.getElementById('pet-porte').value || 0;
-            const p = config.portes[idxPorte];
-            const selServico = document.getElementById('servico-principal');
+      bookings.unshift(newItem);
+      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      upsertClientRecord(ownerName, ownerPhone, petName, combinedServiceName, dateVal);
 
-            selServico.innerHTML = `
-                <option value="Banho|${p.banho}">🚿 Banho (R$ ${p.banho.toFixed(2)})</option>
-                <option value="Banho + Tosa Higiênica|${p.banhoTosaHig}">✂️ Banho + Tosa Hig. (R$ ${p.banhoTosaHig.toFixed(2)})</option>
-                <option value="Banho + Tosa Completa|${p.banhoTosaTotal}">🐩 Banho + Tosa Total (R$ ${p.banhoTosaTotal.toFixed(2)})</option>
-            `;
-            calcularTotalAtendimento();
-        }
+      renderCounterFila();
+      renderCounterFechamento();
+      renderAdminBookings();
+      renderClientsList();
+      renderReheatList();
 
-        function renderizarAdicionaisFormulario() {
-            const container = document.getElementById('lista-adicionais-form');
-            container.innerHTML = config.adicionais.map(ad => `
-                <label class="addon-chip">
-                    <input type="checkbox" class="chk-adicional" data-nome="${ad.nome}" data-preco="${ad.preco}" onchange="calcularTotalAtendimento()">
-                    <span>${ad.nome} (+R$${ad.preco})</span>
-                </label>
-            `).join('');
-        }
+      document.getElementById('booking-form').reset();
+      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('custom-service-box').classList.add('hidden');
+      clientState.isCustomService = false; 
+      clientState.selectedService = ''; 
+      clientState.selectedExtras = [];
+      renderServices(); 
+      renderExtras(); 
+      updateSummary();
+      
+      switchClientTab('fila');
+    }
 
-        function calcularTotalAtendimento() {
-            const servVal = document.getElementById('servico-principal').value;
-            let total = servVal ? parseFloat(servVal.split('|')[1]) : 0;
+    function upsertClientRecord(ownerName, phone, petName, serviceName, dateStr) {
+      let client = clientsDb.find(c => c.phone === phone || c.ownerName.toLowerCase() === ownerName.toLowerCase());
+      if (client) {
+        client.visitsCount = (client.visitsCount || 1) + 1;
+        client.lastVisitDate = dateStr; 
+        client.lastService = serviceName; 
+        client.petName = petName; 
+        client.ownerName = ownerName;
+      } else {
+        clientsDb.push({ id: Date.now(), ownerName, phone, petName, visitsCount: 1, lastVisitDate: dateStr, lastService: serviceName });
+      }
+      localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+    }
 
-            document.querySelectorAll('.chk-adicional:checked').forEach(chk => {
-                total += parseFloat(chk.dataset.preco);
-            });
+    // ================= ROTINAS DE FILA E CAIXA =================
+    function changeStatus(id, st) {
+      bookings = bookings.map(b => b.id === id ? { ...b, status: st } : b);
+      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      renderCounterFila();
+      renderCounterFechamento();
+      renderAdminBookings();
+    }
 
-            document.getElementById('valor-final').value = total.toFixed(2);
-            document.getElementById('display-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        }
+    function removeBooking(id) {
+      bookings = bookings.filter(b => b.id !== id);
+      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      renderCounterFila();
+      renderCounterFechamento();
+      renderAdminBookings();
+    }
 
-        // Busca Rápida de Clientes
-        function buscarClienteRapido(termo) {
-            const box = document.getElementById('lista-busca-rapida');
-            const t = termo.trim().toLowerCase();
-            if (!t) {
-                box.style.display = 'none';
-                return;
-            }
+    function notifyReady(id) {
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      const phone = b.ownerPhone.replace(/\D/g, '');
+      const fullPhone = phone.startsWith('55') ? phone : '55' + phone;
+      const msg = `Olá, *${b.ownerName}*! 🐾 Passando para avisar que o(a) *${b.petName}* já está prontinho(a) e cheiroso(a) aqui no *${config.storeName}*! ✨`;
+      window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
-            const encontrados = clientes.filter(c =>
-                c.pet.toLowerCase().includes(t) ||
-                c.tutor.toLowerCase().includes(t) ||
-                c.zap.includes(t)
-            );
+    function renderCounterFila() {
+      const activeBookings = bookings.filter(b => b.status !== 'Finalizado');
+      const list = document.getElementById('counter-bookings-active');
+      document.getElementById('counter-badge-active').textContent = activeBookings.length;
 
-            if (encontrados.length === 0) {
-                box.innerHTML = `<div class="search-item" style="color:#64748b;">Nenhum cliente cadastrado com "${termo}"</div>`;
-                box.style.display = 'block';
-                return;
-            }
+      if (activeBookings.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet aguardando ou no banho.</p>`;
+        return;
+      }
+      list.innerHTML = activeBookings.map(b => buildBookingCardHtml(b, false)).join('');
+    }
 
-            box.innerHTML = encontrados.map(c => `
-                <div class="search-item" onclick="preencherCliente(${c.id})">
-                    <div>
-                        <strong>🐾 ${c.pet}</strong> (${c.raca || c.especie})<br>
-                        <span style="color:#64748b; font-size:12px;">👤 ${c.tutor} • 📞 ${c.zap}</span>
-                    </div>
-                    <span style="color:var(--cyan); font-weight:700;">Selecionar</span>
-                </div>
-            `).join('');
-            box.style.display = 'block';
-        }
+    function renderCounterFechamento() {
+      const doneBookings = bookings.filter(b => b.status === 'Finalizado');
+      const rev = doneBookings.reduce((sum, b) => sum + (Number(b.total) || 0), 0);
+      
+      document.getElementById('counter-stat-done').textContent = doneBookings.length;
+      document.getElementById('counter-stat-rev').textContent = `R$ ${formatMoney(rev)}`;
+      
+      const list = document.getElementById('counter-bookings-done');
+      if (doneBookings.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet finalizado ainda.</p>`;
+        return;
+      }
+      
+      list.innerHTML = doneBookings.map(b => `
+        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+          <div>
+            <span class="font-bold text-sm text-slate-800">${b.petName}</span>
+            <span class="text-[10px] ml-1 text-slate-500">${b.serviceName}</span>
+          </div>
+          <div class="text-right">
+            <span class="font-brand text-sm font-bold text-[#6AB43E]">R$ ${formatMoney(b.total)}</span>
+            <button onclick="changeStatus(${b.id}, 'Pronto')" class="block text-[10px] text-blue-500 underline mt-0.5">Desfazer (Voltar p/ Fila)</button>
+          </div>
+        </div>
+      `).join('');
+    }
 
-        function preencherCliente(id) {
-            const c = clientes.find(item => item.id === id);
-            if (!c) return;
-            document.getElementById('pet-nome').value = c.pet;
-            document.getElementById('pet-especie').value = c.especie || 'Cão';
-            document.getElementById('pet-porte').value = c.porteIdx ?? 1;
-            document.getElementById('pet-raca').value = c.raca || '';
-            document.getElementById('tutor-nome').value = c.tutor;
-            document.getElementById('tutor-zap').value = c.zap;
-            document.getElementById('atendimento-obs').value = c.obs || '';
-            document.getElementById('lista-busca-rapida').style.display = 'none';
-            document.getElementById('input-busca-cliente').value = '';
-            atualizarPrecosFormulario();
-        }
+    function encerrarDia() {
+      if(confirm('Encerrar o dia? Isso limpará a Fila e o Caixa do Balcão para o dia seguinte. O histórico dos clientes continuará salvo!')) {
+        bookings = [];
+        localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+        renderCounterFila();
+        renderCounterFechamento();
+        renderAdminBookings();
+        switchClientTab('novo');
+        alert('Caixa encerrado com sucesso! Um ótimo descanso para a equipe.');
+      }
+    }
 
-        // Registrar Atendimento com Validação e Rolagem Automática
-        function registrarAtendimento(e) {
-            e.preventDefault();
-            const obrigatorios = ['pet-nome', 'tutor-nome', 'tutor-zap'];
-            for (let id of obrigatorios) {
-                const el = document.getElementById(id);
-                el.classList.remove('input-error');
-                if (!el.value.trim()) {
-                    el.classList.add('input-error');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    el.focus();
-                    return;
-                }
-            }
+    function buildBookingCardHtml(b, isAdmin = false) {
+      const statusColors = {
+        'Aguardando': 'bg-amber-100 text-amber-800',
+        'No Banho / Tosa': 'bg-cyan-100 text-cyan-800',
+        'Pronto': 'bg-purple-100 text-purple-800',
+        'Finalizado': 'bg-green-100 text-green-800'
+      };
+      
+      const isPronto = b.status === 'Pronto';
 
-            const pet = document.getElementById('pet-nome').value.trim();
-            const especie = document.getElementById('pet-especie').value;
-            const porteIdx = document.getElementById('pet-porte').value;
-            const porteNome = config.portes[porteIdx].nome;
-            const raca = document.getElementById('pet-raca').value.trim();
-            const tutor = document.getElementById('tutor-nome').value.trim();
-            const zap = document.getElementById('tutor-zap').value.replace(/\D/g, '');
-            const servicoBase = document.getElementById('servico-principal').value.split('|')[0];
-            const adicionaisEscolhidos = Array.from(document.querySelectorAll('.chk-adicional:checked')).map(c => c.dataset.nome);
-            const valor = parseFloat(document.getElementById('valor-final').value) || 0;
-            const pagamento = document.getElementById('pagamento-metodo').value;
-            const obs = document.getElementById('atendimento-obs').value.trim();
-            const hora = document.getElementById('atendimento-hora').value;
+      const controlsHtml = isAdmin ? '' : `
+        <div class="flex items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
+          <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1">
+            <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
+            <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
+            <option value="Pronto" ${b.status === 'Pronto' ? 'selected' : ''}>✨ Pronto (Na Loja)</option>
+            <option value="Finalizado">✅ Finalizado (Entregue/Pago)</option>
+          </select>
+          
+          ${isPronto ? `<button onclick="notifyReady(${b.id})" class="px-2.5 py-2 rounded-lg bg-green-500 text-white text-[11px] font-bold flex shrink-0" title="Avisar WhatsApp">📲 Avisar</button>` : ''}
+          
+          <button onclick="removeBooking(${b.id})" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0">🗑️</button>
+        </div>
+      `;
 
-            // Salva ou atualiza no CRM de clientes
-            let clienteExistente = clientes.find(c => c.pet.toLowerCase() === pet.toLowerCase() && c.zap === zap);
-            if (clienteExistente) {
-                clienteExistente.ultimaVisita = new Date().toISOString();
-                clienteExistente.obs = obs;
-            } else {
-                clientes.unshift({
-                    id: Date.now(),
-                    pet, especie, porteIdx, raca, tutor, zap, obs,
-                    ultimaVisita: new Date().toISOString()
-                });
-            }
+      return `
+        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-bold text-sm text-slate-800">${b.petName}</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-bold ml-1 ${statusColors[b.status] || ''}">${b.status}</span>
+            </div>
+            <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
+          </div>
+          <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
+          ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded mt-1">⚠️ Obs: ${b.notes}</p>` : ''}
+          ${controlsHtml}
+        </div>
+      `;
+    }
 
-            atendimentos.unshift({
-                id: Date.now() + 1,
-                pet, especie, porteNome, raca, tutor, zap,
-                servico: servicoBase,
-                adicionais: adicionaisEscolhidos,
-                valor, pagamento, obs, hora,
-                status: 'Em Banho / Tosa',
-                concluido: false
-            });
+    // ================= ROTINAS DO PAINEL DO DONO =================
+    function renderAdminBookings() {
+      const list = document.getElementById('admin-bookings-list');
+      const doneBookings = bookings.filter(b => b.status === 'Finalizado');
+      
+      const inStore = bookings.length - doneBookings.length;
+      const rev = doneBookings.reduce((sum, b) => sum + (Number(b.total) || 0), 0);
+      const ticket = doneBookings.length ? (rev / doneBookings.length) : 0;
 
-            salvarDados();
-            document.getElementById('form-atendimento').reset();
-            popularSelectPortes();
-            atualizarPrecosFormulario();
-            mostrarAba('fila');
-        }
+      document.getElementById('stat-total').textContent = inStore;
+      document.getElementById('stat-ready').textContent = doneBookings.length;
+      document.getElementById('stat-revenue').textContent = `R$ ${formatMoney(rev)}`;
+      document.getElementById('stat-ticket').textContent = `R$ ${formatMoney(ticket)}`;
 
-        // Renderizar Aba Em Andamento
-        function renderizarFila() {
-            const container = document.getElementById('container-fila');
-            const ativos = atendimentos.filter(a => !a.concluido);
+      if (bookings.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum atendimento registrado hoje.</p>`;
+        return;
+      }
+      list.innerHTML = bookings.map(b => buildBookingCardHtml(b, true)).join('');
+    }
 
-            if (ativos.length === 0) {
-                container.innerHTML = `
-                    <div class="card" style="text-align:center; color:#64748b; padding:32px 16px;">
-                        🐾 Nenhum atendimento em andamento no momento.
-                    </div>
-                `;
-                return;
-            }
+    function renderClientsList() {
+      const list = document.getElementById('admin-clients-list');
+      const badge = document.getElementById('client-total-badge');
+      if (badge) badge.textContent = `${clientsDb.length} cadastrados`;
+      
+      if (clientsDb.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente cadastrado ainda.</p>`; return;
+      }
+      
+      list.innerHTML = clientsDb.map(c => {
+        const safeOwner = c.ownerName.replace(/'/g, "\\'");
+        const safePet = c.petName.replace(/'/g, "\\'");
+        return `
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-bold">🐾 Pet: ${c.petName}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 text-xs text-slate-600 pt-1">
+              <div>📞 <strong>Tel:</strong> ${c.phone}</div>
+              <div>🔄 <strong>Frequência:</strong> ${c.visitsCount} visita(s)</div>
+              <div>📅 <strong>Última Visita:</strong> ${c.lastVisitDate || 'N/A'}</div>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
+              <span class="text-slate-500"><strong>Último Serviço:</strong> ${c.lastService || 'Banho'}</span>
+              <button onclick="callClientWhatsApp('${c.phone}', '${safeOwner}', '${safePet}')" class="px-3 py-1 bg-[#6AB43E] text-white font-bold rounded-lg">💬 Enviar WhatsApp</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
 
-            container.innerHTML = ativos.map(a => `
-                <div class="queue-card">
-                    <div class="queue-top">
-                        <div>
-                            <strong style="font-size:16px;">${a.pet}</strong>
-                            <span style="font-size:12px; color:#64748b;">(${a.porteNome} • ${a.tutor})</span>
-                            <div style="font-size:13px; color:var(--cyan); font-weight:700; margin-top:3px;">
-                                ${a.servico} ${a.adicionais.length ? '+ ' + a.adicionais.join(', ') : ''}
-                            </div>
-                        </div>
-                        <span class="badge ${a.status === 'Pronto' ? 'badge-ready' : 'badge-doing'}">${a.status}</span>
-                    </div>
-                    ${a.obs ? `<div style="font-size:12px; background:#fffbeb; color:#b45309; padding:8px; border-radius:8px; margin-bottom:8px;">⚠️ Obs: ${a.obs}</div>` : ''}
-                    <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569;">
-                        <span>🕒 Entrada: ${a.hora || '--:--'}</span>
-                        <strong>R$ ${a.valor.toFixed(2).replace('.', ',')} (${a.pagamento})</strong>
-                    </div>
-                    <div class="queue-actions">
-                        <button onclick="avisarWhatsAppPronto(${a.id})" class="btn-sm btn-wa">📲 Avisar Pronto</button>
-                        <button onclick="concluirAtendimento(${a.id})" class="btn-sm btn-finish">✅ Concluir / Caixa</button>
-                        <button onclick="alternarStatusPronto(${a.id})" class="btn-sm btn-status">🔄 Mudar Status</button>
-                        <button onclick="excluirAtendimento(${a.id})" class="btn-sm btn-del">🗑️ Excluir</button>
-                    </div>
-                </div>
-            `).join('');
-        }
+    // ================= ABA CLIENTES SUMIDOS (REAQUECER) =================
+    function setReheatDays(days) {
+      document.getElementById('reheat-days-input').value = days;
+      renderReheatList();
+    }
 
-        function alternarStatusPronto(id) {
-            const item = atendimentos.find(a => a.id === id);
-            if (!item) return;
-            item.status = item.status === 'Pronto' ? 'Em Banho / Tosa' : 'Pronto';
-            salvarDados();
-            renderizarFila();
-        }
+    function renderReheatList() {
+      const container = document.getElementById('admin-reheat-list');
+      const inputVal = document.getElementById('reheat-days-input').value;
+      const daysLimit = parseInt(inputVal) || 30;
+      
+      const today = new Date();
+      
+      const inactiveClients = clientsDb.filter(c => {
+        if (!c.lastVisitDate) return true;
+        const lastDate = new Date(c.lastVisitDate + 'T00:00:00');
+        const diffTime = today - lastDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays >= daysLimit;
+      });
 
-        function avisarWhatsAppPronto(id) {
-            const item = atendimentos.find(a => a.id === id);
-            if (!item) return;
-            item.status = 'Pronto';
-            salvarDados();
-            renderizarFila();
-            const texto = config.msgPronto
-                .replace(/\{pet\}/g, item.pet)
-                .replace(/\{tutor\}/g, item.tutor);
-            window.open(`https://wa.me/55${item.zap}?text=${encodeURIComponent(texto)}`, '_blank');
-        }
+      if (inactiveClients.length === 0) {
+        container.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente sumido há mais de ${daysLimit} dias.</p>`;
+        return;
+      }
 
-        function concluirAtendimento(id) {
-            const item = atendimentos.find(a => a.id === id);
-            if (!item) return;
-            if (item.pagamento === 'A Pagar') {
-                const metodo = prompt("Qual foi a forma de pagamento na retirada? (Pix, Cartão ou Dinheiro)", "Pix");
-                if (!metodo) return;
-                item.pagamento = metodo;
-            }
-            item.concluido = true;
-            salvarDados();
-            renderizarFila();
-        }
+      container.innerHTML = inactiveClients.map((c, idx) => {
+        const defaultMsg = `Olá, ${c.ownerName}! 🐾 Sentimos falta do(a) ${c.petName} aqui no ${config.storeName}! Já faz um tempinho desde o último banho. Que tal agendarmos um horário esta semana para ele(a) ficar cheiroso(a)? ✨`;
+        return `
+          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold ml-1">🐾 Pet: ${c.petName}</span>
+              </div>
+              <span class="text-xs text-slate-500">Última visita: <strong>${c.lastVisitDate || 'Desconhecida'}</strong></span>
+            </div>
+            
+            <div class="space-y-1">
+              <label class="block text-[10px] font-bold text-slate-600 uppercase">Mensagem Personalizada para ${c.ownerName}:</label>
+              <textarea id="reheat-msg-${idx}" rows="3" class="w-full p-2 text-xs rounded-lg border border-slate-300 bg-white">${defaultMsg}</textarea>
+            </div>
 
-        function excluirAtendimento(id) {
-            if (confirm("Deseja remover este atendimento?")) {
-                atendimentos = atendimentos.filter(a => a.id !== id);
-                salvarDados();
-                renderizarFila();
-            }
-        }
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[11px] text-slate-600">📞 ${c.phone}</span>
+              <button onclick="sendReheatWhatsApp('${c.phone}', 'reheat-msg-${idx}')" class="px-3 py-1.5 bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold rounded-lg text-xs flex items-center gap-1 shadow-sm">
+                💬 Enviar WhatsApp
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
 
-        // Renderizar Caixa do Dia
-        function renderizarCaixa() {
-            const concluidos = atendimentos.filter(a => a.concluido);
-            const total = concluidos.reduce((acc, cur) => acc + cur.valor, 0);
-            document.getElementById('caixa-total-valor').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    function sendReheatWhatsApp(phone, textareaId) {
+      const cleanPhone = phone.replace(/\D/g, '');
+      const fullPhone = cleanPhone.startsWith('55') ? cleanPhone : '55' + cleanPhone;
+      const msg = document.getElementById(textareaId).value;
+      window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
-            let somaPix = 0, somaCartao = 0, somaDinheiro = 0;
-            concluidos.forEach(c => {
-                const p = c.pagamento.toLowerCase();
-                if (p.includes('pix')) somaPix += c.valor;
-                else if (p.includes('cart')) somaCartao += c.valor;
-                else somaDinheiro += c.valor;
-            });
+    function callClientWhatsApp(phone, ownerName, petName) {
+      const full = phone.replace(/\D/g, '').startsWith('55') ? phone.replace(/\D/g, '') : '55' + phone.replace(/\D/g, '');
+      window.open(`https://wa.me/${full}?text=${encodeURIComponent(`Olá, *${ownerName}*! Passando para saber como está o(a) *${petName}*! 🐾`)}`, '_blank');
+    }
 
-            document.getElementById('caixa-resumo-metodos').innerHTML = `
-                <div style="background:#f8fafc; padding:8px; border-radius:10px;">💠 Pix<br><strong>R$ ${somaPix.toFixed(2)}</strong></div>
-                <div style="background:#f8fafc; padding:8px; border-radius:10px;">💳 Cartão<br><strong>R$ ${somaCartao.toFixed(2)}</strong></div>
-                <div style="background:#f8fafc; padding:8px; border-radius:10px;">💵 Dinheiro<br><strong>R$ ${somaDinheiro.toFixed(2)}</strong></div>
-            `;
+    // ================= MENUS E CONFIGURAÇÕES =================
+    function openPinModal() { 
+      document.getElementById('pin-input').value = ''; 
+      document.getElementById('pin-modal').classList.remove('hidden'); 
+      document.getElementById('pin-modal').classList.add('flex'); 
+      document.getElementById('pin-input').focus(); 
+    }
+    
+    function closePinModal() { 
+      document.getElementById('pin-modal').classList.add('hidden'); 
+      document.getElementById('pin-modal').classList.remove('flex'); 
+    }
+    
+    function verifyPin() {
+      if (document.getElementById('pin-input').value.trim() === config.pin) {
+        closePinModal(); 
+        document.getElementById('view-client').classList.add('hidden'); 
+        document.getElementById('view-admin').classList.remove('hidden'); 
+        document.getElementById('btn-exit-admin').classList.remove('hidden');
+        renderAdminBookings(); 
+        renderClientsList(); 
+        renderReheatList(); 
+        renderAdminEditors(); 
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else { 
+        alert('Senha incorreta!'); 
+      }
+    }
+    
+    function exitAdmin() { 
+      document.getElementById('view-admin').classList.add('hidden'); 
+      document.getElementById('view-client').classList.remove('hidden'); 
+      document.getElementById('btn-exit-admin').classList.add('hidden'); 
+      window.scrollTo({ top: 0, behavior: 'smooth' }); 
+    }
+    
+    function switchAdminTab(tab) {
+      ['fila', 'clientes', 'reaquecer', 'portes', 'precos', 'horarios'].forEach(t => {
+        document.getElementById('admin-sec-' + t).classList.toggle('hidden', t !== tab);
+        document.getElementById('adm-tab-' + t).className = t === tab ? 'px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white' : 'px-2 py-2 rounded-lg text-xs font-bold text-slate-300';
+      });
+      if (tab === 'reaquecer') {
+        renderReheatList();
+      }
+    }
 
-            const lista = document.getElementById('lista-caixa-concluidos');
-            if (concluidos.length === 0) {
-                lista.innerHTML = `<p style="text-align:center; color:#94a3b8; font-size:13px; padding:14px;">Nenhum atendimento finalizado hoje.</p>`;
-                return;
-            }
+    function renderAdminEditors() {
+      // Editor de Portes
+      document.getElementById('admin-sizes-editor').innerHTML = config.sizes.map((sz, idx) => `
+        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+          <input type="text" id="edit-sz-name-${idx}" value="${sz.name}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white w-1/3" />
+          <input type="text" id="edit-sz-sub-${idx}" value="${sz.subtitle}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white flex-1" />
+          <button onclick="deleteSizeCategory('${sz.id}')" class="text-xs text-red-500 font-bold px-2 py-1">🗑️</button>
+        </div>
+      `).join('');
+      
+      // Editor de Serviços
+      document.getElementById('admin-services-editor').innerHTML = config.services.map((srv, sIdx) => `
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <input type="text" id="edit-srv-name-${sIdx}" value="${srv.name}" class="font-bold text-sm text-slate-800 bg-white px-3 py-1.5 rounded-lg border border-slate-300 flex-1" />
+            <button onclick="deleteService('${srv.id}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold flex items-center shrink-0">🗑️</button>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            ${config.sizes.map(sz => `
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <label class="block text-[10px] font-bold text-slate-600 truncate">${sz.name} (R$)</label>
+                <input type="number" step="0.5" id="edit-price-${sIdx}-${sz.id}" value="${srv.prices[sz.id] ?? 50}" class="w-full mt-1 px-2 py-1 rounded border border-slate-300 text-sm font-bold text-[#EE3E80]" />
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      
+      // Editor de Adicionais
+      document.getElementById('admin-extras-editor').innerHTML = config.extras.map((ex, eIdx) => `
+        <div class="flex items-center gap-1.5 p-2 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden w-full">
+          <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-slate-50" />
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="text-[10px] text-slate-500 font-bold">R$</span>
+            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold text-[#EE3E80] bg-slate-50 text-center" />
+          </div>
+          <button onclick="deleteExtra('${ex.id}')" class="text-red-500 hover:bg-red-50 rounded-lg shrink-0 px-1" title="Excluir">🗑️</button>
+        </div>
+      `).join('');
 
-            lista.innerHTML = concluidos.map(c => `
-                <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
-                    <div>
-                        <strong>${c.pet}</strong> (${c.tutor})<br>
-                        <span style="color:#64748b;">${c.servico} • ${c.pagamento}</span>
-                    </div>
-                    <strong>R$ ${c.valor.toFixed(2).replace('.', ',')}</strong>
-                </div>
-            `).join('');
-        }
+      document.getElementById('cfg-store-name').value = config.storeName;
+      document.getElementById('cfg-banner-title').value = config.bannerTitle || 'Painel de Balcão — Banho & Tosa';
+      document.getElementById('cfg-store-address').value = config.storeAddress;
+      document.getElementById('cfg-whatsapp').value = config.whatsapp;
+      document.getElementById('cfg-pin').value = config.pin;
+    }
 
-        function limparCaixaDia() {
-            if (confirm("Deseja zerar os atendimentos concluídos do caixa de hoje?")) {
-                atendimentos = atendimentos.filter(a => !a.concluido);
-                salvarDados();
-                renderizarCaixa();
-            }
-        }
-
-        // Painel do Dono (PIN 1234)
-        function abrirPainelDono() {
-            const senha = prompt("Digite a senha PIN do Painel do Dono:");
-            if (senha !== config.pin) {
-                if (senha !== null) alert("Senha incorreta!");
-                return;
-            }
-            document.getElementById('modal-dono').classList.remove('hidden');
-            carregarDadosPainelDono();
-        }
-
-        function fecharPainelDono() {
-            document.getElementById('modal-dono').classList.add('hidden');
-        }
-
-        function mostrarAbaDono(aba) {
-            ['precos', 'adicionais', 'sumidos', 'loja'].forEach(a => {
-                document.getElementById(`otab-${a}`).classList.add('hidden');
-                document.getElementById(`otab-btn-${a}`).classList.remove('active');
-            });
-            document.getElementById(`otab-${aba}`).classList.remove('hidden');
-            document.getElementById(`otab-btn-${aba}`).classList.add('active');
-        }
-
-        function carregarDadosPainelDono() {
-            // Preços e Portes
-            document.getElementById('editor-precos-portes').innerHTML = config.portes.map((p, i) => `
-                <div style="background:#f8fafc; padding:10px; border-radius:12px; margin-bottom:8px;">
-                    <strong style="font-size:13px; display:block; margin-bottom:6px;">Porte: ${p.nome}</strong>
-                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
-                        <div>
-                            <label style="font-size:10px;">Banho</label>
-                            <input type="number" class="input-control" style="padding:6px;" id="preco-b-${i}" value="${p.banho}">
-                        </div>
-                        <div>
-                            <label style="font-size:10px;">Banho+Hig</label>
-                            <input type="number" class="input-control" style="padding:6px;" id="preco-bh-${i}" value="${p.banhoTosaHig}">
-                        </div>
-                        <div>
-                            <label style="font-size:10px;">Banho+Total</label>
-                            <input type="number" class="input-control" style="padding:6px;" id="preco-bt-${i}" value="${p.banhoTosaTotal}">
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            // Adicionais
-            document.getElementById('editor-lista-adicionais').innerHTML = config.adicionais.map(ad => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #f1f5f9; font-size:13px;">
-                    <span>${ad.nome} - <strong>R$ ${ad.preco}</strong></span>
-                    <button onclick="removerAdicional(${ad.id})" class="btn-sm btn-del" style="padding:4px 8px;">Excluir</button>
-                </div>
-            `).join('');
-
-            // Mensagens e CRM Sumidos
-            document.getElementById('config-msg-pronto').value = config.msgPronto;
-            document.getElementById('config-msg-sumidos').value = config.msgSumidos;
-            document.getElementById('config-logo-zoom').value = config.logoZoom || 100;
-
-            const listaCrm = document.getElementById('lista-clientes-crm');
-            if (clientes.length === 0) {
-                listaCrm.innerHTML = `<p style="font-size:12px; color:#94a3b8; text-align:center;">Nenhum cliente cadastrado ainda.</p>`;
-            } else {
-                listaCrm.innerHTML = clientes.map(c => {
-                    const dias = Math.floor((Date.now() - new Date(c.ultimaVisita).getTime()) / (1000 * 60 * 60 * 24));
-                    return `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f8fafc; border-radius:10px; margin-bottom:6px; font-size:12px;">
-                            <div>
-                                <strong>🐾 ${c.pet}</strong> (${c.tutor})<br>
-                                <span style="color:#64748b;">Última visita: há ${dias} dia(s)</span>
-                            </div>
-                            <button onclick="chamarClienteSumido(${c.id})" class="btn-sm btn-wa">📲 Chamar</button>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        function salvarConfiguracoesDono() {
-            config.portes.forEach((p, i) => {
-                p.banho = parseFloat(document.getElementById(`preco-b-${i}`).value) || p.banho;
-                p.banhoTosaHig = parseFloat(document.getElementById(`preco-bh-${i}`).value) || p.banhoTosaHig;
-                p.banhoTosaTotal = parseFloat(document.getElementById(`preco-bt-${i}`).value) || p.banhoTosaTotal;
-            });
-            config.msgPronto = document.getElementById('config-msg-pronto').value;
-            config.msgSumidos = document.getElementById('config-msg-sumidos').value;
-            salvarDados();
-            atualizarPrecosFormulario();
-            alert("Configurações atualizadas com sucesso!");
-        }
-
-        function adicionarNovoAdicional() {
-            const nome = document.getElementById('novo-adicional-nome').value.trim();
-            const preco = parseFloat(document.getElementById('novo-adicional-preco').value);
-            if (!nome || isNaN(preco)) return;
-            config.adicionais.push({ id: Date.now(), nome, preco });
-            salvarDados();
-            document.getElementById('novo-adicional-nome').value = '';
-            document.getElementById('novo-adicional-preco').value = '';
-            carregarDadosPainelDono();
-            renderizarAdicionaisFormulario();
-        }
-
-        function removerAdicional(id) {
-            config.adicionais = config.adicionais.filter(a => a.id !== id);
-            salvarDados();
-            carregarDadosPainelDono();
-            renderizarAdicionaisFormulario();
-        }
-
-        function chamarClienteSumido(id) {
-            const c = clientes.find(item => item.id === id);
-            if (!c) return;
-            const msg = document.getElementById('config-msg-sumidos').value
-                .replace(/\{pet\}/g, c.pet)
-                .replace(/\{tutor\}/g, c.tutor);
-            window.open(`https://wa.me/55${c.zap}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function carregarNovaLogo(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                config.logoBase64 = evt.target.result;
-                salvarDados();
-                aplicarLogoHeader();
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function ajustarZoomLogo(val) {
-            config.logoZoom = parseInt(val);
-            document.getElementById('zoom-val-label').textContent = val + '%';
-            salvarDados();
-            aplicarLogoHeader();
-        }
-
-        function removerLogoCustom() {
-            config.logoBase64 = "";
-            config.logoZoom = 100;
-            salvarDados();
-            aplicarLogoHeader();
-        }
-
-        inicializarApp();
-    </script>
+    function openNewServiceModal() { 
+      document.getElementById('service-modal').classList.remove('hidden'); 
+      document.getElementById('service-modal').classList.add('flex'); 
+    }
+    
+    function closeNewServiceModal() { 
+      document.getElementById('service-modal').classList.add('hidden'); 
+      document.getElementById('service-modal').classList.remove('flex'); 
+    }
+    
+    function saveNewService() {
+      const name = document.getElementById('new-srv-name').value.trim(); 
+      const base = parseFloat(document.getElementById('new-srv-base').value) || 60;
+      if (!name) return alert('Digite o nome!');
+      
+      const pricesObj = {}; 
+      config.sizes.forEach((sz, i) => { pricesObj[sz.id] = base + (i * 15); });
+      
+      config.services.push({ id: 'srv_' + Date.now(), name, desc: document.getElementById('new-srv-desc').value.trim() || 'Serviço', prices: pricesObj });
+      closeNewServiceModal(); 
+      saveConfig(); 
+      alert('✅ Serviço adicionado!');
+    }
+    
+    function deleteService(id) { 
+      if (config.services.length <= 1) return alert('Mantenha pelo menos 1 serviço.'); 
+      config.services = config.services.filter(s => s.id !== id); 
+      saveConfig(); 
+    }
+    
+    function deleteSizeCategory(id) {
+      if (config.sizes.length <= 1) return alert('Mantenha pelo menos 1 porte de animal.');
+      config.sizes = config.sizes.filter(s => s.id !== id);
+      saveConfig();
+    }
+    
+    function addNewExtra() {
+      const name = document.getElementById('new-extra-name').value.trim(); 
+      const price = parseFloat(document.getElementById('new-extra-price').value) || 15;
+      if (!name) return alert('Digite o nome do adicional!');
+      config.extras.push({ id: 'ext_' + Date.now(), name, price });
+      document.getElementById('new-extra-name').value = ''; 
+      document.getElementById('new-extra-price').value = ''; 
+      saveConfig();
+    }
+    
+    function deleteExtra(id) { 
+      config.extras = config.extras.filter(e => e.id !== id); 
+      saveConfig(); 
+    }
+    
+    function saveExtrasFromEditor() {
+      config.extras.forEach((ex, eIdx) => {
+        const nEl = document.getElementById(`edit-extra-name-${eIdx}`); 
+        const pEl = document.getElementById(`edit-extra-price-${eIdx}`);
+        if (nEl && nEl.value.trim()) ex.name = nEl.value.trim(); 
+        if (pEl) ex.price = parseFloat(pEl.value) || 0;
+      });
+      saveConfig(); 
+      alert('✅ Adicionais salvos!');
+    }
+    
+    function saveSizesChanges() {
+      config.sizes.forEach((sz, idx) => {
+        const n = document.getElementById(`edit-sz-name-${idx}`); 
+        const s = document.getElementById(`edit-sz-sub-${idx}`);
+        if (n && n.value.trim()) sz.name = n.value.trim(); 
+        if (s) sz.subtitle = s.value.trim();
+      }); 
+      saveConfig(); 
+      alert('✅ Categorias salvas!');
+    }
+    
+    function savePricesFromEditor() {
+      config.services.forEach((srv, sIdx) => {
+        const nameEl = document.getElementById(`edit-srv-name-${sIdx}`); 
+        if (nameEl && nameEl.value.trim()) srv.name = nameEl.value.trim();
+        config.sizes.forEach(sz => { 
+          const priceInput = document.getElementById(`edit-price-${sIdx}-${sz.id}`); 
+          if (priceInput) srv.prices[sz.id] = Number(priceInput.value) || 0; 
+        });
+      }); 
+      saveConfig(); 
+      alert('✅ Preços salvos!');
+    }
+    
+    function saveStoreDataConfig() {
+      config.storeName = document.getElementById('cfg-store-name').value.trim(); 
+      config.bannerTitle = document.getElementById('cfg-banner-title').value.trim();
+      config.storeAddress = document.getElementById('cfg-store-address').value.trim(); 
+      config.whatsapp = document.getElementById('cfg-whatsapp').value.trim();
+      config.pin = document.getElementById('cfg-pin').value.trim(); 
+      saveConfig(); 
+      alert('✅ Configurações salvas!');
+    }
+  </script>
 </body>
 </html>
