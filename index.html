@@ -214,6 +214,39 @@
             color: var(--text-muted);
             font-size: 14px;
         }
+
+        .atendimento-card {
+            background: #f8f9fe;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .atendimento-info h4 {
+            color: #32325d;
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .atendimento-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -232,9 +265,9 @@
     </div>
 
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('registrar')">📝 Registrar</button>
-        <button class="tab-btn" onclick="switchTab('fila')">⏳ Em Andamento</button>
-        <button class="tab-btn" onclick="switchTab('caixa')">💰 Caixa do Dia</button>
+        <button class="tab-btn active" onclick="switchTab('registrar', event)">📝 Registrar</button>
+        <button class="tab-btn" onclick="switchTab('fila', event)">⏳ Em Andamento</button>
+        <button class="tab-btn" onclick="switchTab('caixa', event)">💰 Caixa do Dia</button>
     </div>
 
     <!-- SEÇÃO: REGISTRAR -->
@@ -282,11 +315,13 @@
     <!-- SEÇÃO: CAIXA DO DIA -->
     <div id="tab-caixa" class="section hidden">
         <div class="section-title">💰 Fechamento do Dia</div>
-        <div class="empty-state">Nenhum atendimento finalizado hoje.</div>
+        <div id="caixaList" class="empty-state">Nenhum atendimento finalizado hoje.</div>
     </div>
 
     <script>
-        function switchTab(tabName) {
+        let atendimentos = JSON.parse(localStorage.getItem('recanto_atendimentos')) || [];
+
+        function switchTab(tabName, event) {
             document.getElementById('tab-registrar').classList.add('hidden');
             document.getElementById('tab-fila').classList.add('hidden');
             document.getElementById('tab-caixa').classList.add('hidden');
@@ -295,32 +330,80 @@
 
             if(tabName === 'registrar') {
                 document.getElementById('tab-registrar').classList.remove('hidden');
-                event.currentTarget.classList.add('active');
             } else if(tabName === 'fila') {
                 document.getElementById('tab-fila').classList.remove('hidden');
-                event.currentTarget.classList.add('active');
+                atualizarFila();
             } else if(tabName === 'caixa') {
                 document.getElementById('tab-caixa').classList.remove('hidden');
+            }
+            if(event && event.currentTarget) {
                 event.currentTarget.classList.add('active');
             }
         }
 
-        function buscarCliente() {}
-
         function salvarAtendimento() {
-            const pet = document.getElementById('petName').value;
-            const tutor = document.getElementById('tutorName').value;
+            const pet = document.getElementById('petName').value.trim();
+            const tutor = document.getElementById('tutorName').value.trim();
+            const phone = document.getElementById('tutorPhone').value.trim();
+            const service = document.getElementById('serviceType').value;
             
             if(!pet || !tutor) {
                 alert('Por favor, preencha o nome do pet e do tutor!');
                 return;
             }
 
-            alert('Atendimento cadastrado com sucesso!');
+            const novoItem = {
+                id: Date.now(),
+                pet,
+                tutor,
+                phone,
+                service,
+                status: 'Em Andamento'
+            };
+
+            atendimentos.push(novoItem);
+            localStorage.setItem('recanto_atendimentos', JSON.stringify(atendimentos));
+
+            alert('Atendimento cadastrado na fila com sucesso!');
             document.getElementById('petName').value = '';
             document.getElementById('tutorName').value = '';
             document.getElementById('tutorPhone').value = '';
         }
+
+        function atualizarFila() {
+            const container = document.getElementById('filaList');
+            const emAndamento = atendimentos.filter(item => item.status === 'Em Andamento');
+
+            if(emAndamento.length === 0) {
+                container.innerHTML = '<div class="empty-state">Nenhum pet no momento.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            emAndamento.forEach(item => {
+                container.innerHTML += `
+                    <div class="atendimento-card">
+                        <div class="atendimento-info">
+                            <h4>🐾 ${item.pet} (${item.service})</h4>
+                            <p>Tutor: ${item.tutor} • Tel: ${item.phone || 'Não informado'}</p>
+                        </div>
+                        <button class="btn-action" onclick="concluirAtendimento(${item.id})">Concluir</button>
+                    </div>
+                `;
+            });
+        }
+
+        function concluirAtendimento(id) {
+            atendimentos = atendimentos.map(item => {
+                if(item.id === id) item.status = 'Concluído';
+                return item;
+            });
+            localStorage.setItem('recanto_atendimentos', JSON.stringify(atendimentos));
+            atualizarFila();
+            alert('Atendimento concluído com sucesso!');
+        }
+
+        function buscarCliente() {}
     </script>
 </body>
 </html>
