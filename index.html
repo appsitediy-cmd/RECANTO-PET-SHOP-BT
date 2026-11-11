@@ -6,27 +6,28 @@
     <title>Recanto Petshop - Painel de Balcão</title>
     <style>
         :root {
-            --primary: #008B8B;
-            --primary-dark: #006666;
-            --secondary: #FF6B6B;
-            --bg-color: #f4f7f6;
+            --primary: #5e72e4;
+            --primary-dark: #324cdd;
+            --success: #2dce89;
+            --info: #11cdef;
+            --bg-color: #f8f9fe;
             --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-muted: #666666;
-            --border: #e0e0e0;
+            --text-main: #525f7f;
+            --text-muted: #8898aa;
+            --border: #e9ecef;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 15px;
+            padding: 20px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -36,15 +37,15 @@
             align-items: center;
             gap: 15px;
             background: var(--card-bg);
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
             margin-bottom: 20px;
         }
 
         .logo-box {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             background: var(--primary);
             color: white;
             border-radius: 50%;
@@ -53,33 +54,36 @@
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .brand-info h1 {
             font-size: 18px;
-            color: #FF6B6B;
-            letter-spacing: 0.5px;
+            color: #32325d;
+            font-weight: 600;
         }
 
         .brand-info p {
             font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .main-card {
-            background: linear-gradient(135deg, #00B4D8, #0077B6);
+            background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,119,182,0.3);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
         }
 
         .main-card h2 {
-            font-size: 20px;
-            margin-bottom: 5px;
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .main-card p {
@@ -91,6 +95,9 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            background: #e9ecef;
+            padding: 5px;
+            border-radius: 12px;
         }
 
         .tab-btn {
@@ -98,80 +105,86 @@
             padding: 12px;
             border: none;
             border-radius: 10px;
-            background: white;
-            color: var(--text-muted);
+            background: transparent;
+            color: var(--text-main);
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
         .tab-btn.active {
-            background: #00B4D8;
-            color: white;
-            box-shadow: 0 4px 8px rgba(0,180,216,0.2);
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .section {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
             margin-bottom: 20px;
         }
 
         .section-title {
             font-size: 16px;
             font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 15px;
+            color: #32325d;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #525f7f;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #525f7f;
             outline: none;
-            transition: border 0.2s;
+            transition: all 0.2s;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(50, 50, 93, 0.05);
         }
 
         input:focus, select:focus, textarea:focus {
-            border-color: #00B4D8;
+            border-color: var(--primary);
+            box-shadow: 0 3px 9px rgba(50, 50, 93, 0.1), 0 1px 4px rgba(0, 0, 0, 0.08);
         }
 
         .btn-submit {
             width: 100%;
             padding: 14px;
-            background: #FF6B6B;
+            background: var(--success);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s;
         }
 
         .btn-submit:active {
-            background: #ff5252;
+            transform: translateY(1px);
         }
 
         .search-box {
@@ -185,7 +198,7 @@
 
         .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
@@ -206,29 +219,29 @@
 <body>
 
     <header>
-        <div class="logo-box" style="background: #FF6B6B;">R</div>
+        <div class="logo-box">R</div>
         <div class="brand-info">
             <h1>Recanto</h1>
-            <p>PETSHOP</p>
+            <p>Petshop</p>
         </div>
     </header>
 
     <div class="main-card">
         <h2>Painel de Balcão – Banho & Tosa</h2>
-        <p>Gerenciamento de atendimentos</p>
+        <p>Gerenciamento e controle de atendimento</p>
     </div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('registrar')">📝 Registrar</button>
         <button class="tab-btn" onclick="switchTab('fila')">⏳ Em Andamento</button>
-        <button class="tab-btn" onclick="switchTab('caixa')">✅ Caixa do Dia</button>
+        <button class="tab-btn" onclick="switchTab('caixa')">💰 Caixa do Dia</button>
     </div>
 
     <!-- SEÇÃO: REGISTRAR -->
     <div id="tab-registrar" class="section">
         <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchClient" placeholder="Digite nome do pet, tutor ou telefone..." oninput="buscarCliente()">
+            <input type="text" id="searchClient" placeholder="Buscar cliente, pet ou telefone..." oninput="buscarCliente()">
         </div>
 
         <div class="section-title">➕ Novo Atendimento</div>
