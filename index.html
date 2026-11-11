@@ -57,7 +57,7 @@
 
         .brand-info h1 {
             font-size: 18px;
-            color: var(--primary);
+            color: #FF6B6B;
             letter-spacing: 0.5px;
         }
 
@@ -65,14 +65,15 @@
             font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .main-card {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(135deg, #00B4D8, #0077B6);
             color: white;
             padding: 20px;
             border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,139,139,0.3);
+            box-shadow: 0 4px 10px rgba(0,119,182,0.3);
             margin-bottom: 20px;
         }
 
@@ -107,9 +108,9 @@
         }
 
         .tab-btn.active {
-            background: var(--primary);
+            background: #00B4D8;
             color: white;
-            box-shadow: 0 4px 8px rgba(0,139,139,0.2);
+            box-shadow: 0 4px 8px rgba(0,180,216,0.2);
         }
 
         .section {
@@ -153,13 +154,13 @@
         }
 
         input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
+            border-color: #00B4D8;
         }
 
         .btn-submit {
             width: 100%;
             padding: 14px;
-            background: var(--primary);
+            background: #FF6B6B;
             color: white;
             border: none;
             border-radius: 10px;
@@ -170,7 +171,7 @@
         }
 
         .btn-submit:active {
-            background: var(--primary-dark);
+            background: #ff5252;
         }
 
         .search-box {
@@ -205,29 +206,29 @@
 <body>
 
     <header>
-        <div class="logo-box">R</div>
+        <div class="logo-box" style="background: #FF6B6B;">R</div>
         <div class="brand-info">
             <h1>Recanto</h1>
-            <p>Petshop</p>
+            <p>PETSHOP</p>
         </div>
     </header>
 
     <div class="main-card">
-        <h2>Painel de Balcão</h2>
-        <p>Gerenciamento de Banho & Tosa</p>
+        <h2>Painel de Balcão – Banho & Tosa</h2>
+        <p>Gerenciamento de atendimentos</p>
     </div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('registrar')">📝 Registrar</button>
         <button class="tab-btn" onclick="switchTab('fila')">⏳ Em Andamento</button>
-        <button class="tab-btn" onclick="switchTab('caixa')">💰 Caixa do Dia</button>
+        <button class="tab-btn" onclick="switchTab('caixa')">✅ Caixa do Dia</button>
     </div>
 
     <!-- SEÇÃO: REGISTRAR -->
     <div id="tab-registrar" class="section">
         <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchClient" placeholder="Buscar cliente cadastrado..." oninput="buscarCliente()">
+            <input type="text" id="searchClient" placeholder="Digite nome do pet, tutor ou telefone..." oninput="buscarCliente()">
         </div>
 
         <div class="section-title">➕ Novo Atendimento</div>
@@ -259,56 +260,7 @@
         <button class="btn-submit" onclick="salvarAtendimento()">Cadastrar na Fila</button>
     </div>
 
-    <!-- SEÇÃO: EM ANDAMENTO (FILA) -->
+    <!-- SEÇÃO: EM ANDAMENTO -->
     <div id="tab-fila" class="section hidden">
         <div class="section-title">⏳ Pets em Andamento</div>
-        <div id="filaList" class="empty-state">Nenhum pet no momento.</div>
-    </div>
-
-    <!-- SEÇÃO: CAIXA DO DIA -->
-    <div id="tab-caixa" class="section hidden">
-        <div class="section-title">💰 Fechamento do Dia</div>
-        <div class="empty-state">Nenhum atendimento finalizado hoje.</div>
-    </div>
-
-    <script>
-        function switchTab(tabName) {
-            document.getElementById('tab-registrar').classList.add('hidden');
-            document.getElementById('tab-fila').classList.add('hidden');
-            document.getElementById('tab-caixa').classList.add('hidden');
-            
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-            if(tabName === 'registrar') {
-                document.getElementById('tab-registrar').classList.remove('hidden');
-                event.currentTarget.classList.add('active');
-            } else if(tabName === 'fila') {
-                document.getElementById('tab-fila').classList.remove('hidden');
-                event.currentTarget.classList.add('active');
-            } else if(tabName === 'caixa') {
-                document.getElementById('tab-caixa').classList.remove('hidden');
-                event.currentTarget.classList.add('active');
-            }
-        }
-
-        function buscarCliente() {
-            // Função de busca futura
-        }
-
-        function salvarAtendimento() {
-            const pet = document.getElementById('petName').value;
-            const tutor = document.getElementById('tutorName').value;
-            
-            if(!pet || !tutor) {
-                alert('Por favor, preencha o nome do pet e do tutor!');
-                return;
-            }
-
-            alert('Atendimento cadastrado com sucesso!');
-            document.getElementById('petName').value = '';
-            document.getElementById('tutorName').value = '';
-            document.getElementById('tutorPhone').value = '';
-        }
-    </script>
-</body>
-</html>
+        <div id="filaList" class="empty-state">N
