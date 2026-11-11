@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recanto Petshop - Sistema de Gestão</title>
+    <style>
+        :root {
+            --primary: #5e72e4;
+            --primary-dark: #324cdd;
+            --success: #2dce89;
+            --info: #11cdef;
+            --warning: #fb6340;
+            --bg-color: #f8f9fe;
+            --card-bg: #ffffff;
+            --text-main: #525f7f;
+            --text-muted: #8898aa;
+            --border: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+            margin-bottom: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand-info h1 {
+            font-size: 18px;
+            color: #32325d;
+            font-weight: 600;
+        }
+
+        .brand-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .btn-toggle-admin {
+            background: #f4f5f7;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle-admin:hover {
+            background: #e9ecef;
+        }
+
+        .main-card {
+            background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .main-card h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .main-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #e9ecef;
+            padding: 5px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #32325d;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #525f7f;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: #525f7f;
+            outline: none;
+            transition: all 0.2s;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(50, 50, 93, 0.05);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 3px 9px rgba(50, 50, 93, 0.1), 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s;
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            padding-left: 40px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .atendimento-card {
+            background: #f8f9fe;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .atendimento-info h4 {
+            color: #32325d;
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .atendimento-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="logo-box">R</div>
+            <div class="brand-info">
+                <h1>Recanto</h1>
+                <p>Petshop</p>
+            </div>
+        </div>
+        <button class="btn-toggle-admin" onclick="toggleModoAdmin()" id="btnAdminText">🔒 Painel Dono</button>
+    </header>
+
+    <div class="main-card">
+        <h2 id="cardTitle">Painel de Balcão – Banho & Tosa</h2>
+        <p id="cardSub">Gerenciamento e controle de atendimento</p>
+    </div>
+
+    <!-- ABAS DE NAVEGAÇÃO DO BALCÃO -->
+    <div class="nav-tabs" id="balcaoNav">
+        <button class="tab-btn active" onclick="switchTab('registrar', event)">📝 Registrar</button>
+        <button class="tab-btn" onclick="switchTab('fila', event)">⏳ Em Andamento</button>
+        <button class="tab-btn" onclick="switchTab('caixa', event)">💰 Caixa do Dia</button>
+    </div>
+
+    <!-- SEÇÃO: REGISTRAR -->
+    <div id="tab-registrar" class="section">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchClient" placeholder="Buscar cliente, pet ou telefone..." oninput="buscarCliente()">
+        </div>
+
+        <div class="section-title">➕ Novo Atendimento</div>
+        
+        <div class="form-group">
+            <label>Nome do Pet *</label>
+            <input type="text" id="petName" placeholder="Ex: Thor">
+        </div>
+
+        <div class="form-group">
+            <label>Nome do Tutor *</label>
+            <input type="text" id="tutorName" placeholder="Ex: Maria Silva">
+        </div>
+
+        <div class="form-group">
+            <label>Telefone / WhatsApp *</label>
+            <input type="tel" id="tutorPhone" placeholder="(00) 00000-0000">
+        </div>
+
+        <div class="form-group">
+            <label>Serviço Principal *</label>
+            <select id="serviceType">
+                <option value="Banho">Banho</option>
+                <option value="Banho e Tosa">Banho e Tosa</option>
+                <option value="Tosa Higiênica">Tosa Higiênica</option>
+            </select>
+        </div>
+
+        <button class="btn-submit" onclick="salvarAtendimento()">Cadastrar na Fila</button>
+    </div>
+
+    <!-- SEÇÃO: EM ANDAMENTO -->
+    <div id="tab-fila" class="section hidden">
+        <div class="section-title">⏳ Pets em Andamento</div>
+        <div id="filaList" class="empty-state">Nenhum pet no momento.</div>
+    </div>
+
+    <!-- SEÇÃO: CAIXA DO DIA -->
+    <div id="tab-caixa" class="section hidden">
+        <div class="section-title">💰 Fechamento do Dia</div>
+        <div id="caixaList" class="empty-state">Nenhum atendimento finalizado hoje.</div>
+    </div>
+
+    <!-- SEÇÃO: PAINEL DO DONO (ADMIN) -->
+    <div id="tab-admin" class="section hidden">
+        <div class="section-title">⚙️ Configurações e Preços</div>
+        
+        <div class="form-group">
+            <label>Preço do Banho (R$)</label>
+            <input type="number" id="precoBanho" value="50.00">
+        </div>
+
+        <div class="form-group">
+            <label>Preço do Banho e Tosa (R$)</label>
+            <input type="number" id="precoBanhoTosa" value="80.00">
+        </div>
+
+        <div class="form-group">
+            <label>Preço da Tosa Higiênica (R$)</label>
+            <input type="number" id="precoTosaHig" value="40.00">
+        </div>
+
+        <button class="btn-submit" onclick="salvarConfiguracoes()" style="background: var(--primary);">Salvar Configurações</button>
+    </div>
+
+    <script>
+        let atendimentos = JSON.parse(localStorage.getItem('recanto_atendimentos')) || [];
+        let modoAdmin = false;
+
+        function switchTab(tabName, event) {
+            document.getElementById('tab-registrar').classList.add('hidden');
+            document.getElementById('tab-fila').classList.add('hidden');
+            document.getElementById('tab-caixa').classList.add('hidden');
+            document.getElementById('tab-admin').classList.add('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if(tabName === 'registrar') {
+                document.getElementById('tab-registrar').classList.remove('hidden');
+            } else if(tabName === 'fila') {
+                document.getElementById('tab-fila').classList.remove('hidden');
+                atualizarFila();
+            } else if(tabName === 'caixa') {
+                document.getElementById('tab-caixa').classList.remove('hidden');
+                atualizarCaixa();
+            } else if(tabName === 'admin') {
+                document.getElementById('tab-admin').classList.remove('hidden');
+            }
+            
+            if(event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function toggleModoAdmin() {
+            modoAdmin = !modoAdmin;
+            const btnText = document.getElementById('btnAdminText');
+            const cardTitle = document.getElementById('cardTitle');
+            const cardSub = document.getElementById('cardSub');
+            const balcaoNav = document.getElementById('balcaoNav');
+
+            if(modoAdmin) {
+                btnText.innerHTML = '🚪 Sair do Painel';
+                cardTitle.innerHTML = 'Painel do Dono – Gestão';
+                cardSub.innerHTML = 'Configurações de preços e serviços';
+                balcaoNav.classList.add('hidden');
+                switchTab('admin');
+            } else {
+                btnText.innerHTML = '🔒 Painel Dono';
+                cardTitle.innerHTML = 'Painel de Balcão – Banho & Tosa';
+                cardSub.innerHTML = 'Gerenciamento e controle de atendimento';
+                balcaoNav.classList.remove('hidden');
+                switchTab('registrar');
+            }
+        }
+
+        function salvarAtendimento() {
+            const pet = document.getElementById('petName').value.trim();
+            const tutor = document.getElementById('tutorName').value.trim();
+            const phone = document.getElementById('tutorPhone').value.trim();
+            const service = document.getElementById('serviceType').value;
+            
+            if(!pet || !tutor) {
+                alert('Por favor, preencha o nome do pet e do tutor!');
+                return;
+            }
+
+            const novoItem = {
+                id: Date.now(),
+                pet,
+                tutor,
+                phone,
+                service,
+                status: 'Em Andamento',
+                data: new Date().toLocaleDateString()
+            };
+
+            atendimentos.push(novoItem);
+            localStorage.setItem('recanto_atendimentos', JSON.stringify(atendimentos));
+
+            alert('Atendimento cadastrado na fila com sucesso!');
+            document.getElementById('petName').value = '';
+            document.getElementById('tutorName').value = '';
+            document.getElementById('tutorPhone').value = '';
+        }
+
+        function atualizarFila() {
+            const container = document.getElementById('filaList');
+            const emAndamento = atendimentos.filter(item => item.status === 'Em Andamento');
+
+            if(emAndamento.length === 0) {
+                container.innerHTML = '<div class="empty-state">Nenhum pet no momento.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            emAndamento.forEach(item => {
+                container.innerHTML += `
+                    <div class="atendimento-card">
+                        <div class="atendimento-info">
+                            <h4>🐾 ${item.pet} (${item.service})</h4>
+                            <p>Tutor: ${item.tutor} • Tel: ${item.phone || 'Não informado'}</p>
+                        </div>
+                        <button class="btn-action" onclick="concluirAtendimento(${item.id})">Concluir</button>
+                    </div>
+                `;
+            });
+        }
+
+        function concluirAtendimento(id) {
+            atendimentos = atendimentos.map(item => {
+                if(item.id === id) item.status = 'Concluído';
+                return item;
+            });
+            localStorage.setItem('recanto_atendimentos', JSON.stringify(atendimentos));
+            atualizarFila();
+            alert('Atendimento concluído e enviado para o Caixa do Dia!');
+        }
+
+        function atualizarCaixa() {
+            const container = document.getElementById('caixaList');
+            const concluidos = atendimentos.filter(item => item.status === 'Concluído');
+
+            if(concluidos.length === 0) {
+                container.innerHTML = '<div class="empty-state">Nenhum atendimento finalizado hoje.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            concluidos.forEach(item => {
+                container.innerHTML += `
+                    <div class="atendimento-card">
+                        <div class="atendimento-info">
+                            <h4>✅ ${item.pet} (${item.service})</h4>
+                            <p>Tutor: ${item.tutor} • Status: Finalizado</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function salvarConfiguracoes() {
+            alert('Configurações salvas com sucesso!');
+            toggleModoAdmin();
+        }
+
+        function buscarCliente() {}
+    </script>
+</body>
+</html>
