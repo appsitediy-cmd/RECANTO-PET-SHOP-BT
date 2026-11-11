@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recanto Petshop - Painel de Balcão</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ff007a;
+            --green: #22c55e;
+            --cyan: #00a8b5;
+            --yellow: #eab308;
+            --orange: #ff7b00;
+            --bg: #f4f7fa;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #dce3ec;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barra Superior 4 Cores */
+        .top-color-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            height: 6px;
+            width: 100%;
+        }
+        .bar-pink { background-color: var(--pink); }
+        .bar-green { background-color: var(--green); }
+        .bar-cyan { background-color: var(--cyan); }
+        .bar-yellow { background-color: var(--yellow); }
+
+        /* Cabeçalho */
+        header {
+            background: var(--card-bg);
+            padding: 14px 20px;
+            border-bottom: 1px solid #e8eef5;
+        }
+
+        .header-container {
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2.5px solid var(--cyan);
+            background-color: #e6f7f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--cyan);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform-origin: center;
+        }
+
+        .brand-text-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 3.5px;
+            margin-top: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Container Principal */
+        .main-container {
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 18px 16px 40px;
+            flex: 1;
+        }
+
+        /* Banner Principal */
+        .hero-banner {
+            background-color: var(--cyan);
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 22px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(0, 168, 181, 0.18);
+        }
+
+        .hero-banner h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 25px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        /* Abas de Navegação do Balcão */
+        .tabs-nav {
+            background-color: #e9eef5;
+            border-radius: 16px;
+            padding: 6px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 8px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: var(--cyan);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Cards Brancos */
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #e8eef5;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        }
+
+        /* Busca de Cliente */
+        .search-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0, 168, 181, 0.12);
+        }
+
+        .input-error {
+            border-color: var(--pink) !important;
+            box-shadow: 0 0 0 3px rgba(255, 0, 122, 0.15) !important;
+        }
+
+        /* Cabeçalho da Seção Novo Atendimento */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .plus-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--pink);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Campos do Formulário */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        /* Resultados da Busca Rápida */
+        .search-results {
+            margin-top: 8px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+            max-height: 210px;
+            overflow-y: auto;
+            background: #fff;
+        }
+
+        .search-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .search-item:hover {
+            background-color: #f0fdfa;
+        }
+
+        /* Lista de Adicionais Checkbox */
+        .addons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .addon-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .addon-chip input {
+            accent-color: var(--cyan);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Resumo de Valor */
+        .price-summary {
+            background: #f0fdfa;
+            border: 1.5px solid #99f6e4;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0;
+        }
+
+        .price-summary span {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f766e;
+        }
+
+        .price-summary strong {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 22px;
+            color: #0f766e;
+        }
+
+        /* Botões Principais */
+        .btn-primary {
+            width: 100%;
+            background-color: var(--pink);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            padding: 15px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 0, 122, 0.25);
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Cards da Fila / Em Andamento */
+        .queue-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .queue-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .badge-waiting { background: #fef3c7; color: #b45309; }
+        .badge-doing { background: #e0f2fe; color: #0369a1; }
+        .badge-ready { background: #dcfce7; color: #15803d; }
+
+        .queue-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-sm {
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-wa { background: #22c55e; color: #fff; }
+        .btn-finish { background: var(--cyan); color: #fff; }
+        .btn-status { background: #f1f5f9; color: #334155; }
+        .btn-del { background: #fee2e2; color: #b91c1c; }
+
+        /* Rodapé e Painel do Dono */
+        footer {
+            text-align: center;
+            padding: 20px 16px 30px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .owner-trigger-btn {
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Modal Painel do Dono */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .owner-tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .owner-tab-btn {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 7px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .owner-tab-btn.active {
+            background: var(--cyan);
+            color: #fff;
+            border-color: var(--cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra Colorida no Topo -->
+    <div class="top-color-bar">
+        <div class="bar-pink"></div>
+        <div class="bar-green"></div>
+        <div class="bar-cyan"></div>
+        <div class="bar-yellow"></div>
+    </div>
+
+    <!-- Cabeçalho Simplificado -->
+    <header>
+        <div class="header-container">
+            <div class="brand-box">
+                <div class="logo-circle" id="header-logo-box">R</div>
+                <div class="brand-text-wrap">
+                    <div class="brand-title" id="header-store-title">
+                        <span style="color:#ff007a">R</span><span style="color:#ff007a">e</span><span style="color:#ff7b00">c</span><span style="color:#eab308">a</span><span style="color:#22c55e">n</span><span style="color:#00a8b5">t</span><span style="color:#00a8b5">o</span>
+                    </div>
+                    <div class="brand-subtitle" id="header-store-subtitle">PETSHOP</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-container">
+
+        <!-- Banner -->
+        <div class="hero-banner">
+            <h1>Painel de Balcão – Banho &amp; Tosa</h1>
+        </div>
+
+        <!-- Abas de Navegação -->
+        <div class="tabs-nav">
+            <button type="button" class="tab-btn active" id="tab-btn-registrar" onclick="mostrarAba('registrar')">
+                📝 Registrar
+            </button>
+            <button type="button" class="tab-btn" id="tab-btn-fila" onclick="mostrarAba('fila')">
+                📋 Em Andamento
+            </button>
+            <button type="button" class="tab-btn" id="tab-btn-caixa" onclick="mostrarAba('caixa')">
+                ✅ Caixa do Dia
+            </button>
+        </div>
+
+        <!-- ABA 1: REGISTRAR -->
+        <div id="aba-registrar">
+            <!-- Card de Busca -->
+            <div class="card">
+                <label class="search-label">🔍 Buscar Cliente Cadastrado</label>
+                <input type="text" id="input-busca-cliente" class="input-control" placeholder="Digite nome do pet, tutor ou telefone..." oninput="buscarClienteRapido(this.value)">
+                <div id="lista-busca-rapida" class="search-results"></div>
+            </div>
+
+            <!-- Card Novo Atendimento -->
+            <div class="card">
+                <div class="section-header">
+                    <div class="plus-badge">+</div>
+                    <h2 class="section-title">Novo Atendimento</h2>
+                </div>
+
+                <form id="form-atendimento" onsubmit="registrarAtendimento(event)" novalidate>
+                    <div class="form-group">
+                        <label class="form-label">Nome do Pet *</label>
+                        <input type="text" id="pet-nome" class="input-control" placeholder="Ex: Thor" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label class="form-label">Espécie</label>
+                            <select id="pet-especie" class="input-control">
+                                <option value="Cão">🐶 Cão</option>
+                                <option value="Gato">🐱 Gato</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Porte do Pet *</label>
+                            <select id="pet-porte" class="input-control" onchange="atualizarPrecosFormulario()"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Raça / Pelagem (Opcional)</label>
+                        <input type="text" id="pet-raca" class="input-control" placeholder="Ex: Shih Tzu, Pelo Longo...">
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label class="form-label">Nome do Tutor *</label>
+                            <input type="text" id="tutor-nome" class="input-control" placeholder="Ex: Maria" required>
+                        </div>
+                        <div>
+                            <label class="form-label">WhatsApp *</label>
+                            <input type="tel" id="tutor-zap" class="input-control" placeholder="(11) 99999-9999" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label class="form-label">Serviço Principal *</label>
+                            <select id="servico-principal" class="input-control" onchange="calcularTotalAtendimento()"></select>
+                        </div>
+                        <div>
+                            <label class="form-label">Horário</label>
+                            <input type="time" id="atendimento-hora" class="input-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Serviços Adicionais</label>
+                        <div id="lista-adicionais-form" class="addons-grid"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label class="form-label">Pagamento</label>
+                            <select id="pagamento-metodo" class="input-control">
+                                <option value="A Pagar">⏳ Pagar na Retirada</option>
+                                <option value="Pix">💠 Pix</option>
+                                <option value="Cartão">💳 Cartão</option>
+                                <option value="Dinheiro">💵 Dinheiro</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Valor Final (R$)</label>
+                            <input type="number" step="0.01" id="valor-final" class="input-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Observações / Alergias</label>
+                        <input type="text" id="atendimento-obs" class="input-control" placeholder="Ex: Alergia a perfume, cuidado com ouvido...">
+                    </div>
+
+                    <div class="price-summary">
+                        <span>Total Estimado:</span>
+                        <strong id="display-total">R$ 0,00</strong>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Registrar Atendimento</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ABA 2: EM ANDAMENTO -->
+        <div id="aba-fila" class="hidden">
+            <div id="container-fila"></div>
+        </div>
+
+        <!-- ABA 3: CAIXA DO DIA -->
+        <div id="aba-caixa" class="hidden">
+            <div class="card">
+                <h3 class="section-title" style="margin-bottom: 12px;">💰 Resumo do Caixa de Hoje</h3>
+                <div class="price-summary" style="margin-top:0;">
+                    <span>Total Recebido Hoje:</span>
+                    <strong id="caixa-total-valor">R$ 0,00</strong>
+                </div>
+                <div id="caixa-resumo-metodos" style="font-size: 13px; color: #475569; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;"></div>
+            </div>
+
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 class="section-title" style="font-size:16px;">Atendimentos Concluídos</h3>
+                    <button onclick="limparCaixaDia()" class="btn-sm btn-del" style="padding:6px 10px;">Limpar Dia</button>
+                </div>
+                <div id="lista-caixa-concluidos"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Rodapé com Acesso ao Painel do Dono -->
+    <footer>
+        <button type="button" class="owner-trigger-btn" onclick="abrirPainelDono()">⚙️ Painel do Dono</button>
+        <p>Recanto Petshop – Sistema de Gestão Local</p>
+    </footer>
+
+    <!-- MODAL: PAINEL DO DONO (PIN 1234) -->
+    <div id="modal-dono" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h2 class="section-title">⚙️ Painel de Gestão do Dono</h2>
+                <button onclick="fecharPainelDono()" class="btn-sm btn-del">✕ Fechar</button>
+            </div>
+
+            <div class="owner-tabs">
+                <button class="owner-tab-btn active" id="otab-btn-precos" onclick="mostrarAbaDono('precos')">💲 Preços e Portes</button>
+                <button class="owner-tab-btn" id="otab-btn-adicionais" onclick="mostrarAbaDono('adicionais')">➕ Adicionais</button>
+                <button class="owner-tab-btn" id="otab-btn-sumidos" onclick="mostrarAbaDono('sumidos')">📢 Clientes Sumidos</button>
+                <button class="owner-tab-btn" id="otab-btn-loja" onclick="mostrarAbaDono('loja')">🏪 Loja &amp; Logo</button>
+            </div>
+
+            <!-- Aba Dono: Preços por Porte -->
+            <div id="otab-precos">
+                <p style="font-size:12px; color:#64748b; margin-bottom:12px;">Edite os valores base de cada serviço conforme o porte:</p>
+                <div id="editor-precos-portes"></div>
+                <button onclick="salvarConfiguracoesDono()" class="btn-primary" style="margin-top:12px;">Salvar Tabela de Preços</button>
+            </div>
+
+            <!-- Aba Dono: Adicionais -->
+            <div id="otab-adicionais" class="hidden">
+                <div id="editor-lista-adicionais" style="margin-bottom:12px;"></div>
+                <div class="form-row">
+                    <input type="text" id="novo-adicional-nome" class="input-control" placeholder="Nome (ex: Hidratação)">
+                    <input type="number" id="novo-adicional-preco" class="input-control" placeholder="Valor R$">
+                </div>
+                <button onclick="adicionarNovoAdicional()" class="btn-primary" style="background:var(--cyan);">+ Incluir Adicional</button>
+            </div>
+
+            <!-- Aba Dono: Clientes Sumidos (CRM Reaquecimento) -->
+            <div id="otab-sumidos" class="hidden">
+                <div class="form-group">
+                    <label class="form-label">Mensagem de Reaquecimento (WhatsApp)</label>
+                    <textarea id="config-msg-sumidos" class="input-control" rows="3"></textarea>
+                    <small style="color:#64748b; font-size:11px;">Use {pet} para o nome do pet e {tutor} para o nome do cliente.</small>
+                </div>
+                <button onclick="salvarConfiguracoesDono()" class="btn-sm btn-finish" style="width:100%; margin-bottom:14px;">💾 Salvar Modelo de Mensagem</button>
+                <div id="lista-clientes-crm"></div>
+            </div>
+
+            <!-- Aba Dono: Loja & Logo -->
+            <div id="otab-loja" class="hidden">
+                <div class="form-group">
+                    <label class="form-label">Foto / Logo da Loja (Opcional)</label>
+                    <input type="file" accept="image/*" class="input-control" onchange="carregarNovaLogo(event)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ajuste de Zoom da Logo (<span id="zoom-val-label">100%</span>)</label>
+                    <input type="range" id="config-logo-zoom" min="80" max="200" value="100" style="width:100%;" oninput="ajustarZoomLogo(this.value)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mensagem Automática "Pet Pronto"</label>
+                    <textarea id="config-msg-pronto" class="input-control" rows="3"></textarea>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button onclick="salvarConfiguracoesDono()" class="btn-primary">Salvar Configurações</button>
+                    <button onclick="removerLogoCustom()" class="btn-sm btn-del">Resetar Logo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados Padrão do Sistema
+        const CONFIG_PADRAO = {
+            pin: "1234",
+            logoBase64: "",
+            logoZoom: 100,
+            msgPronto: "Olá {tutor}! 🐾 Passando para avisar que o(a) *{pet}* já está prontinho(a), cheiroso(a) e esperando por você aqui no *Recanto Petshop*! ✨",
+            msgSumidos: "Oi {tutor}, tudo bem? Sentimos falta do(a) *{pet}* aqui no *Recanto Petshop*! 🐶🚿 Que tal agendar o próximo banho essa semana?",
+            portes: [
+                { nome: "Mini", banho: 40, banhoTosaHig: 55, banhoTosaTotal: 70 },
+                { nome: "Pequeno", banho: 45, banhoTosaHig: 60, banhoTosaTotal: 75 },
+                { nome: "Médio", banho: 55, banhoTosaHig: 70, banhoTosaTotal: 90 },
+                { nome: "Grande", banho: 75, banhoTosaHig: 95, banhoTosaTotal: 120 },
+                { nome: "Gigante", banho: 95, banhoTosaHig: 120, banhoTosaTotal: 150 }
+            ],
+            adicionais: [
+                { id: 1, nome: "Hidratação", preco: 20 },
+                { id: 2, nome: "Corte de Unha", preco: 10 },
+                { id: 3, nome: "Tosa Higiênica Avulsa", preco: 20 },
+                { id: 4, nome: "Desembolo", preco: 25 }
+            ]
+        };
+
+        let config = JSON.parse(localStorage.getItem('recanto_config_v2')) || CONFIG_PADRAO;
+        let clientes = JSON.parse(localStorage.getItem('recanto_clientes_v2')) || [];
+        let atendimentos = JSON.parse(localStorage.getItem('recanto_atendimentos_v2')) || [];
+
+        function salvarDados() {
+            localStorage.setItem('recanto_config_v2', JSON.stringify(config));
+            localStorage.setItem('recanto_clientes_v2', JSON.stringify(clientes));
+            localStorage.setItem('recanto_atendimentos_v2', JSON.stringify(atendimentos));
+        }
+
+        function inicializarApp() {
+            aplicarLogoHeader();
+            popularSelectPortes();
+            renderizarAdicionaisFormulario();
+            atualizarPrecosFormulario();
+            const agora = new Date();
+            document.getElementById('atendimento-hora').value = agora.toTimeString().slice(0,5);
+        }
+
+        function aplicarLogoHeader() {
+            const box = document.getElementById('header-logo-box');
+            if (config.logoBase64) {
+                box.innerHTML = `<img src="${config.logoBase64}" style="transform: scale(${config.logoZoom / 100})">`;
+            } else {
+                box.innerHTML = 'R';
+            }
+        }
+
+        function mostrarAba(aba) {
+            ['registrar', 'fila', 'caixa'].forEach(a => {
+                document.getElementById(`aba-${a}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${a}`).classList.remove('active');
+            });
+            document.getElementById(`aba-${aba}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${aba}`).classList.add('active');
+
+            if (aba === 'fila') renderizarFila();
+            if (aba === 'caixa') renderizarCaixa();
+        }
+
+        function popularSelectPortes() {
+            const sel = document.getElementById('pet-porte');
+            sel.innerHTML = config.portes.map((p, idx) => `<option value="${idx}">${p.nome}</option>`).join('');
+            sel.value = "1"; // Pequeno por padrão
+        }
+
+        function atualizarPrecosFormulario() {
+            const idxPorte = document.getElementById('pet-porte').value || 0;
+            const p = config.portes[idxPorte];
+            const selServico = document.getElementById('servico-principal');
+
+            selServico.innerHTML = `
+                <option value="Banho|${p.banho}">🚿 Banho (R$ ${p.banho.toFixed(2)})</option>
+                <option value="Banho + Tosa Higiênica|${p.banhoTosaHig}">✂️ Banho + Tosa Hig. (R$ ${p.banhoTosaHig.toFixed(2)})</option>
+                <option value="Banho + Tosa Completa|${p.banhoTosaTotal}">🐩 Banho + Tosa Total (R$ ${p.banhoTosaTotal.toFixed(2)})</option>
+            `;
+            calcularTotalAtendimento();
+        }
+
+        function renderizarAdicionaisFormulario() {
+            const container = document.getElementById('lista-adicionais-form');
+            container.innerHTML = config.adicionais.map(ad => `
+                <label class="addon-chip">
+                    <input type="checkbox" class="chk-adicional" data-nome="${ad.nome}" data-preco="${ad.preco}" onchange="calcularTotalAtendimento()">
+                    <span>${ad.nome} (+R$${ad.preco})</span>
+                </label>
+            `).join('');
+        }
+
+        function calcularTotalAtendimento() {
+            const servVal = document.getElementById('servico-principal').value;
+            let total = servVal ? parseFloat(servVal.split('|')[1]) : 0;
+
+            document.querySelectorAll('.chk-adicional:checked').forEach(chk => {
+                total += parseFloat(chk.dataset.preco);
+            });
+
+            document.getElementById('valor-final').value = total.toFixed(2);
+            document.getElementById('display-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        // Busca Rápida de Clientes
+        function buscarClienteRapido(termo) {
+            const box = document.getElementById('lista-busca-rapida');
+            const t = termo.trim().toLowerCase();
+            if (!t) {
+                box.style.display = 'none';
+                return;
+            }
+
+            const encontrados = clientes.filter(c =>
+                c.pet.toLowerCase().includes(t) ||
+                c.tutor.toLowerCase().includes(t) ||
+                c.zap.includes(t)
+            );
+
+            if (encontrados.length === 0) {
+                box.innerHTML = `<div class="search-item" style="color:#64748b;">Nenhum cliente cadastrado com "${termo}"</div>`;
+                box.style.display = 'block';
+                return;
+            }
+
+            box.innerHTML = encontrados.map(c => `
+                <div class="search-item" onclick="preencherCliente(${c.id})">
+                    <div>
+                        <strong>🐾 ${c.pet}</strong> (${c.raca || c.especie})<br>
+                        <span style="color:#64748b; font-size:12px;">👤 ${c.tutor} • 📞 ${c.zap}</span>
+                    </div>
+                    <span style="color:var(--cyan); font-weight:700;">Selecionar</span>
+                </div>
+            `).join('');
+            box.style.display = 'block';
+        }
+
+        function preencherCliente(id) {
+            const c = clientes.find(item => item.id === id);
+            if (!c) return;
+            document.getElementById('pet-nome').value = c.pet;
+            document.getElementById('pet-especie').value = c.especie || 'Cão';
+            document.getElementById('pet-porte').value = c.porteIdx ?? 1;
+            document.getElementById('pet-raca').value = c.raca || '';
+            document.getElementById('tutor-nome').value = c.tutor;
+            document.getElementById('tutor-zap').value = c.zap;
+            document.getElementById('atendimento-obs').value = c.obs || '';
+            document.getElementById('lista-busca-rapida').style.display = 'none';
+            document.getElementById('input-busca-cliente').value = '';
+            atualizarPrecosFormulario();
+        }
+
+        // Registrar Atendimento com Validação e Rolagem Automática
+        function registrarAtendimento(e) {
+            e.preventDefault();
+            const obrigatorios = ['pet-nome', 'tutor-nome', 'tutor-zap'];
+            for (let id of obrigatorios) {
+                const el = document.getElementById(id);
+                el.classList.remove('input-error');
+                if (!el.value.trim()) {
+                    el.classList.add('input-error');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    el.focus();
+                    return;
+                }
+            }
+
+            const pet = document.getElementById('pet-nome').value.trim();
+            const especie = document.getElementById('pet-especie').value;
+            const porteIdx = document.getElementById('pet-porte').value;
+            const porteNome = config.portes[porteIdx].nome;
+            const raca = document.getElementById('pet-raca').value.trim();
+            const tutor = document.getElementById('tutor-nome').value.trim();
+            const zap = document.getElementById('tutor-zap').value.replace(/\D/g, '');
+            const servicoBase = document.getElementById('servico-principal').value.split('|')[0];
+            const adicionaisEscolhidos = Array.from(document.querySelectorAll('.chk-adicional:checked')).map(c => c.dataset.nome);
+            const valor = parseFloat(document.getElementById('valor-final').value) || 0;
+            const pagamento = document.getElementById('pagamento-metodo').value;
+            const obs = document.getElementById('atendimento-obs').value.trim();
+            const hora = document.getElementById('atendimento-hora').value;
+
+            // Salva ou atualiza no CRM de clientes
+            let clienteExistente = clientes.find(c => c.pet.toLowerCase() === pet.toLowerCase() && c.zap === zap);
+            if (clienteExistente) {
+                clienteExistente.ultimaVisita = new Date().toISOString();
+                clienteExistente.obs = obs;
+            } else {
+                clientes.unshift({
+                    id: Date.now(),
+                    pet, especie, porteIdx, raca, tutor, zap, obs,
+                    ultimaVisita: new Date().toISOString()
+                });
+            }
+
+            atendimentos.unshift({
+                id: Date.now() + 1,
+                pet, especie, porteNome, raca, tutor, zap,
+                servico: servicoBase,
+                adicionais: adicionaisEscolhidos,
+                valor, pagamento, obs, hora,
+                status: 'Em Banho / Tosa',
+                concluido: false
+            });
+
+            salvarDados();
+            document.getElementById('form-atendimento').reset();
+            popularSelectPortes();
+            atualizarPrecosFormulario();
+            mostrarAba('fila');
+        }
+
+        // Renderizar Aba Em Andamento
+        function renderizarFila() {
+            const container = document.getElementById('container-fila');
+            const ativos = atendimentos.filter(a => !a.concluido);
+
+            if (ativos.length === 0) {
+                container.innerHTML = `
+                    <div class="card" style="text-align:center; color:#64748b; padding:32px 16px;">
+                        🐾 Nenhum atendimento em andamento no momento.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = ativos.map(a => `
+                <div class="queue-card">
+                    <div class="queue-top">
+                        <div>
+                            <strong style="font-size:16px;">${a.pet}</strong>
+                            <span style="font-size:12px; color:#64748b;">(${a.porteNome} • ${a.tutor})</span>
+                            <div style="font-size:13px; color:var(--cyan); font-weight:700; margin-top:3px;">
+                                ${a.servico} ${a.adicionais.length ? '+ ' + a.adicionais.join(', ') : ''}
+                            </div>
+                        </div>
+                        <span class="badge ${a.status === 'Pronto' ? 'badge-ready' : 'badge-doing'}">${a.status}</span>
+                    </div>
+                    ${a.obs ? `<div style="font-size:12px; background:#fffbeb; color:#b45309; padding:8px; border-radius:8px; margin-bottom:8px;">⚠️ Obs: ${a.obs}</div>` : ''}
+                    <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569;">
+                        <span>🕒 Entrada: ${a.hora || '--:--'}</span>
+                        <strong>R$ ${a.valor.toFixed(2).replace('.', ',')} (${a.pagamento})</strong>
+                    </div>
+                    <div class="queue-actions">
+                        <button onclick="avisarWhatsAppPronto(${a.id})" class="btn-sm btn-wa">📲 Avisar Pronto</button>
+                        <button onclick="concluirAtendimento(${a.id})" class="btn-sm btn-finish">✅ Concluir / Caixa</button>
+                        <button onclick="alternarStatusPronto(${a.id})" class="btn-sm btn-status">🔄 Mudar Status</button>
+                        <button onclick="excluirAtendimento(${a.id})" class="btn-sm btn-del">🗑️ Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function alternarStatusPronto(id) {
+            const item = atendimentos.find(a => a.id === id);
+            if (!item) return;
+            item.status = item.status === 'Pronto' ? 'Em Banho / Tosa' : 'Pronto';
+            salvarDados();
+            renderizarFila();
+        }
+
+        function avisarWhatsAppPronto(id) {
+            const item = atendimentos.find(a => a.id === id);
+            if (!item) return;
+            item.status = 'Pronto';
+            salvarDados();
+            renderizarFila();
+            const texto = config.msgPronto
+                .replace(/\{pet\}/g, item.pet)
+                .replace(/\{tutor\}/g, item.tutor);
+            window.open(`https://wa.me/55${item.zap}?text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        function concluirAtendimento(id) {
+            const item = atendimentos.find(a => a.id === id);
+            if (!item) return;
+            if (item.pagamento === 'A Pagar') {
+                const metodo = prompt("Qual foi a forma de pagamento na retirada? (Pix, Cartão ou Dinheiro)", "Pix");
+                if (!metodo) return;
+                item.pagamento = metodo;
+            }
+            item.concluido = true;
+            salvarDados();
+            renderizarFila();
+        }
+
+        function excluirAtendimento(id) {
+            if (confirm("Deseja remover este atendimento?")) {
+                atendimentos = atendimentos.filter(a => a.id !== id);
+                salvarDados();
+                renderizarFila();
+            }
+        }
+
+        // Renderizar Caixa do Dia
+        function renderizarCaixa() {
+            const concluidos = atendimentos.filter(a => a.concluido);
+            const total = concluidos.reduce((acc, cur) => acc + cur.valor, 0);
+            document.getElementById('caixa-total-valor').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+            let somaPix = 0, somaCartao = 0, somaDinheiro = 0;
+            concluidos.forEach(c => {
+                const p = c.pagamento.toLowerCase();
+                if (p.includes('pix')) somaPix += c.valor;
+                else if (p.includes('cart')) somaCartao += c.valor;
+                else somaDinheiro += c.valor;
+            });
+
+            document.getElementById('caixa-resumo-metodos').innerHTML = `
+                <div style="background:#f8fafc; padding:8px; border-radius:10px;">💠 Pix<br><strong>R$ ${somaPix.toFixed(2)}</strong></div>
+                <div style="background:#f8fafc; padding:8px; border-radius:10px;">💳 Cartão<br><strong>R$ ${somaCartao.toFixed(2)}</strong></div>
+                <div style="background:#f8fafc; padding:8px; border-radius:10px;">💵 Dinheiro<br><strong>R$ ${somaDinheiro.toFixed(2)}</strong></div>
+            `;
+
+            const lista = document.getElementById('lista-caixa-concluidos');
+            if (concluidos.length === 0) {
+                lista.innerHTML = `<p style="text-align:center; color:#94a3b8; font-size:13px; padding:14px;">Nenhum atendimento finalizado hoje.</p>`;
+                return;
+            }
+
+            lista.innerHTML = concluidos.map(c => `
+                <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                    <div>
+                        <strong>${c.pet}</strong> (${c.tutor})<br>
+                        <span style="color:#64748b;">${c.servico} • ${c.pagamento}</span>
+                    </div>
+                    <strong>R$ ${c.valor.toFixed(2).replace('.', ',')}</strong>
+                </div>
+            `).join('');
+        }
+
+        function limparCaixaDia() {
+            if (confirm("Deseja zerar os atendimentos concluídos do caixa de hoje?")) {
+                atendimentos = atendimentos.filter(a => !a.concluido);
+                salvarDados();
+                renderizarCaixa();
+            }
+        }
+
+        // Painel do Dono (PIN 1234)
+        function abrirPainelDono() {
+            const senha = prompt("Digite a senha PIN do Painel do Dono:");
+            if (senha !== config.pin) {
+                if (senha !== null) alert("Senha incorreta!");
+                return;
+            }
+            document.getElementById('modal-dono').classList.remove('hidden');
+            carregarDadosPainelDono();
+        }
+
+        function fecharPainelDono() {
+            document.getElementById('modal-dono').classList.add('hidden');
+        }
+
+        function mostrarAbaDono(aba) {
+            ['precos', 'adicionais', 'sumidos', 'loja'].forEach(a => {
+                document.getElementById(`otab-${a}`).classList.add('hidden');
+                document.getElementById(`otab-btn-${a}`).classList.remove('active');
+            });
+            document.getElementById(`otab-${aba}`).classList.remove('hidden');
+            document.getElementById(`otab-btn-${aba}`).classList.add('active');
+        }
+
+        function carregarDadosPainelDono() {
+            // Preços e Portes
+            document.getElementById('editor-precos-portes').innerHTML = config.portes.map((p, i) => `
+                <div style="background:#f8fafc; padding:10px; border-radius:12px; margin-bottom:8px;">
+                    <strong style="font-size:13px; display:block; margin-bottom:6px;">Porte: ${p.nome}</strong>
+                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+                        <div>
+                            <label style="font-size:10px;">Banho</label>
+                            <input type="number" class="input-control" style="padding:6px;" id="preco-b-${i}" value="${p.banho}">
+                        </div>
+                        <div>
+                            <label style="font-size:10px;">Banho+Hig</label>
+                            <input type="number" class="input-control" style="padding:6px;" id="preco-bh-${i}" value="${p.banhoTosaHig}">
+                        </div>
+                        <div>
+                            <label style="font-size:10px;">Banho+Total</label>
+                            <input type="number" class="input-control" style="padding:6px;" id="preco-bt-${i}" value="${p.banhoTosaTotal}">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Adicionais
+            document.getElementById('editor-lista-adicionais').innerHTML = config.adicionais.map(ad => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                    <span>${ad.nome} - <strong>R$ ${ad.preco}</strong></span>
+                    <button onclick="removerAdicional(${ad.id})" class="btn-sm btn-del" style="padding:4px 8px;">Excluir</button>
+                </div>
+            `).join('');
+
+            // Mensagens e CRM Sumidos
+            document.getElementById('config-msg-pronto').value = config.msgPronto;
+            document.getElementById('config-msg-sumidos').value = config.msgSumidos;
+            document.getElementById('config-logo-zoom').value = config.logoZoom || 100;
+
+            const listaCrm = document.getElementById('lista-clientes-crm');
+            if (clientes.length === 0) {
+                listaCrm.innerHTML = `<p style="font-size:12px; color:#94a3b8; text-align:center;">Nenhum cliente cadastrado ainda.</p>`;
+            } else {
+                listaCrm.innerHTML = clientes.map(c => {
+                    const dias = Math.floor((Date.now() - new Date(c.ultimaVisita).getTime()) / (1000 * 60 * 60 * 24));
+                    return `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f8fafc; border-radius:10px; margin-bottom:6px; font-size:12px;">
+                            <div>
+                                <strong>🐾 ${c.pet}</strong> (${c.tutor})<br>
+                                <span style="color:#64748b;">Última visita: há ${dias} dia(s)</span>
+                            </div>
+                            <button onclick="chamarClienteSumido(${c.id})" class="btn-sm btn-wa">📲 Chamar</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function salvarConfiguracoesDono() {
+            config.portes.forEach((p, i) => {
+                p.banho = parseFloat(document.getElementById(`preco-b-${i}`).value) || p.banho;
+                p.banhoTosaHig = parseFloat(document.getElementById(`preco-bh-${i}`).value) || p.banhoTosaHig;
+                p.banhoTosaTotal = parseFloat(document.getElementById(`preco-bt-${i}`).value) || p.banhoTosaTotal;
+            });
+            config.msgPronto = document.getElementById('config-msg-pronto').value;
+            config.msgSumidos = document.getElementById('config-msg-sumidos').value;
+            salvarDados();
+            atualizarPrecosFormulario();
+            alert("Configurações atualizadas com sucesso!");
+        }
+
+        function adicionarNovoAdicional() {
+            const nome = document.getElementById('novo-adicional-nome').value.trim();
+            const preco = parseFloat(document.getElementById('novo-adicional-preco').value);
+            if (!nome || isNaN(preco)) return;
+            config.adicionais.push({ id: Date.now(), nome, preco });
+            salvarDados();
+            document.getElementById('novo-adicional-nome').value = '';
+            document.getElementById('novo-adicional-preco').value = '';
+            carregarDadosPainelDono();
+            renderizarAdicionaisFormulario();
+        }
+
+        function removerAdicional(id) {
+            config.adicionais = config.adicionais.filter(a => a.id !== id);
+            salvarDados();
+            carregarDadosPainelDono();
+            renderizarAdicionaisFormulario();
+        }
+
+        function chamarClienteSumido(id) {
+            const c = clientes.find(item => item.id === id);
+            if (!c) return;
+            const msg = document.getElementById('config-msg-sumidos').value
+                .replace(/\{pet\}/g, c.pet)
+                .replace(/\{tutor\}/g, c.tutor);
+            window.open(`https://wa.me/55${c.zap}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function carregarNovaLogo(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                config.logoBase64 = evt.target.result;
+                salvarDados();
+                aplicarLogoHeader();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function ajustarZoomLogo(val) {
+            config.logoZoom = parseInt(val);
+            document.getElementById('zoom-val-label').textContent = val + '%';
+            salvarDados();
+            aplicarLogoHeader();
+        }
+
+        function removerLogoCustom() {
+            config.logoBase64 = "";
+            config.logoZoom = 100;
+            salvarDados();
+            aplicarLogoHeader();
+        }
+
+        inicializarApp();
+    </script>
+</body>
+</html>
