@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recanto Petshop | Gestão Completa</title>
+  <title>Recanto Petshop | Gestão e Agenda</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -27,22 +27,20 @@
 
   <div class="brand-gradient-bar w-full sticky top-0 z-50"></div>
 
-  <!-- CABEÇALHO FIXO COM 2 LOGOS (REDONDA + RETANGULAR OU TEXTO) -->
+  <!-- CABEÇALHO TRAVADO COM 2 LOGOS (REDONDA + RETANGULAR OU TEXTO) -->
   <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center">
     <div class="max-w-3xl w-full mx-auto px-4 flex items-center justify-between">
       <div class="flex items-center gap-2.5">
         <div id="round-logo-wrapper" class="w-11 h-11 rounded-full border-2 border-theme-primary flex items-center justify-center bg-cyan-50 shadow-sm shrink-0 overflow-hidden">
           <span id="round-logo-default-letter" class="font-brand text-2xl font-bold text-theme-primary leading-none">R</span>
-          <img id="round-logo-img" class="w-full h-full object-contain hidden" alt="Logo 1" />
+          <img id="round-logo-img" class="w-full h-full object-contain hidden" alt="Logo Redonda" />
         </div>
         <div id="rect-brand-text" class="flex flex-col justify-center">
-          <div id="header-MainTitle-container" class="font-brand text-2xl tracking-tight leading-none flex items-center">
-            <span class="text-[#EE3E80]">R</span><span class="text-[#6AB43E]">e</span><span class="text-[#23B5C8]">c</span><span class="text-[#FDD815]">a</span><span class="text-[#EE3E80]">n</span><span class="text-[#6AB43E]">t</span><span class="text-[#23B5C8]">o</span>
-          </div>
+          <div id="header-MainTitle-container" class="font-brand text-2xl tracking-tight leading-none flex items-center"></div>
           <span id="header-SubTitle-text" class="block text-[10px] font-bold tracking-[0.26em] text-slate-600 uppercase mt-0.5">PETSHOP</span>
         </div>
         <div id="rect-logo-wrapper" class="hidden w-32 h-11 rounded-lg overflow-hidden flex items-center justify-center bg-white shrink-0">
-          <img id="rect-logo-img" class="w-full h-full object-contain" alt="Logo 2" />
+          <img id="rect-logo-img" class="w-full h-full object-contain" alt="Logo Retangular" />
         </div>
       </div>
       <button type="button" id="btn-exit-admin" onclick="exitAdmin()" class="hidden px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">⬅️ Voltar ao Balcão</button>
@@ -56,9 +54,10 @@
       <div class="bg-theme-primary rounded-2xl p-4 sm:p-5 text-white shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h1 class="font-brand text-xl sm:text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
         <div class="flex items-center gap-1.5 flex-wrap">
-          <button type="button" onclick="switchClientTab('fila')" class="bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-lg text-[11px] font-bold">📍 Hoje: <span id="top-count-today">0</span></button>
+          <button type="button" onclick="switchClientTab('fila')" class="bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-lg text-[11px] font-bold">🐾 Na Fila: <span id="top-count-queue">0</span></button>
+          <button type="button" onclick="openAgendaFilter('hoje')" class="bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-lg text-[11px] font-bold">📍 Hoje: <span id="top-count-today">0</span></button>
           <button type="button" onclick="openAgendaFilter('amanha')" class="bg-white/20 hover:bg-white/30 px-2.5 py-1 rounded-lg text-[11px] font-bold">📅 Amanhã: <span id="top-count-tomorrow">0</span></button>
-          <button type="button" onclick="openAgendaFilter('futuros')" class="bg-amber-400 text-slate-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">🗓️ Agenda: <span id="top-count-future">0</span></button>
+          <button type="button" onclick="openAgendaFilter('todos')" class="bg-amber-400 text-slate-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">🗓️ Agenda Total: <span id="top-count-future">0</span></button>
         </div>
       </div>
 
@@ -80,13 +79,13 @@
           <div id="counter-search-results" class="hidden space-y-2 max-h-52 overflow-y-auto pt-1"></div>
         </div>
 
-        <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100 space-y-4">
+        <form id="booking-form" onsubmit="event.preventDefault()" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
             <div class="flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-theme-accent text-white text-xs font-bold flex items-center justify-center">+</span>
               <h2 class="font-bold text-slate-800 text-sm sm:text-base">Novo Atendimento</h2>
             </div>
-            <button type="button" onclick="clearSelectedClient()" id="btn-unlink-client" class="hidden text-[11px] text-red-500 underline font-semibold">Limpar vínculo</button>
+            <button type="button" onclick="clearSelectedClient()" id="btn-unlink-client" class="hidden text-[11px] text-red-500 underline font-semibold">Limpar ficha selecionada</button>
           </div>
 
           <input type="hidden" id="linked-client-id" value="" />
@@ -171,10 +170,18 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Data do Atendimento *</label>
-              <input type="date" id="booking-date" onchange="clearError(this); renderTimeSlots()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold" />
+              <input type="date" id="booking-date" oninput="clearError(this); renderTimeSlots()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold" />
+              <div class="flex gap-1.5 mt-1.5">
+                <button type="button" onclick="setFormQuickDate(0)" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-[11px] font-bold text-slate-700">📍 Hoje</button>
+                <button type="button" onclick="setFormQuickDate(1)" class="px-2 py-1 rounded bg-cyan-50 hover:bg-cyan-100 text-[11px] font-bold text-cyan-800">➡️ Amanhã</button>
+                <button type="button" onclick="setFormQuickDate(7)" class="px-2 py-1 rounded bg-amber-50 hover:bg-amber-100 text-[11px] font-bold text-amber-900">🔄 +7 Dias</button>
+              </div>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-semibold text-slate-600">Horário *</label>
+                <input type="time" id="custom-time-input" oninput="selectTime(this.value)" class="px-2 py-0.5 border border-slate-300 rounded text-xs font-bold" title="Ou digite outro horário" />
+              </div>
               <div id="time-slots" class="grid grid-cols-4 gap-1.5"></div>
             </div>
           </div>
@@ -192,18 +199,35 @@
                 <span id="summary-desc" class="text-xs text-slate-300"></span>
               </div>
             </div>
-            <button type="submit" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-theme-action text-white font-bold text-xs shadow">✅ Salvar Atendimento</button>
+            <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <button type="button" onclick="submitBookingForm('fila')" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-theme-action text-white font-bold text-xs shadow flex items-center justify-center gap-1">
+                🐾 Já Chegou (Ir p/ Fila)
+              </button>
+              <button type="button" onclick="submitBookingForm('agenda')" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-theme-primary text-white font-bold text-xs shadow flex items-center justify-center gap-1">
+                📅 Agendar na Agenda
+              </button>
+            </div>
           </div>
         </form>
       </div>
 
-      <!-- ABA 2: PETS NA FILA -->
+      <!-- ABA 2: PETS NA FILA (NA LOJA AGORA) -->
       <div id="client-sec-fila" class="hidden space-y-3">
+        <!-- Alerta de Pets Agendados para Hoje aguardando entrada -->
+        <div id="today-scheduled-alert" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="text-xs text-amber-900">
+            🔔 <strong id="today-scheduled-alert-text">Há pets agendados para hoje na Agenda!</strong> Quando o cliente entregar o pet no balcão, clique em "Chegou! Ir p/ Fila".
+          </div>
+          <button type="button" onclick="openAgendaFilter('hoje')" class="px-3 py-1.5 rounded-xl bg-amber-500 text-white text-xs font-bold shrink-0">
+            📅 Ver Agendados de Hoje
+          </button>
+        </div>
+
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
             <div>
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">🐾 Pets na Fila (Por Ordem de Chegada)</h3>
-              <p class="text-[11px] text-slate-400">Quem chegou primeiro fica no topo (1º, 2º, 3º)</p>
+              <p class="text-[11px] text-slate-400">Quem chegou primeiro fica no topo (1º, 2º, 3º). Use 🚨 ou ⬆️ para subir prioridade.</p>
             </div>
             <span id="counter-badge-active" class="text-xs bg-theme-primary text-white px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
@@ -211,21 +235,41 @@
         </div>
       </div>
 
-      <!-- ABA 3: AGENDA -->
+      <!-- ABA 3: AGENDA COMPLETA -->
       <div id="client-sec-agenda" class="hidden space-y-3">
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
             <div>
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">📅 Agenda de Horários Marcados</h3>
-              <p class="text-[11px] text-slate-500">Agendamentos futuros mantidos ao encerrar o dia</p>
+              <p class="text-[11px] text-slate-500">Agendamentos separados por data e protegidos ao fechar o caixa</p>
             </div>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <button type="button" onclick="setAgendaFilter('amanha')" id="btn-ag-amanha" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">Amanhã</button>
-              <button type="button" onclick="setAgendaFilter('futuros')" id="btn-ag-futuros" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-theme-primary text-white">Todos Futuros</button>
-              <input type="date" id="agenda-date-picker" onchange="setAgendaFilter('data')" class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-bold" />
+            <button type="button" onclick="switchClientTab('novo')" class="px-3 py-1.5 rounded-xl bg-theme-accent text-white text-xs font-bold self-start sm:self-auto">
+              + Novo Agendamento
+            </button>
+          </div>
+
+          <!-- Filtros Rápidos da Agenda -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="setAgendaFilter('todos')" id="btn-ag-todos" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-theme-primary text-white">🗓️ Todos Agendados</button>
+            <button type="button" onclick="setAgendaFilter('hoje')" id="btn-ag-hoje" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">📍 Hoje</button>
+            <button type="button" onclick="setAgendaFilter('amanha')" id="btn-ag-amanha" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">➡️ Amanhã</button>
+            <button type="button" onclick="setAgendaFilter('7dias')" id="btn-ag-7dias" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">📅 Próx. 7 Dias</button>
+            <div class="flex items-center gap-1 ml-auto">
+              <span class="text-[11px] font-semibold text-slate-500">Dia:</span>
+              <input type="date" id="agenda-date-picker" oninput="setAgendaFilter('data')" class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-bold" />
             </div>
           </div>
-          <div id="counter-bookings-agenda" class="space-y-3"></div>
+
+          <!-- Grade de Disponibilidade de Horários do Dia Consultado -->
+          <div id="agenda-day-slots-box" class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="agenda-slots-title" class="text-xs font-bold text-slate-700">⏰ Horários do Dia (Toque num horário livre para agendar):</span>
+            </div>
+            <div id="agenda-day-slots-grid" class="grid grid-cols-4 sm:grid-cols-8 gap-1.5"></div>
+          </div>
+
+          <!-- Lista Agrupada por Data -->
+          <div id="counter-bookings-agenda" class="space-y-4 pt-1"></div>
         </div>
       </div>
 
@@ -250,7 +294,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
           <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2.5 mb-3">✅ Histórico de Pets Finalizados Hoje</h3>
           <div id="counter-bookings-done" class="space-y-3 mb-4"></div>
-          <button type="button" onclick="encerrarDia()" class="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow">🌙 Encerrar Expediente (Salvar no Histórico)</button>
+          <button type="button" onclick="encerrarDia()" class="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow">🌙 Encerrar Expediente (Salvar no Histórico e Manter Agenda)</button>
         </div>
       </div>
 
@@ -291,7 +335,7 @@
               <button type="button" onclick="saveQuickReheatTemplate()" class="px-3 py-1.5 rounded-lg bg-theme-action text-white text-xs font-bold">💾 Salvar Modelo</button>
             </div>
             <div class="flex flex-wrap items-center gap-2 pt-1">
-              <span class="text-xs font-bold text-slate-600">Filtro:</span>
+              <span class="text-xs font-bold text-slate-600">Sem vir há mais de:</span>
               <button type="button" onclick="setReheatDays(7)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-bold">7 dias</button>
               <button type="button" onclick="setReheatDays(15)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-bold">15 dias</button>
               <button type="button" onclick="setReheatDays(30)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-bold">30 dias</button>
@@ -341,13 +385,13 @@
           </div>
           <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
             <span class="font-semibold text-slate-600">Data específica:</span>
-            <input type="date" id="rep-custom-date" onchange="setReportPeriod('data')" class="px-3 py-1 rounded-lg border border-slate-300 font-bold" />
+            <input type="date" id="rep-custom-date" oninput="setReportPeriod('data')" class="px-3 py-1 rounded-lg border border-slate-300 font-bold" />
             <span id="rep-active-label" class="ml-auto text-[11px] font-bold text-theme-primary">Exibindo: Hoje</span>
           </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div class="bg-white p-3 rounded-2xl border text-center"><span class="text-[10px] text-slate-500 font-semibold uppercase">Na Fila Hoje</span><p id="stat-total" class="font-brand text-xl font-bold">0</p></div>
+          <div class="bg-white p-3 rounded-2xl border text-center"><span class="text-[10px] text-slate-500 font-semibold uppercase">Na Fila Agora</span><p id="stat-total" class="font-brand text-xl font-bold">0</p></div>
           <div class="bg-white p-3 rounded-2xl border text-center"><span class="text-[10px] text-slate-500 font-semibold uppercase">Finalizados</span><p id="stat-ready" class="font-brand text-xl font-bold text-theme-primary">0</p></div>
           <div class="bg-white p-3 rounded-2xl border text-center"><span class="text-[10px] text-slate-500 font-semibold uppercase">Faturamento</span><p id="stat-revenue" class="font-brand text-xl font-bold text-theme-action">R$ 0,00</p></div>
           <div class="bg-white p-3 rounded-2xl border text-center"><span class="text-[10px] text-slate-500 font-semibold uppercase">Ticket Médio</span><p id="stat-ticket" class="font-brand text-xl font-bold text-theme-accent">R$ 0,00</p></div>
@@ -449,9 +493,9 @@
             <button type="button" onclick="applyColorPreset('#EA580C','#16A34A','#2563EB')" class="p-2 rounded-xl border text-xs font-bold bg-slate-50">Laranja Vivo</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="p-2.5 rounded-xl border flex items-center justify-between"><span class="text-xs font-bold">Cor Principal</span><input type="color" id="picker-primary" onchange="updateCustomColors()" class="w-8 h-8" /></div>
-            <div class="p-2.5 rounded-xl border flex items-center justify-between"><span class="text-xs font-bold">Botões Confirmar</span><input type="color" id="picker-action" onchange="updateCustomColors()" class="w-8 h-8" /></div>
-            <div class="p-2.5 rounded-xl border flex items-center justify-between"><span class="text-xs font-bold">Destaque/Preços</span><input type="color" id="picker-accent" onchange="updateCustomColors()" class="w-8 h-8" /></div>
+            <div class="p-2.5 rounded-xl border flex items-center justify-between"><span class="text-xs font-bold">Cor Principal</span><input type="color" id="picker-primary" oninput="updateCustomColors()" class="w-8 h-8" /></div>
+            <div class="p-2.5 rounded-xl border flex items-center justify-between"><span class="text-xs font-bold">Botões Confirmar</span><input type="color" id="picker-action" oninput="updateCustomColors()" class="w-8 h-8" /></div>
+            <div class="p-2.5 rounded-xl border flex items-center justify-between"><span class="text-xs font-bold">Destaque/Preços</span><input type="color" id="picker-accent" oninput="updateCustomColors()" class="w-8 h-8" /></div>
           </div>
         </div>
 
@@ -484,12 +528,22 @@
               <input type="range" id="rect-scale-slider" min="50" max="250" step="5" value="100" oninput="adjustRectLogoScale(this.value)" class="w-full" />
             </div>
           </div>
-          <button type="button" onclick="saveConfig(); alert('✅ Cores e Logos salvas!')" class="w-full py-3 rounded-xl bg-theme-action text-white font-bold text-sm shadow">💾 Salvar Aparência e Logos</button>
+          <button type="button" onclick="saveConfig(); alert('✅ Aparência e Logos salvas!')" class="w-full py-3 rounded-xl bg-theme-action text-white font-bold text-sm shadow">💾 Salvar Aparência e Logos</button>
         </div>
       </div>
 
-      <!-- GESTOR 6: LOJA, SENHA & BACKUP -->
+      <!-- GESTOR 6: HORÁRIOS DA AGENDA, LOJA, SENHA & BACKUP -->
       <div id="admin-sec-horarios" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border shadow-sm space-y-3">
+          <h3 class="font-bold text-slate-800 text-base">⏰ Grade de Horários da Agenda</h3>
+          <p class="text-xs text-slate-500">Adicione ou remova os botões de horários exibidos no cadastro e na Agenda:</p>
+          <div id="admin-timeslots-list" class="flex flex-wrap gap-2"></div>
+          <div class="flex gap-2 pt-1">
+            <input type="time" id="new-timeslot-input" class="px-3 py-2 rounded-xl border text-xs font-bold" />
+            <button type="button" onclick="addTimeSlotConfig()" class="px-4 py-2 rounded-xl bg-theme-primary text-white text-xs font-bold">+ Adicionar Horário</button>
+          </div>
+        </div>
+
         <div class="bg-white rounded-2xl p-4 sm:p-5 border shadow-sm space-y-3">
           <h3 class="font-bold text-slate-800 text-base">💾 Planilha Excel e Backup Geral</h3>
           <div class="flex flex-wrap gap-2">
@@ -498,6 +552,7 @@
             <label class="px-3.5 py-2.5 rounded-xl bg-slate-800 text-white text-xs font-bold cursor-pointer">📂 Restaurar Backup<input type="file" accept=".json" onchange="restoreFullBackup(event)" class="hidden" /></label>
           </div>
         </div>
+
         <div class="bg-white rounded-2xl p-4 sm:p-5 border shadow-sm space-y-3">
           <h3 class="font-bold text-slate-800 text-base">📍 Dados da Loja e Senha</h3>
           <div><label class="block text-xs font-semibold mb-1">Nome da Loja</label><input type="text" id="cfg-store-name" class="w-full px-3.5 py-2 rounded-xl border text-sm" /></div>
@@ -557,29 +612,36 @@
       </div>
       <div class="grid grid-cols-2 gap-2">
         <button type="button" onclick="closeCheckoutModal()" class="py-2.5 rounded-xl border text-xs font-bold text-slate-600">Cancelar</button>
-        <button type="button" onclick="confirmCheckoutPayment()" class="py-2.5 rounded-xl bg-theme-action text-white text-xs font-bold shadow">✅ Confirmar</button>
+        <button type="button" onclick="confirmCheckoutPayment()" class="py-2.5 rounded-xl bg-theme-action text-white text-xs font-bold shadow">✅ Confirmar Recebimento</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: REMARCAR DIA -->
+  <!-- MODAL: REMARCAR DIA / MUDAR DATA E HORÁRIO -->
   <div id="reschedule-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl">
       <h3 class="font-bold text-slate-800 text-base">📅 Mudar Dia / Reagendar Pet</h3>
       <p id="reschedule-pet-label" class="text-xs text-slate-500 font-semibold"></p>
       <input type="hidden" id="reschedule-booking-id" />
-      <div class="grid grid-cols-3 gap-1.5">
-        <button type="button" onclick="applyQuickReschedule(0)" class="py-2 rounded-lg bg-slate-100 text-xs font-bold">📍 Hoje</button>
-        <button type="button" onclick="applyQuickReschedule(1)" class="py-2 rounded-lg bg-cyan-50 text-xs font-bold text-cyan-800">➡️ Amanhã</button>
-        <button type="button" onclick="applyQuickReschedule(7)" class="py-2 rounded-lg bg-amber-50 text-xs font-bold text-amber-900">🔄 +7 Dias</button>
+      <div class="grid grid-cols-4 gap-1.5">
+        <button type="button" onclick="previewRescheduleDate(0)" class="py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] font-bold">📍 Hoje</button>
+        <button type="button" onclick="previewRescheduleDate(1)" class="py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-[11px] font-bold text-cyan-800">➡️ Amanhã</button>
+        <button type="button" onclick="previewRescheduleDate(7)" class="py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-[11px] font-bold text-amber-900">🔄 +7 Dias</button>
+        <button type="button" onclick="previewRescheduleDate(15)" class="py-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-[11px] font-bold text-purple-900">🔄 +15 Dias</button>
       </div>
       <div class="grid grid-cols-2 gap-2">
-        <div><label class="block text-xs font-semibold mb-1">Nova Data</label><input type="date" id="reschedule-date-input" class="w-full px-3 py-2 rounded-xl border text-xs font-bold" /></div>
-        <div><label class="block text-xs font-semibold mb-1">Horário</label><select id="reschedule-time-input" class="w-full px-3 py-2 rounded-xl border text-xs font-bold"></select></div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Nova Data</label>
+          <input type="date" id="reschedule-date-input" oninput="populateRescheduleTimes()" class="w-full px-3 py-2 rounded-xl border text-xs font-bold" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Novo Horário</label>
+          <select id="reschedule-time-input" class="w-full px-3 py-2 rounded-xl border text-xs font-bold"></select>
+        </div>
       </div>
       <div class="grid grid-cols-2 gap-2">
         <button type="button" onclick="closeRescheduleModal()" class="py-2.5 rounded-xl border text-xs font-bold">Cancelar</button>
-        <button type="button" onclick="saveRescheduleModal()" class="py-2.5 rounded-xl bg-theme-primary text-white text-xs font-bold">Salvar</button>
+        <button type="button" onclick="saveRescheduleModal()" class="py-2.5 rounded-xl bg-theme-primary text-white text-xs font-bold">✅ Confirmar Nova Data</button>
       </div>
     </div>
   </div>
@@ -672,19 +734,22 @@
     function safeLoad(key, fallback) {
       try { const v = JSON.parse(localStorage.getItem(key)); return v || fallback; } catch(e) { return fallback; }
     }
+    function safeSave(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) { alert('⚠️ Memória cheia no navegador. Tente usar uma imagem de logo menor.'); }
+    }
 
     let config = Object.assign({}, JSON.parse(JSON.stringify(DEFAULT_CONFIG)), safeLoad('recanto_cfg_v25', {}));
     if (!Array.isArray(config.sizes) || !config.sizes.length) config.sizes = DEFAULT_CONFIG.sizes;
     if (!Array.isArray(config.services) || !config.services.length) config.services = DEFAULT_CONFIG.services;
     if (!Array.isArray(config.extras)) config.extras = DEFAULT_CONFIG.extras;
-    if (!Array.isArray(config.timeSlots)) config.timeSlots = DEFAULT_CONFIG.timeSlots;
+    if (!Array.isArray(config.timeSlots) || !config.timeSlots.length) config.timeSlots = DEFAULT_CONFIG.timeSlots;
 
     let bookings = safeLoad('recanto_bookings_v25', []);
     let clientsDb = safeLoad('recanto_clients_v25', []);
     let historyDb = safeLoad('recanto_history_v25', []);
 
     let clientState = { species: 'Cachorro', sizeId: config.sizes[0].id, selectedService: '', selectedExtras: [], selectedTime: config.timeSlots[0], isCustomService: false, useCashbackDiscount: false };
-    let agendaFilterMode = 'futuros', reportPeriodMode = 'hoje';
+    let agendaFilterMode = 'todos', reportPeriodMode = 'hoje';
 
     function getLocalISODate(offset = 0) {
       const d = new Date(); d.setDate(d.getDate() + offset);
@@ -692,17 +757,59 @@
     }
     function getCurrentTimeHM() { const d = new Date(); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; }
     function formatDateBR(s) { return s && s.includes('-') ? s.split('-').reverse().join('/') : (s || ''); }
+    function getWeekdayLabel(isoStr) {
+      if (!isoStr) return '';
+      const today = getLocalISODate(0), tom = getLocalISODate(1);
+      const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+      const dt = new Date(isoStr + 'T12:00:00');
+      const wName = !isNaN(dt) ? dias[dt.getDay()] : '';
+      if (isoStr === today) return `📍 HOJE (${wName}, ${formatDateBR(isoStr)})`;
+      if (isoStr === tom) return `➡️ AMANHÃ (${wName}, ${formatDateBR(isoStr)})`;
+      return `🗓️ ${wName}, ${formatDateBR(isoStr)}`;
+    }
     function formatMoney(v) { return (Number(v) || 0).toFixed(2).replace('.', ','); }
+    function cleanPhoneDigits(p) { return String(p || '').replace(/\D/g, ''); }
     function clearError(el) { if (el) el.classList.remove('border-red-500', 'bg-red-50'); }
 
+    // Verifica se um atendimento está na Fila Ativa da Loja ou se é um Agendamento na Agenda
+    function isBookingInLiveQueue(b) {
+      if (b.status === 'Finalizado') return false;
+      if (b.status === 'Agendado') return false;
+      const today = getLocalISODate(0);
+      if (b.date && b.date > today) return false;
+      return true;
+    }
+
     function saveConfig() {
-      localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
+      safeSave('recanto_cfg_v25', config);
       applyStoreBranding(); renderAllClient(); renderAdminEditors();
     }
     function resetToFactory() {
       if (confirm('Restaurar cores, portes e preços de fábrica? (Clientes e histórico serão mantidos)')) {
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG)); saveConfig();
       }
+    }
+
+    // Compressor automático de imagem para nunca travar o localStorage
+    function compressImageFile(file, maxSize, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          let w = img.width, h = img.height;
+          if (w > maxSize || h > maxSize) {
+            if (w > h) { h = Math.round((h * maxSize) / w); w = maxSize; }
+            else { w = Math.round((w * maxSize) / h); h = maxSize; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          callback(canvas.toDataURL('image/png', 0.85));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
 
     function applyStoreBranding() {
@@ -741,34 +848,36 @@
       const m = config.secondSlotMode || 'text';
       document.getElementById('slot2-text-ConfigBox').classList.toggle('hidden', m !== 'text');
       document.getElementById('slot2-image-ConfigBox').classList.toggle('hidden', m !== 'image');
+      document.getElementById('btn-slot2-text').className = m === 'text' ? 'py-2 rounded-lg border text-xs font-bold bg-theme-primary text-white' : 'py-2 rounded-lg border text-xs font-bold bg-white text-slate-700';
+      document.getElementById('btn-slot2-image').className = m === 'image' ? 'py-2 rounded-lg border text-xs font-bold bg-theme-primary text-white' : 'py-2 rounded-lg border text-xs font-bold bg-white text-slate-700';
     }
 
-    function applyColorPreset(p, a, c) { config.themePrimary = p; config.themeAction = a; config.themeAccent = c; renderAdminEditors(); applyStoreBranding(); }
+    function applyColorPreset(p, a, c) { config.themePrimary = p; config.themeAction = a; config.themeAccent = c; safeSave('recanto_cfg_v25', config); renderAdminEditors(); applyStoreBranding(); }
     function updateCustomColors() {
       config.themePrimary = document.getElementById('picker-primary').value;
       config.themeAction = document.getElementById('picker-action').value;
       config.themeAccent = document.getElementById('picker-accent').value;
-      applyStoreBranding();
+      safeSave('recanto_cfg_v25', config); applyStoreBranding();
     }
     function handleRoundLogoUpload(e) {
       const f = e.target.files[0]; if (!f) return;
-      const r = new FileReader(); r.onload = ev => { config.roundLogoBase64 = ev.target.result; config.roundLogoScale = 100; applyStoreBranding(); }; r.readAsDataURL(f);
+      compressImageFile(f, 320, base64 => { config.roundLogoBase64 = base64; config.roundLogoScale = 100; safeSave('recanto_cfg_v25', config); applyStoreBranding(); });
     }
-    function adjustRoundLogoScale(v) { config.roundLogoScale = Number(v) || 100; applyStoreBranding(); }
-    function clearRoundLogo() { config.roundLogoBase64 = ''; config.roundLogoScale = 100; applyStoreBranding(); }
-    function setSecondSlotMode(m) { config.secondSlotMode = m; applyStoreBranding(); }
+    function adjustRoundLogoScale(v) { config.roundLogoScale = Number(v) || 100; safeSave('recanto_cfg_v25', config); applyStoreBranding(); }
+    function clearRoundLogo() { config.roundLogoBase64 = ''; config.roundLogoScale = 100; safeSave('recanto_cfg_v25', config); applyStoreBranding(); }
+    function setSecondSlotMode(m) { config.secondSlotMode = m; safeSave('recanto_cfg_v25', config); applyStoreBranding(); }
     function previewHeaderBrandText() {
       config.headerTitle = document.getElementById('cfg-header-title').value || 'Recanto';
       config.headerSub = document.getElementById('cfg-header-sub').value || 'PETSHOP';
       config.colorfulLetters = document.getElementById('cfg-colorful-letters').checked;
-      applyStoreBranding();
+      safeSave('recanto_cfg_v25', config); applyStoreBranding();
     }
     function handleRectLogoUpload(e) {
       const f = e.target.files[0]; if (!f) return;
-      const r = new FileReader(); r.onload = ev => { config.rectLogoBase64 = ev.target.result; config.rectLogoScale = 100; config.secondSlotMode = 'image'; applyStoreBranding(); }; r.readAsDataURL(f);
+      compressImageFile(f, 420, base64 => { config.rectLogoBase64 = base64; config.rectLogoScale = 100; config.secondSlotMode = 'image'; safeSave('recanto_cfg_v25', config); applyStoreBranding(); });
     }
-    function adjustRectLogoScale(v) { config.rectLogoScale = Number(v) || 100; applyStoreBranding(); }
-    function clearRectLogo() { config.rectLogoBase64 = ''; config.secondSlotMode = 'text'; applyStoreBranding(); }
+    function adjustRectLogoScale(v) { config.rectLogoScale = Number(v) || 100; safeSave('recanto_cfg_v25', config); applyStoreBranding(); }
+    function clearRectLogo() { config.rectLogoBase64 = ''; config.secondSlotMode = 'text'; safeSave('recanto_cfg_v25', config); applyStoreBranding(); }
 
     function switchClientTab(tab) {
       ['novo', 'fila', 'agenda', 'fechamento', 'clientes', 'sumidos'].forEach(t => {
@@ -777,6 +886,8 @@
           ? 'px-1.5 py-2 rounded-lg text-[11px] font-bold bg-white shadow-sm text-theme-primary'
           : 'px-1.5 py-2 rounded-lg text-[11px] font-bold text-slate-600';
       });
+      if (tab === 'fila') renderCounterFila();
+      if (tab === 'agenda') renderCounterAgenda();
       if (tab === 'clientes') renderClientsList();
       if (tab === 'sumidos') renderReheatList();
     }
@@ -784,20 +895,35 @@
     function openAgendaFilter(m) { switchClientTab('agenda'); setAgendaFilter(m); }
     function setAgendaFilter(m) {
       agendaFilterMode = m;
-      document.getElementById('btn-ag-amanha').className = m === 'amanha' ? 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-theme-primary text-white' : 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
-      document.getElementById('btn-ag-futuros').className = m === 'futuros' ? 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-theme-primary text-white' : 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
+      ['todos', 'hoje', 'amanha', '7dias'].forEach(k => {
+        const btn = document.getElementById('btn-ag-' + k);
+        if (btn) btn.className = k === m ? 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-theme-primary text-white' : 'px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
+      });
       renderCounterAgenda();
     }
 
+    function setFormQuickDate(offset) {
+      document.getElementById('booking-date').value = getLocalISODate(offset);
+      renderTimeSlots();
+    }
+
     function updateTopScheduleCounters() {
-      const today = getLocalISODate(0), tom = getLocalISODate(1), act = bookings.filter(b => b.status !== 'Finalizado');
-      document.getElementById('top-count-today').textContent = act.filter(b => !b.date || b.date <= today).length;
-      document.getElementById('top-count-tomorrow').textContent = act.filter(b => b.date === tom).length;
-      document.getElementById('top-count-future').textContent = act.filter(b => b.date > today).length;
+      const today = getLocalISODate(0), tom = getLocalISODate(1);
+      const inQueueCount = bookings.filter(b => isBookingInLiveQueue(b)).length;
+      const openScheduled = bookings.filter(b => b.status !== 'Finalizado');
+      const todayCount = openScheduled.filter(b => b.date === today).length;
+      const tomCount = openScheduled.filter(b => b.date === tom).length;
+      const futureTotal = openScheduled.filter(b => b.status === 'Agendado' || b.date > today).length;
+
+      document.getElementById('top-count-queue').textContent = inQueueCount;
+      document.getElementById('top-count-today').textContent = todayCount;
+      document.getElementById('top-count-tomorrow').textContent = tomCount;
+      document.getElementById('top-count-future').textContent = futureTotal;
     }
 
     function renderAllClient() {
       if (!config.sizes.find(s => s.id === clientState.sizeId)) clientState.sizeId = config.sizes[0]?.id || '';
+      if (!clientState.selectedTime) clientState.selectedTime = config.timeSlots[0] || '09:00';
       renderSizesClient(); renderServices(); renderExtras(); renderTimeSlots(); updateSummary();
     }
     function selectSpecies(sp) {
@@ -822,7 +948,12 @@
       clientState.selectedExtras = clientState.selectedExtras.includes(id) ? clientState.selectedExtras.filter(e => e !== id) : [...clientState.selectedExtras, id];
       renderExtras(); updateSummary();
     }
-    function selectTime(t) { clientState.selectedTime = t; renderTimeSlots(); }
+    function selectTime(t) {
+      if (!t) return;
+      clientState.selectedTime = t;
+      document.getElementById('custom-time-input').value = t;
+      renderTimeSlots();
+    }
 
     function renderServices() {
       document.getElementById('services-grid').innerHTML = config.services.map(srv => `
@@ -839,10 +970,11 @@
     }
     function renderTimeSlots() {
       const selDate = document.getElementById('booking-date')?.value || getLocalISODate(0);
+      document.getElementById('custom-time-input').value = clientState.selectedTime || '09:00';
       document.getElementById('time-slots').innerHTML = config.timeSlots.map(t => {
         const cnt = bookings.filter(b => b.date === selDate && b.time === t && b.status !== 'Finalizado').length;
         const sel = clientState.selectedTime === t;
-        return `<button type="button" onclick="selectTime('${t}')" class="time-btn ${sel ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2 px-1 rounded-xl border text-xs font-bold flex flex-col items-center"><span>${t}</span>${cnt > 0 ? `<span class="text-[9px] mt-0.5 px-1.5 rounded-full ${sel ? 'bg-white text-slate-900' : 'bg-amber-100 text-amber-800'}">${cnt} pet</span>` : ''}</button>`;
+        return `<button type="button" onclick="selectTime('${t}')" class="time-btn ${sel ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2 px-1 rounded-xl border text-xs font-bold flex flex-col items-center"><span>${t}</span>${cnt > 0 ? `<span class="text-[9px] mt-0.5 px-1.5 rounded-full ${sel ? 'bg-white text-slate-900' : 'bg-amber-100 text-amber-800'}">${cnt} pet${cnt > 1 ? 's' : ''}</span>` : '<span class="text-[9px] opacity-60">Livre</span>'}</button>`;
       }).join('');
     }
 
@@ -875,7 +1007,7 @@
       if (document.getElementById('linked-client-id').value || q.length < 2) { box.classList.add('hidden'); return; }
       const matches = clientsDb.filter(c => (c.petName || '').toLowerCase() === q);
       if (!matches.length) { box.classList.add('hidden'); return; }
-      box.innerHTML = matches.map(c => `<div class="flex items-center justify-between gap-2"><span>⚠️ Já existe o pet <strong>${c.petName}</strong> de <strong>${c.ownerName}</strong> (${c.phone}). É o mesmo pet?</span><button type="button" onclick="selectClientForBooking(${c.id})" class="px-2.5 py-1 rounded bg-amber-600 text-white font-bold shrink-0">Usar Ficha</button></div>`).join('');
+      box.innerHTML = matches.map(c => `<div class="flex items-center justify-between gap-2"><span>⚠️ Já existe o pet <strong>${c.petName}</strong> na família de <strong>${c.ownerName}</strong> (${c.phone}). É o mesmo pet?</span><button type="button" onclick="selectClientForBooking(${c.id})" class="px-2.5 py-1 rounded bg-amber-600 text-white font-bold shrink-0">Sim, usar ficha</button></div>`).join('');
       box.classList.remove('hidden');
     }
 
@@ -910,7 +1042,7 @@
       clientState.useCashbackDiscount = false;
       document.getElementById('booking-form').reset();
       document.getElementById('booking-date').value = getLocalISODate(0);
-      updateSummary();
+      renderTimeSlots(); updateSummary();
     }
 
     function updateLoyaltyBannerUI(c) {
@@ -937,14 +1069,13 @@
       const goal = Number(config.loyaltyGoal) || 10;
       if (confirm(`Resgatar prêmio (${config.loyaltyReward}) e descontar ${goal} selos?`)) {
         c.loyaltyStamps = Math.max(0, (Number(c.loyaltyStamps) || 0) - goal);
-        localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+        safeSave('recanto_clients_v25', clientsDb);
         updateLoyaltyBannerUI(c);
         document.getElementById('booking-notes').value += ` 🎁 Prêmio Fidelidade: ${config.loyaltyReward}`;
       }
     }
 
-    function handleBookingSubmit(e) {
-      e.preventDefault();
+    function submitBookingForm(destinationMode) {
       const req = ['pet-name', 'owner-name', 'owner-phone', 'booking-date'];
       if (clientState.isCustomService) req.push('custom-service-desc', 'custom-service-price');
       for (const id of req) {
@@ -963,28 +1094,44 @@
       const combinedSrv = srvs.join(' + '), sz = config.sizes.find(x => x.id === clientState.sizeId);
       const extrasNames = clientState.selectedExtras.map(id => config.extras.find(x => x.id === id)?.name).filter(Boolean);
       const rawSub = calculateRawSubtotal(), finalTot = calculateTotal(), cbUsed = Math.max(0, rawSub - finalTot);
+      const today = getLocalISODate(0);
+
+      // Se a data for futura ou se o usuário clicou em "Agendar na Agenda", entra como 'Agendado'
+      const goesToAgenda = destinationMode === 'agenda' || dateVal > today;
+      const initialStatus = goesToAgenda ? 'Agendado' : 'Aguardando';
 
       const cli = upsertClientRecord(linkedId, ownerName, ownerPhone, petName, ownerAddress, extraContacts, combinedSrv, dateVal, cbUsed);
       bookings.push({
         id: Date.now(), clientId: cli.id, petName, species: clientState.species, sizeName: sz ? sz.name : 'Padrão',
         ownerName, ownerPhone, ownerAddress, extraContacts, serviceName: combinedSrv, extras: extrasNames,
-        date: dateVal, time: clientState.selectedTime, arrivalTime: getCurrentTimeHM(), arrivalTimestamp: Date.now(),
-        isPriority: false, notes, total: finalTot, cashbackUsed: cbUsed, status: 'Aguardando'
+        date: dateVal, time: clientState.selectedTime, arrivalTime: goesToAgenda ? '' : getCurrentTimeHM(), arrivalTimestamp: Date.now(),
+        isPriority: false, notes, total: finalTot, cashbackUsed: cbUsed, status: initialStatus
       });
-      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      safeSave('recanto_bookings_v25', bookings);
       clearSelectedClient();
       document.getElementById('custom-service-box').classList.add('hidden');
       clientState.isCustomService = false; clientState.selectedService = ''; clientState.selectedExtras = [];
       renderServices(); renderExtras(); updateSummary(); refreshAllViews();
-      if (dateVal > getLocalISODate(0)) openAgendaFilter('futuros'); else switchClientTab('fila');
+
+      if (goesToAgenda) {
+        if (dateVal === today) openAgendaFilter('hoje');
+        else if (dateVal === getLocalISODate(1)) openAgendaFilter('amanha');
+        else openAgendaFilter('todos');
+      } else {
+        switchClientTab('fila');
+      }
     }
 
     function upsertClientRecord(linkedId, ownerName, phone, petName, address, extraContacts, serviceName, dateStr, cbUsed) {
-      let c = linkedId ? clientsDb.find(x => x.id === linkedId) : clientsDb.find(x => (x.petName || '').toLowerCase() === petName.toLowerCase() && (x.phone === phone || (x.ownerName || '').toLowerCase() === ownerName.toLowerCase()));
+      const cleanPh = cleanPhoneDigits(phone);
+      let c = linkedId ? clientsDb.find(x => x.id === linkedId) : clientsDb.find(x =>
+        (x.petName || '').toLowerCase() === petName.toLowerCase() &&
+        (cleanPhoneDigits(x.phone) === cleanPh || (x.ownerName || '').toLowerCase() === ownerName.toLowerCase())
+      );
       if (c) {
-        if ((c.ownerName || '').toLowerCase() !== ownerName.toLowerCase() || c.phone !== phone) {
+        if ((c.ownerName || '').toLowerCase() !== ownerName.toLowerCase() || cleanPhoneDigits(c.phone) !== cleanPh) {
           const fam = `${ownerName} (${phone})`;
-          if (!(c.extraContacts || '').includes(phone)) c.extraContacts = c.extraContacts ? `${c.extraContacts} | ${fam}` : fam;
+          if (!(c.extraContacts || '').includes(cleanPh)) c.extraContacts = c.extraContacts ? `${c.extraContacts} | ${fam}` : fam;
         }
         if (extraContacts) c.extraContacts = extraContacts;
         if (address) c.address = address;
@@ -994,30 +1141,58 @@
         c = { id: Date.now() + Math.floor(Math.random() * 999), ownerName, phone, petName, address, extraContacts, visitsCount: 1, loyaltyStamps: 0, cashbackBalance: 0, lastVisitDate: dateStr, lastService: serviceName };
         clientsDb.push(c);
       }
-      localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+      safeSave('recanto_clients_v25', clientsDb);
       return c;
     }
 
+    // ================= FILA DE HOJE E DAR ENTRADA DA AGENDA =================
     function getTodaySortedQueue() {
-      const today = getLocalISODate(0);
-      return bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= today)).sort((a, b) => {
+      return bookings.filter(b => isBookingInLiveQueue(b)).sort((a, b) => {
         if (Boolean(b.isPriority) !== Boolean(a.isPriority)) return b.isPriority ? 1 : -1;
         return (a.arrivalTimestamp || a.id) - (b.arrivalTimestamp || b.id);
       });
     }
-    function togglePriorityQueue(id) { bookings = bookings.map(b => b.id === id ? { ...b, isPriority: !b.isPriority } : b); localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings)); refreshAllViews(); }
+
+    function checkInFromAgendaToQueue(id) {
+      const today = getLocalISODate(0);
+      bookings = bookings.map(b => b.id === id ? {
+        ...b,
+        date: today,
+        status: 'Aguardando',
+        arrivalTime: getCurrentTimeHM(),
+        arrivalTimestamp: Date.now()
+      } : b);
+      safeSave('recanto_bookings_v25', bookings);
+      refreshAllViews();
+      switchClientTab('fila');
+    }
+
+    function togglePriorityQueue(id) { bookings = bookings.map(b => b.id === id ? { ...b, isPriority: !b.isPriority } : b); safeSave('recanto_bookings_v25', bookings); refreshAllViews(); }
     function moveQueuePosition(id, dir) {
       const q = getTodaySortedQueue(), idx = q.findIndex(b => b.id === id), tIdx = idx + dir;
       if (idx < 0 || tIdx < 0 || tIdx >= q.length) return;
       const cur = bookings.find(b => b.id === q[idx].id), nei = bookings.find(b => b.id === q[tIdx].id);
       const tmp = cur.arrivalTimestamp || cur.id; cur.arrivalTimestamp = nei.arrivalTimestamp || nei.id; nei.arrivalTimestamp = tmp;
       if (cur.arrivalTimestamp === nei.arrivalTimestamp) cur.arrivalTimestamp += dir;
-      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings)); refreshAllViews();
+      safeSave('recanto_bookings_v25', bookings); refreshAllViews();
     }
+
     function handleStatusSelectChange(id, st) {
       if (st === 'Finalizado') { openCheckoutModal(id); renderCounterFila(); return; }
-      bookings = bookings.map(b => b.id === id ? { ...b, status: st } : b);
-      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings)); refreshAllViews();
+      bookings = bookings.map(b => {
+        if (b.id !== id) return b;
+        return {
+          ...b,
+          status: st,
+          arrivalTime: st !== 'Agendado' && !b.arrivalTime ? getCurrentTimeHM() : b.arrivalTime
+        };
+      });
+      safeSave('recanto_bookings_v25', bookings); refreshAllViews();
+    }
+
+    function undoFinalizeBooking(id) {
+      bookings = bookings.map(b => b.id === id ? { ...b, status: 'Pronto', payments: null, paymentSummary: '', date: getLocalISODate(0) } : b);
+      safeSave('recanto_bookings_v25', bookings); refreshAllViews();
     }
 
     // MODAL DE PAGAMENTO E TROCO
@@ -1074,36 +1249,66 @@
       b.status = 'Finalizado'; b.payments = { pix, credito, debito, dinheiro }; b.paymentSummary = lbs.join(' + ') || 'Pago';
 
       if (!b.loyaltyCredited) {
-        const cli = clientsDb.find(c => c.id === b.clientId || c.phone === b.ownerPhone);
+        const cli = clientsDb.find(c => c.id === b.clientId || cleanPhoneDigits(c.phone) === cleanPhoneDigits(b.ownerPhone));
         if (cli) {
           cli.visitsCount = (Number(cli.visitsCount) || 0) + 1;
           cli.loyaltyStamps = (Number(cli.loyaltyStamps) || 0) + 1;
           cli.cashbackBalance = (Number(cli.cashbackBalance) || 0) + ((b.total * (Number(config.cashbackPct) || 0)) / 100);
-          localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+          safeSave('recanto_clients_v25', clientsDb);
         }
         b.loyaltyCredited = true;
       }
-      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      safeSave('recanto_bookings_v25', bookings);
       closeCheckoutModal(); refreshAllViews();
     }
 
-    // MODAL REMARCAR DIA
+    // MODAL REMARCAR DIA (CORRIGIDO: PERMITE ESCOLHER HORÁRIO ANTES DE SALVAR)
     function openRescheduleModal(id) {
       const b = bookings.find(x => x.id === id); if (!b) return;
       document.getElementById('reschedule-booking-id').value = b.id;
-      document.getElementById('reschedule-pet-label').textContent = `🐾 ${b.petName} (${b.ownerName})`;
+      document.getElementById('reschedule-pet-label').textContent = `🐾 ${b.petName} (${b.ownerName}) — Atual: ${formatDateBR(b.date)} às ${b.time}`;
       document.getElementById('reschedule-date-input').value = b.date || getLocalISODate(0);
-      document.getElementById('reschedule-time-input').innerHTML = config.timeSlots.map(t => `<option value="${t}" ${t === b.time ? 'selected' : ''}>${t}</option>`).join('');
+      populateRescheduleTimes(b.time);
       document.getElementById('reschedule-modal').classList.remove('hidden'); document.getElementById('reschedule-modal').classList.add('flex');
     }
-    function closeRescheduleModal() { document.getElementById('reschedule-modal').classList.add('hidden'); document.getElementById('reschedule-modal').classList.remove('flex'); }
-    function applyQuickReschedule(off) { document.getElementById('reschedule-date-input').value = getLocalISODate(off); saveRescheduleModal(); }
-    function saveRescheduleModal() {
-      const id = Number(document.getElementById('reschedule-booking-id').value), nd = document.getElementById('reschedule-date-input').value, nt = document.getElementById('reschedule-time-input').value;
-      bookings = bookings.map(b => b.id === id ? { ...b, date: nd, time: nt, arrivalTimestamp: Date.now() } : b);
-      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings)); closeRescheduleModal(); refreshAllViews();
+    function populateRescheduleTimes(currentTime) {
+      const selDate = document.getElementById('reschedule-date-input').value || getLocalISODate(0);
+      const selEl = document.getElementById('reschedule-time-input');
+      const cur = currentTime || selEl.value || config.timeSlots[0];
+      const allTimes = Array.from(new Set([...config.timeSlots, cur])).filter(Boolean).sort();
+      selEl.innerHTML = allTimes.map(t => {
+        const cnt = bookings.filter(b => b.date === selDate && b.time === t && b.status !== 'Finalizado').length;
+        return `<option value="${t}" ${t === cur ? 'selected' : ''}>${t} ${cnt > 0 ? `(${cnt} agendado)` : '(Livre)'}</option>`;
+      }).join('');
     }
-    function removeBooking(id) { if (confirm('Excluir este atendimento?')) { bookings = bookings.filter(b => b.id !== id); localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings)); refreshAllViews(); } }
+    function previewRescheduleDate(off) {
+      document.getElementById('reschedule-date-input').value = getLocalISODate(off);
+      populateRescheduleTimes();
+    }
+    function closeRescheduleModal() { document.getElementById('reschedule-modal').classList.add('hidden'); document.getElementById('reschedule-modal').classList.remove('flex'); }
+    function saveRescheduleModal() {
+      const id = Number(document.getElementById('reschedule-booking-id').value);
+      const nd = document.getElementById('reschedule-date-input').value;
+      const nt = document.getElementById('reschedule-time-input').value;
+      if (!nd) return;
+      const today = getLocalISODate(0);
+      bookings = bookings.map(b => {
+        if (b.id !== id) return b;
+        const newStatus = nd > today ? 'Agendado' : b.status;
+        return { ...b, date: nd, time: nt, status: newStatus, arrivalTimestamp: Date.now() };
+      });
+      safeSave('recanto_bookings_v25', bookings);
+      closeRescheduleModal();
+      refreshAllViews();
+    }
+
+    function removeBooking(id) {
+      if (confirm('Deseja realmente excluir este agendamento?')) {
+        bookings = bookings.filter(b => b.id !== id);
+        safeSave('recanto_bookings_v25', bookings);
+        refreshAllViews();
+      }
+    }
 
     function formatWhatsAppTemplate(tpl, b, cli) {
       const goal = Number(config.loyaltyGoal) || 10, st = cli ? (Number(cli.loyaltyStamps) || 0) : 1, cb = cli ? (Number(cli.cashbackBalance) || 0) : 0;
@@ -1111,28 +1316,95 @@
     }
     function notifyReady(id) {
       const b = bookings.find(x => x.id === id); if (!b) return;
-      const cli = clientsDb.find(c => c.id === b.clientId || c.phone === b.ownerPhone), ph = b.ownerPhone.replace(/\D/g, '');
+      const cli = clientsDb.find(c => c.id === b.clientId || cleanPhoneDigits(c.phone) === cleanPhoneDigits(b.ownerPhone)), ph = cleanPhoneDigits(b.ownerPhone);
       window.open(`https://wa.me/${ph.startsWith('55') ? ph : '55' + ph}?text=${encodeURIComponent(formatWhatsAppTemplate(config.msgReadyTemplate, b, cli))}`, '_blank');
     }
     function confirmScheduleWhatsApp(id) {
       const b = bookings.find(x => x.id === id); if (!b) return;
-      const cli = clientsDb.find(c => c.id === b.clientId || c.phone === b.ownerPhone), ph = b.ownerPhone.replace(/\D/g, '');
+      const cli = clientsDb.find(c => c.id === b.clientId || cleanPhoneDigits(c.phone) === cleanPhoneDigits(b.ownerPhone)), ph = cleanPhoneDigits(b.ownerPhone);
       window.open(`https://wa.me/${ph.startsWith('55') ? ph : '55' + ph}?text=${encodeURIComponent(formatWhatsAppTemplate(config.msgAgendaTemplate, b, cli))}`, '_blank');
     }
 
     function renderCounterFila() {
+      const today = getLocalISODate(0);
       const q = getTodaySortedQueue(), list = document.getElementById('counter-bookings-active');
       document.getElementById('counter-badge-active').textContent = q.length;
-      list.innerHTML = q.length ? q.map((b, i) => buildBookingCardHtml(b, 'fila', i + 1)).join('') : `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet na fila de hoje.</p>`;
+
+      // Alerta se houver pets agendados para hoje na Agenda que ainda não entraram na fila
+      const scheduledToday = bookings.filter(b => b.date === today && b.status === 'Agendado');
+      const alertBox = document.getElementById('today-scheduled-alert');
+      if (scheduledToday.length > 0) {
+        document.getElementById('today-scheduled-alert-text').textContent = `Há ${scheduledToday.length} pet(s) agendado(s) para hoje na Agenda aguardando chegada!`;
+        alertBox.classList.remove('hidden');
+      } else {
+        alertBox.classList.add('hidden');
+      }
+
+      list.innerHTML = q.length ? q.map((b, i) => buildBookingCardHtml(b, 'fila', i + 1)).join('') : `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet na fila da loja neste momento.</p>`;
     }
+
+    function bookSlotFromAgenda(dateStr, timeStr) {
+      document.getElementById('booking-date').value = dateStr;
+      selectTime(timeStr);
+      switchClientTab('novo');
+      document.getElementById('pet-name').focus();
+    }
+
     function renderCounterAgenda() {
-      const today = getLocalISODate(0), tom = getLocalISODate(1), cd = document.getElementById('agenda-date-picker')?.value;
+      const today = getLocalISODate(0), tom = getLocalISODate(1), next7 = getLocalISODate(7);
+      const pickerVal = document.getElementById('agenda-date-picker')?.value || today;
+
+      // Define qual data mostrar na grade de horários do topo da Agenda
+      let slotDate = today;
+      if (agendaFilterMode === 'amanha') slotDate = tom;
+      else if (agendaFilterMode === 'data') slotDate = pickerVal;
+
+      document.getElementById('agenda-slots-title').textContent = `⏰ Horários em ${formatDateBR(slotDate)} (Toque num horário para agendar):`;
+      document.getElementById('agenda-day-slots-grid').innerHTML = config.timeSlots.map(t => {
+        const cnt = bookings.filter(b => b.date === slotDate && b.time === t && b.status !== 'Finalizado').length;
+        return `<button type="button" onclick="bookSlotFromAgenda('${slotDate}','${t}')" class="p-1.5 rounded-lg border text-center transition-all ${cnt > 0 ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-white border-emerald-200 text-emerald-800 hover:bg-emerald-50'}">
+          <span class="block text-xs font-bold">${t}</span>
+          <span class="block text-[9px] font-semibold">${cnt > 0 ? `${cnt} marcado(s)` : '🟢 Livre'}</span>
+        </button>`;
+      }).join('');
+
       let sch = bookings.filter(b => b.status !== 'Finalizado');
-      if (agendaFilterMode === 'amanha') sch = sch.filter(b => b.date === tom);
-      else if (agendaFilterMode === 'data' && cd) sch = sch.filter(b => b.date === cd);
-      else sch = sch.filter(b => b.date > today);
+      if (agendaFilterMode === 'hoje') sch = sch.filter(b => b.date === today);
+      else if (agendaFilterMode === 'amanha') sch = sch.filter(b => b.date === tom);
+      else if (agendaFilterMode === '7dias') sch = sch.filter(b => b.date >= today && b.date <= next7);
+      else if (agendaFilterMode === 'data') sch = sch.filter(b => b.date === pickerVal);
+      else sch = sch.filter(b => b.status === 'Agendado' || b.date >= today);
+
       sch.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
-      document.getElementById('counter-bookings-agenda').innerHTML = sch.length ? sch.map(b => buildBookingCardHtml(b, 'agenda')).join('') : `<p class="text-center py-6 text-xs text-slate-400">Nenhum agendamento neste filtro.</p>`;
+
+      const container = document.getElementById('counter-bookings-agenda');
+      if (!sch.length) {
+        container.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum agendamento encontrado para este filtro.</p>`;
+        return;
+      }
+
+      // Agrupa por data para leitura clara da Agenda
+      const grouped = {};
+      sch.forEach(b => {
+        const dKey = b.date || today;
+        if (!grouped[dKey]) grouped[dKey] = [];
+        grouped[dKey].push(b);
+      });
+
+      container.innerHTML = Object.keys(grouped).sort().map(dateKey => {
+        const items = grouped[dateKey];
+        return `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between bg-slate-100 px-3 py-1.5 rounded-xl">
+              <span class="text-xs font-extrabold text-slate-700">${getWeekdayLabel(dateKey)}</span>
+              <span class="text-[11px] font-bold text-theme-primary">${items.length} pet(s)</span>
+            </div>
+            <div class="space-y-2.5">
+              ${items.map(b => buildBookingCardHtml(b, 'agenda')).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function sumPaymentsBreakdown(recs) {
@@ -1153,24 +1425,24 @@
       document.getElementById('caixa-sum-debito').textContent = `R$ ${formatMoney(brk.debito)}`;
       document.getElementById('caixa-sum-dinheiro').textContent = `R$ ${formatMoney(brk.dinheiro)}`;
       document.getElementById('counter-bookings-done').innerHTML = done.length ? done.map(b => {
-        const tel = (b.ownerPhone || '').replace(/\D/g, ''), so = (b.ownerName || '').replace(/'/g, "\\'"), sp = (b.petName || '').replace(/'/g, "\\'");
-        return `<div class="p-3 rounded-xl border bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><div><span class="font-bold text-sm">🐾 ${b.petName}</span> <span class="text-xs text-slate-600">(${b.ownerName})</span><div class="text-xs text-slate-600">📞 <strong>Tel:</strong> ${b.ownerPhone} • <strong class="text-emerald-700">${b.paymentSummary || 'Pago'}</strong></div></div><div class="flex items-center gap-1.5"><span class="font-brand text-sm font-bold text-theme-action mr-2">R$ ${formatMoney(b.total)}</span><a href="tel:${tel}" class="px-2.5 py-1 rounded bg-slate-200 text-xs font-bold">📞 Ligar</a><button type="button" onclick="callClientWhatsApp('${b.ownerPhone}','${so}','${sp}')" class="px-2.5 py-1 rounded bg-theme-action text-white text-xs font-bold">💬 Zap</button><button type="button" onclick="handleStatusSelectChange(${b.id},'Pronto')" class="text-[10px] text-blue-600 underline ml-1">Voltar</button></div></div>`;
+        const tel = cleanPhoneDigits(b.ownerPhone), so = (b.ownerName || '').replace(/'/g, "\\'"), sp = (b.petName || '').replace(/'/g, "\\'");
+        return `<div class="p-3 rounded-xl border bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><div><span class="font-bold text-sm">🐾 ${b.petName}</span> <span class="text-xs text-slate-600">(${b.ownerName})</span><div class="text-xs text-slate-600">📞 <strong>Tel:</strong> ${b.ownerPhone} • <strong class="text-emerald-700">${b.paymentSummary || 'Pago'}</strong></div></div><div class="flex items-center gap-1.5"><span class="font-brand text-sm font-bold text-theme-action mr-2">R$ ${formatMoney(b.total)}</span><a href="tel:${tel}" class="px-2.5 py-1 rounded bg-slate-200 text-xs font-bold">📞 Ligar</a><button type="button" onclick="callClientWhatsApp('${b.ownerPhone}','${so}','${sp}')" class="px-2.5 py-1 rounded bg-theme-action text-white text-xs font-bold">💬 Zap</button><button type="button" onclick="undoFinalizeBooking(${b.id})" class="text-[10px] text-blue-600 underline ml-1">Voltar p/ Fila</button></div></div>`;
       }).join('') : `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet finalizado hoje.</p>`;
     }
 
     function encerrarDia() {
       const done = bookings.filter(b => b.status === 'Finalizado'), open = bookings.filter(b => b.status !== 'Finalizado');
       if (!done.length) return alert('Nenhum atendimento finalizado para arquivar.');
-      if (confirm(`Arquivar ${done.length} finalizado(s) no Histórico Geral e manter ${open.length} agendamento(s) futuros?`)) {
+      if (confirm(`Arquivar ${done.length} finalizado(s) no Histórico Geral e manter ${open.length} agendamento(s) em aberto na Agenda?`)) {
         done.forEach(item => { if (!historyDb.some(h => h.id === item.id)) historyDb.unshift({ ...item, closedAt: getLocalISODate(0) }); });
-        localStorage.setItem('recanto_history_v25', JSON.stringify(historyDb));
-        bookings = open; localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-        refreshAllViews(); switchClientTab('novo'); alert('✅ Expediente encerrado!');
+        safeSave('recanto_history_v25', historyDb);
+        bookings = open; safeSave('recanto_bookings_v25', bookings);
+        refreshAllViews(); switchClientTab('novo'); alert('✅ Expediente encerrado! O histórico foi salvo e a Agenda futura continua intacta.');
       }
     }
 
     function buildBookingCardHtml(b, mode = 'fila', pos = null) {
-      const colors = { 'Aguardando': 'bg-amber-100 text-amber-800', 'No Banho / Tosa': 'bg-cyan-100 text-cyan-800', 'Pronto': 'bg-purple-100 text-purple-800', 'Finalizado': 'bg-green-100 text-green-800' };
+      const colors = { 'Agendado': 'bg-blue-100 text-blue-800', 'Aguardando': 'bg-amber-100 text-amber-800', 'No Banho / Tosa': 'bg-cyan-100 text-cyan-800', 'Pronto': 'bg-purple-100 text-purple-800', 'Finalizado': 'bg-green-100 text-green-800' };
       const badge = pos ? `<span class="px-2 py-0.5 rounded-lg text-xs font-extrabold ${b.isPriority ? 'bg-red-600 text-white' : 'bg-slate-900 text-[#FDD815]'}">${pos}º da Fila ${b.isPriority ? '🚨' : ''}</span>` : '';
       let ctrls = '';
       if (mode === 'fila') {
@@ -1179,6 +1451,7 @@
             <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
             <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
             <option value="Pronto" ${b.status === 'Pronto' ? 'selected' : ''}>✨ Pronto</option>
+            <option value="Agendado">📅 Mover p/ Agenda</option>
             <option value="Finalizado">💰 Finalizar</option>
           </select>
           <button type="button" onclick="openCheckoutModal(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-theme-action text-white text-[11px] font-bold">💰 Receber</button>
@@ -1190,15 +1463,23 @@
           <button type="button" onclick="removeBooking(${b.id})" class="px-2 py-1 text-xs text-red-500">🗑️</button>
         </div>`;
       } else if (mode === 'agenda') {
-        ctrls = `<div class="flex items-center gap-1.5 pt-2 border-t mt-2">
-          <button type="button" onclick="confirmScheduleWhatsApp(${b.id})" class="px-3 py-1.5 rounded-lg bg-theme-action text-white text-[11px] font-bold flex-1">📲 Confirmar no WhatsApp</button>
+        const alreadyInQueue = isBookingInLiveQueue(b);
+        ctrls = `<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t mt-2">
+          ${!alreadyInQueue ? `<button type="button" onclick="checkInFromAgendaToQueue(${b.id})" class="px-3 py-1.5 rounded-lg bg-theme-primary text-white text-[11px] font-bold">🐾 Chegou! Ir p/ Fila</button>` : `<span class="text-[11px] font-bold text-emerald-700 px-2">🐾 Já está na Fila</span>`}
+          <button type="button" onclick="confirmScheduleWhatsApp(${b.id})" class="px-3 py-1.5 rounded-lg bg-theme-action text-white text-[11px] font-bold flex-1">📲 Confirmar Zap</button>
           <button type="button" onclick="openRescheduleModal(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-slate-200 text-[11px] font-bold">📅 Remarcar</button>
+          <button type="button" onclick="openCheckoutModal(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-900 text-[11px] font-bold">💰 Receber</button>
           <button type="button" onclick="removeBooking(${b.id})" class="px-2 py-1.5 text-xs text-red-500">🗑️</button>
         </div>`;
       }
       return `<div class="p-3.5 rounded-xl border ${b.isPriority ? 'border-red-400 bg-red-50/30' : 'border-slate-200 bg-slate-50'} space-y-1">
         <div class="flex items-center justify-between flex-wrap gap-1"><div class="flex items-center gap-1.5 flex-wrap">${badge}<span class="font-bold text-sm">${b.petName}</span><span class="text-xs text-slate-500">(${b.ownerName})</span><span class="text-[11px] px-2 py-0.5 rounded-full font-bold ${colors[b.status] || ''}">${b.status}</span></div><span class="font-brand text-sm font-bold text-theme-accent">R$ ${formatMoney(b.total)}</span></div>
-        <div class="text-[11px] text-slate-600 flex flex-wrap gap-x-3"><span>🕒 Chegada: <strong>${b.arrivalTime || b.time}</strong></span><span>📅 Marcado: <strong>${formatDateBR(b.date)} às ${b.time}</strong></span><span>📞 ${b.ownerPhone}</span></div>
+        <div class="text-[11px] text-slate-600 flex flex-wrap gap-x-3">
+          ${b.arrivalTime ? `<span>🕒 Chegada: <strong>${b.arrivalTime}</strong></span>` : ''}
+          <span>📅 Marcado: <strong>${formatDateBR(b.date)} às ${b.time}</strong></span>
+          <span>🐶 ${b.sizeName || 'Padrão'}</span>
+          <span>📞 ${b.ownerPhone}</span>
+        </div>
         <p class="text-xs text-slate-700"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
         ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded">⚠️ ${b.notes}</p>` : ''}${ctrls}</div>`;
     }
@@ -1270,9 +1551,21 @@
           ${c.address ? `<div class="text-xs text-slate-600">📍 ${c.address}</div>` : ''}
           <div class="flex items-center justify-between pt-2 border-t text-xs">
             <button type="button" onclick="selectClientForBooking(${c.id}); switchClientTab('novo')" class="px-2.5 py-1 bg-theme-primary text-white font-bold rounded-lg">+ Novo Atendimento</button>
-            <div class="flex gap-1.5"><button type="button" onclick="openEditClientModal(${c.id})" class="px-2.5 py-1 bg-slate-200 font-bold rounded-lg">✏️ Editar</button><button type="button" onclick="callClientWhatsApp('${c.phone}','${so}','${sp}')" class="px-3 py-1 bg-theme-action text-white font-bold rounded-lg">💬 Zap</button></div>
+            <div class="flex gap-1.5">
+              <button type="button" onclick="openEditClientModal(${c.id})" class="px-2.5 py-1 bg-slate-200 font-bold rounded-lg">✏️ Editar</button>
+              <button type="button" onclick="deleteClientRecord(${c.id})" class="px-2 py-1 bg-red-50 text-red-600 font-bold rounded-lg">🗑️</button>
+              <button type="button" onclick="callClientWhatsApp('${c.phone}','${so}','${sp}')" class="px-3 py-1 bg-theme-action text-white font-bold rounded-lg">💬 Zap</button>
+            </div>
           </div></div>`;
       }).join('') : `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente encontrado.</p>`;
+    }
+
+    function deleteClientRecord(id) {
+      if (confirm('Deseja excluir esta ficha da lista de clientes?')) {
+        clientsDb = clientsDb.filter(c => c.id !== id);
+        safeSave('recanto_clients_v25', clientsDb);
+        renderClientsList(); renderReheatList();
+      }
     }
 
     function openEditClientModal(id) {
@@ -1297,7 +1590,7 @@
       c.address = document.getElementById('edit-cli-address').value.trim();
       c.loyaltyStamps = Number(document.getElementById('edit-cli-stamps').value) || 0;
       c.cashbackBalance = Number(document.getElementById('edit-cli-cashback').value) || 0;
-      localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+      safeSave('recanto_clients_v25', clientsDb);
       closeEditClientModal(); renderClientsList(); renderReheatList();
     }
 
@@ -1324,12 +1617,12 @@
       }).join('') : `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente sumido há mais de ${limit} dias.</p>`;
     }
     function sendReheatWhatsApp(cid, phone, tid) {
-      const c = clientsDb.find(x => x.id === cid); if (c) { c.lastContactedDate = getLocalISODate(0); localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb)); }
-      const ph = phone.replace(/\D/g, ''), msg = document.getElementById(tid).value;
+      const c = clientsDb.find(x => x.id === cid); if (c) { c.lastContactedDate = getLocalISODate(0); safeSave('recanto_clients_v25', clientsDb); }
+      const ph = cleanPhoneDigits(phone), msg = document.getElementById(tid).value;
       renderReheatList(); window.open(`https://wa.me/${ph.startsWith('55') ? ph : '55' + ph}?text=${encodeURIComponent(msg)}`, '_blank');
     }
     function callClientWhatsApp(phone, owner, pet) {
-      const ph = phone.replace(/\D/g, '');
+      const ph = cleanPhoneDigits(phone);
       window.open(`https://wa.me/${ph.startsWith('55') ? ph : '55' + ph}?text=${encodeURIComponent(`Olá, *${owner}*! Tudo bem com o(a) *${pet}*? 🐾`)}`, '_blank');
     }
 
@@ -1349,8 +1642,8 @@
           const d = JSON.parse(ev.target.result);
           if (d.config) config = Object.assign({}, DEFAULT_CONFIG, d.config);
           if (d.clientsDb) clientsDb = d.clientsDb; if (d.bookings) bookings = d.bookings; if (d.historyDb) historyDb = d.historyDb;
-          localStorage.setItem('recanto_cfg_v25', JSON.stringify(config)); localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
-          localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings)); localStorage.setItem('recanto_history_v25', JSON.stringify(historyDb));
+          safeSave('recanto_cfg_v25', config); safeSave('recanto_clients_v25', clientsDb);
+          safeSave('recanto_bookings_v25', bookings); safeSave('recanto_history_v25', historyDb);
           initApp(); alert('✅ Backup restaurado!');
         } catch(err) { alert('❌ Arquivo inválido.'); }
       }; r.readAsText(f);
@@ -1372,7 +1665,31 @@
       });
     }
 
+    function addTimeSlotConfig() {
+      const val = document.getElementById('new-timeslot-input').value;
+      if (!val) return alert('Escolha um horário!');
+      if (!config.timeSlots.includes(val)) {
+        config.timeSlots.push(val);
+        config.timeSlots.sort();
+        saveConfig();
+        refreshAllViews();
+      }
+      document.getElementById('new-timeslot-input').value = '';
+    }
+    function removeTimeSlotConfig(t) {
+      if (config.timeSlots.length <= 1) return alert('Mantenha pelo menos 1 horário.');
+      config.timeSlots = config.timeSlots.filter(x => x !== t);
+      saveConfig();
+      refreshAllViews();
+    }
+
     function renderAdminEditors() {
+      document.getElementById('admin-timeslots-list').innerHTML = config.timeSlots.map(t => `
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 border text-xs font-bold">
+          ${t} <button type="button" onclick="removeTimeSlotConfig('${t}')" class="text-red-500 font-extrabold">✕</button>
+        </span>
+      `).join('');
+
       document.getElementById('admin-sizes-editor').innerHTML = config.sizes.map((sz, i) => `<div class="p-2.5 rounded-xl border bg-slate-50 flex gap-2"><input type="text" id="edit-sz-name-${i}" value="${sz.name}" class="w-1/3 px-2 py-1.5 rounded border text-xs font-bold bg-white" /><input type="text" id="edit-sz-sub-${i}" value="${sz.subtitle}" class="flex-1 px-2 py-1.5 rounded border text-xs bg-white" /><button type="button" onclick="deleteSizeCategory('${sz.id}')" class="text-red-500 px-2">🗑️</button></div>`).join('');
       document.getElementById('admin-services-editor').innerHTML = config.services.map((srv, sIdx) => `<div class="p-3.5 rounded-xl border bg-slate-50 space-y-2"><div class="flex justify-between gap-2"><input type="text" id="edit-srv-name-${sIdx}" value="${srv.name}" class="font-bold text-sm bg-white px-3 py-1 rounded border flex-1" /><button type="button" onclick="deleteService('${srv.id}')" class="text-red-600 px-2">🗑️</button></div><div class="grid grid-cols-2 sm:grid-cols-3 gap-2">${config.sizes.map(sz => `<div class="bg-white p-2 rounded border"><label class="block text-[10px] font-bold">${sz.name} (R$)</label><input type="number" step="0.5" id="edit-price-${sIdx}-${sz.id}" value="${srv.prices[sz.id] ?? 50}" class="w-full mt-1 px-2 py-1 rounded border text-sm font-bold text-theme-accent" /></div>`).join('')}</div></div>`).join('');
       document.getElementById('admin-extras-editor').innerHTML = config.extras.map((ex, i) => `<div class="flex items-center gap-2 p-2 rounded-xl border bg-white"><input type="text" id="edit-extra-name-${i}" value="${ex.name}" class="flex-1 px-2 py-1 rounded border text-xs font-semibold" /><input type="number" step="0.5" id="edit-extra-price-${i}" value="${ex.price}" class="w-16 px-2 py-1 rounded border text-xs font-bold text-center" /><button type="button" onclick="deleteExtra('${ex.id}')" class="text-red-500 px-1">🗑️</button></div>`).join('');
@@ -1451,7 +1768,7 @@
 
     function initApp() {
       document.getElementById('booking-date').value = getLocalISODate(0);
-      document.getElementById('agenda-date-picker').value = getLocalISODate(1);
+      document.getElementById('agenda-date-picker').value = getLocalISODate(0);
       document.getElementById('rep-custom-date').value = getLocalISODate(0);
       applyStoreBranding(); renderAllClient(); switchClientTab('novo'); refreshAllViews(); renderAdminEditors();
     }
