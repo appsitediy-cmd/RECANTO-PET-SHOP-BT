@@ -57,23 +57,28 @@
 
   <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-5 space-y-5">
 
-    <!-- ==================== TELA 1: BALCÃO (COM ABAS) ==================== -->
+    <!-- ==================== TELA 1: BALCÃO (COM 4 ABAS NO TOPO) ==================== -->
     <section id="view-client" class="space-y-4">
       
       <div class="bg-gradient-to-r from-[#23B5C8] to-[#1ba0b2] rounded-2xl p-5 text-white shadow-md">
         <h1 class="font-brand text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
       </div>
 
-      <!-- ABAS DO BALCÃO -->
-      <div class="grid grid-cols-3 gap-1 bg-slate-200 p-1.5 rounded-xl">
-        <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8]">
-          📝 Registrar
+      <!-- ABAS DO BALCÃO (4 BOTÕES COM CONTADORES) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-slate-200 p-1.5 rounded-xl">
+        <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8] flex items-center justify-center gap-1.5">
+          <span>📝 Registrar</span>
         </button>
-        <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
-          📋 Pets na Fila
+        <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1.5">
+          <span>📋 Pets na Fila</span>
+          <span id="tab-fila-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-[#23B5C8] text-white font-bold leading-none">0</span>
         </button>
-        <button onclick="switchClientTab('fechamento')" id="tab-cli-fechamento" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors">
-          ✅ Caixa do Dia
+        <button onclick="switchClientTab('agenda')" id="tab-cli-agenda" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1.5">
+          <span>📅 Agenda</span>
+          <span id="tab-agenda-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-[#EE3E80] text-white font-bold leading-none">0</span>
+        </button>
+        <button onclick="switchClientTab('fechamento')" id="tab-cli-fechamento" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1.5">
+          <span>✅ Caixa do Dia</span>
         </button>
       </div>
 
@@ -89,9 +94,12 @@
         </div>
 
         <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100 space-y-4">
-          <div class="flex items-center gap-2 border-b border-slate-100 pb-2.5">
-            <span class="w-6 h-6 rounded-full bg-[#EE3E80] text-white text-xs font-bold flex items-center justify-center">+</span>
-            <h2 class="font-bold text-slate-800 text-sm sm:text-base">Novo Atendimento</h2>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-[#EE3E80] text-white text-xs font-bold flex items-center justify-center">+</span>
+              <h2 class="font-bold text-slate-800 text-sm sm:text-base">Novo Atendimento</h2>
+            </div>
+            <span class="text-[11px] text-slate-400 font-medium">Data de hoje = Fila | Data futura = Agenda</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -155,8 +163,8 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Data *</label>
-              <input type="date" id="booking-date" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Data do Atendimento *</label>
+              <input type="date" id="booking-date" onchange="updateSubmitButtonLabel()" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
@@ -177,25 +185,56 @@
                 <span id="summary-desc" class="text-xs text-slate-300 line-clamp-1"></span>
               </div>
             </div>
-            <button type="submit" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
+            <button type="submit" id="btn-submit-booking" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
               ✅ Incluir na Fila
             </button>
           </div>
         </form>
       </div>
 
-      <!-- ABA B: PETS NA FILA -->
+      <!-- ABA B: PETS NA FILA (HOJE) -->
       <div id="client-sec-fila" class="hidden space-y-3">
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
-            <h3 class="font-bold text-slate-800 text-sm sm:text-base">📋 Pets na Fila (Aguardando / Banho)</h3>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm sm:text-base">📋 Pets na Fila de Hoje</h3>
+              <p class="text-[11px] text-slate-400">Pets agendados para hoje aparecem aqui automaticamente.</p>
+            </div>
             <span id="counter-badge-active" class="text-xs bg-[#23B5C8] text-white px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
           <div id="counter-bookings-active" class="space-y-3"></div>
         </div>
       </div>
 
-      <!-- ABA C: FECHAMENTO / CAIXA -->
+      <!-- ABA C: AGENDA (FUTUROS E REMARCAÇÕES) -->
+      <div id="client-sec-agenda" class="hidden space-y-3">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm sm:text-base">📅 Agenda de Marcações</h3>
+              <p class="text-[11px] text-slate-500">Consulte horários marcados, remarque para outro dia ou cancele.</p>
+            </div>
+            <button onclick=" prepareFutureBooking()" class="px-3 py-1.5 rounded-xl bg-[#EE3E80] text-white text-xs font-bold shadow-sm">
+              + Agendar Novo
+            </button>
+          </div>
+
+          <!-- Filtros da Agenda -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button onclick="setAgendaFilter('tomorrow')" id="agfilter-tomorrow" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Amanhã</button>
+            <button onclick="setAgendaFilter('7d')" id="agfilter-7d" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Próx. 7 Dias</button>
+            <button onclick="setAgendaFilter('future')" id="agfilter-future" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold">Todos Futuros</button>
+            <button onclick="setAgendaFilter('all')" id="agfilter-all" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Hoje + Futuros</button>
+            <div class="flex items-center gap-1 ml-auto">
+              <input type="date" id="agenda-specific-date" onchange="setAgendaFilter('date')" class="px-2 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
+            </div>
+          </div>
+
+          <div id="counter-bookings-agenda" class="space-y-3 pt-1"></div>
+        </div>
+      </div>
+
+      <!-- ABA D: FECHAMENTO / CAIXA -->
       <div id="client-sec-fechamento" class="hidden space-y-3">
         <div class="grid grid-cols-2 gap-2.5">
           <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm text-center">
@@ -209,11 +248,11 @@
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2.5 mb-3">✅ Histórico de Pets Finalizados</h3>
+          <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2.5 mb-3">✅ Histórico de Pets Finalizados Hoje</h3>
           <div id="counter-bookings-done" class="space-y-3 mb-4"></div>
           
           <button onclick="encerrarDia()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow">
-            🌙 Encerrar Expediente (Salvar no Histórico e Limpar Fila)
+            🌙 Encerrar Expediente (Salvar no Histórico e Limpar Fila de Hoje)
           </button>
         </div>
       </div>
@@ -263,7 +302,7 @@
       <div id="admin-sec-fila" class="space-y-4">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Na Loja (Fila)</span>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase">Na Fila Hoje</span>
             <p id="stat-total" class="font-brand text-xl font-bold text-slate-800">0</p>
           </div>
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
@@ -281,7 +320,7 @@
         </div>
 
         <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
-          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2.5">Movimento Aberto de Hoje</h3>
+          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2.5">Movimento de Hoje</h3>
           <div id="admin-bookings-list" class="space-y-3"></div>
         </div>
       </div>
@@ -295,7 +334,6 @@
               <span id="hist-records-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 registros</span>
             </div>
 
-            <!-- Filtros Rápidos e Data -->
             <div class="flex flex-wrap items-center gap-1.5">
               <button onclick="setHistoryFilter('today')" id="hfilter-today" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Hoje</button>
               <button onclick="setHistoryFilter('7d')" id="hfilter-7d" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">7 dias</button>
@@ -308,7 +346,6 @@
             </div>
           </div>
 
-          <!-- KPIs Financeiros do Período -->
           <div class="grid grid-cols-3 gap-2.5">
             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
               <span class="text-[10px] text-slate-500 font-bold uppercase">Atendimentos</span>
@@ -324,7 +361,6 @@
             </div>
           </div>
 
-          <!-- Insights Automáticos -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div class="p-3 rounded-xl bg-cyan-50/60 border border-cyan-100">
               <span class="text-[10px] font-bold text-[#23B5C8] uppercase block">📅 Dia Mais Movimentado</span>
@@ -340,13 +376,11 @@
             </div>
           </div>
 
-          <!-- Ranking de Serviços -->
           <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-2">
             <h4 class="text-xs font-bold text-slate-700 uppercase">📈 Distribuição por Tipo de Serviço</h4>
             <div id="hist-services-breakdown" class="space-y-2 text-xs"></div>
           </div>
 
-          <!-- Lista Detalhada de Fechamentos / Atendimentos do Período -->
           <div class="space-y-2.5">
             <h4 class="text-xs font-bold text-slate-700 uppercase">🧾 Detalhamento dos Atendimentos no Período</h4>
             <div id="hist-detailed-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
@@ -365,7 +399,6 @@
             <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 cadastrados</span>
           </div>
 
-          <!-- Barra de Backup e Planilha -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
             <button onclick="exportClientsCSV()" class="py-2 px-3 rounded-lg bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
               📥 Baixar Excel (CSV)
@@ -379,7 +412,6 @@
             </label>
           </div>
 
-          <!-- Busca e Ordenação -->
           <div class="space-y-2">
             <input type="text" id="admin-client-search" oninput="renderClientsList()" placeholder="🔍 Buscar por nome, pet, telefone ou endereço..." 
               class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-[#23B5C8]" />
@@ -422,7 +454,7 @@
         </div>
       </div>
 
-      <!-- SUB-ABA 5: PORTES (COM ADIÇÃO E EDIÇÃO COMPLETA) -->
+      <!-- SUB-ABA 5: PORTES -->
       <div id="admin-sec-portes" class="hidden space-y-5">
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
           <h3 class="font-bold text-slate-800 text-base">🐶 Categorias / Portes de Cães e Gatos</h3>
@@ -434,7 +466,6 @@
             💾 Salvar Alterações nas Categorias
           </button>
 
-          <!-- Adicionar Novo Porte -->
           <div class="pt-4 border-t border-slate-200 space-y-2.5 bg-slate-50 p-3.5 rounded-xl border">
             <span class="block text-xs font-bold text-slate-700">➕ Cadastrar Novo Porte ou Categoria</span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -513,6 +544,29 @@
 
   </main>
 
+  <!-- MODAL: REMARCAR AGENDAMENTO -->
+  <div id="reschedule-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 class="font-bold text-slate-800 text-base">📅 Remarcar Atendimento</h3>
+        <button onclick="closeRescheduleModal()" class="text-xs text-slate-400 font-bold">✕</button>
+      </div>
+      <p id="reschedule-pet-label" class="text-xs text-slate-600 font-semibold"></p>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Nova Data *</label>
+        <input type="date" id="reschedule-date-input" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold" />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Novo Horário *</label>
+        <select id="reschedule-time-select" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold bg-white"></select>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-2">
+        <button onclick="closeRescheduleModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Voltar</button>
+        <button onclick="confirmReschedule()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold shadow-sm">💾 Salvar Nova Data</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAIS (Novo Serviço e PIN) -->
   <div id="service-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl">
@@ -590,6 +644,8 @@
 
     let clientSortMode = 'az';
     let historyFilterMode = 'all';
+    let agendaFilterMode = 'future';
+    let reschedulingBookingId = null;
 
     let clientState = {
       species: 'Cachorro',
@@ -599,6 +655,37 @@
       selectedTime: config.timeSlots[0] || '09:00',
       isCustomService: false
     };
+
+    // Retorna YYYY-MM-DD respeitando o fuso horário local do aparelho
+    function getTodayLocalStr() {
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getTomorrowLocalStr() {
+      const d = new Date();
+      d.setDate(d.getDate() + 1);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function formatDateBR(dateStr) {
+      if (!dateStr) return '';
+      const today = getTodayLocalStr();
+      const tomorrow = getTomorrowLocalStr();
+      const [y, m, d] = dateStr.split('-');
+      const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+      const dt = new Date(dateStr + 'T12:00:00');
+      const wName = weekDays[dt.getDay()];
+      if (dateStr === today) return `Hoje (${d}/${m})`;
+      if (dateStr === tomorrow) return `Amanhã — ${wName}, ${d}/${m}`;
+      return `${wName}, ${d}/${m}/${y}`;
+    }
 
     function saveConfig() {
       localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
@@ -619,18 +706,44 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('booking-date').value = getTodayLocalStr();
       applyStoreBranding();
       renderAllClient();
       switchClientTab('novo');
+      refreshAllViews();
+      renderAdminEditors();
+    });
+
+    function refreshAllViews() {
       renderCounterFila();
+      renderCounterAgenda();
       renderCounterFechamento();
       renderAdminBookings();
       renderHistoryAnalytics();
       renderClientsList();
       renderReheatList();
-      renderAdminEditors();
-    });
+      updateSubmitButtonLabel();
+    }
+
+    function updateSubmitButtonLabel() {
+      const dateVal = document.getElementById('booking-date')?.value;
+      const btn = document.getElementById('btn-submit-booking');
+      if (!btn) return;
+      if (dateVal && dateVal > getTodayLocalStr()) {
+        btn.innerHTML = '📅 Salvar na Agenda';
+        btn.className = 'w-full sm:w-auto px-5 py-3 rounded-xl bg-[#EE3E80] hover:bg-pink-600 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5';
+      } else {
+        btn.innerHTML = '✅ Incluir na Fila';
+        btn.className = 'w-full sm:w-auto px-5 py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-xs shadow flex items-center justify-center gap-1.5';
+      }
+    }
+
+    function prepareFutureBooking() {
+      document.getElementById('booking-date').value = getTomorrowLocalStr();
+      updateSubmitButtonLabel();
+      switchClientTab('novo');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     function clearError(el) {
       el.classList.remove('border-red-500', 'bg-red-50');
@@ -688,13 +801,13 @@
     }
 
     function switchClientTab(tab) {
-      ['novo', 'fila', 'fechamento'].forEach(t => {
+      ['novo', 'fila', 'agenda', 'fechamento'].forEach(t => {
         document.getElementById('client-sec-' + t).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById('tab-cli-' + t);
         if (t === tab) {
-          btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8] transition-colors';
+          btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8] transition-colors flex items-center justify-center gap-1.5';
         } else {
-          btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors';
+          btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1.5';
         }
       });
     }
@@ -942,6 +1055,9 @@
       const sz = config.sizes.find(x => x.id === clientState.sizeId);
       const extrasNames = clientState.selectedExtras.map(id => config.extras.find(x => x.id === id)?.name).filter(Boolean);
       
+      const todayStr = getTodayLocalStr();
+      const isFuture = dateVal > todayStr;
+
       const newItem = {
         id: Date.now(), 
         petName, 
@@ -963,15 +1079,8 @@
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
       upsertClientRecord(ownerName, ownerPhone, petName, ownerAddress, combinedServiceName, dateVal);
 
-      renderCounterFila();
-      renderCounterFechamento();
-      renderAdminBookings();
-      renderHistoryAnalytics();
-      renderClientsList();
-      renderReheatList();
-
       document.getElementById('booking-form').reset();
-      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('booking-date').value = getTodayLocalStr();
       document.getElementById('custom-service-box').classList.add('hidden');
       clientState.isCustomService = false; 
       clientState.selectedService = ''; 
@@ -979,8 +1088,13 @@
       renderServices(); 
       renderExtras(); 
       updateSummary();
+      refreshAllViews();
       
-      switchClientTab('fila');
+      if (isFuture) {
+        switchClientTab('agenda');
+      } else {
+        switchClientTab('fila');
+      }
     }
 
     function upsertClientRecord(ownerName, phone, petName, address, serviceName, dateStr) {
@@ -1007,23 +1121,75 @@
       localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
     }
 
-    // ================= ROTINAS DE FILA E CAIXA =================
+    // ================= ROTINAS DE FILA, AGENDA E CAIXA (INTEGRADAS) =================
     function changeStatus(id, st) {
       bookings = bookings.map(b => b.id === id ? { ...b, status: st } : b);
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-      renderCounterFila();
-      renderCounterFechamento();
-      renderAdminBookings();
-      renderHistoryAnalytics();
+      refreshAllViews();
     }
 
-    function removeBooking(id) {
-      bookings = bookings.filter(b => b.id !== id);
+    function cancelOrRemoveBooking(id, isAgenda = false) {
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      const msg = isAgenda 
+        ? `Deseja cancelar o agendamento de ${b.petName} (${formatDateBR(b.date)} às ${b.time})?`
+        : `Deseja remover ${b.petName} da fila?`;
+      if (confirm(msg)) {
+        bookings = bookings.filter(x => x.id !== id);
+        localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+        refreshAllViews();
+      }
+    }
+
+    function pullToTodayQueue(id) {
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      b.date = getTodayLocalStr();
+      b.status = 'Aguardando';
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-      renderCounterFila();
-      renderCounterFechamento();
-      renderAdminBookings();
-      renderHistoryAnalytics();
+      refreshAllViews();
+      switchClientTab('fila');
+    }
+
+    function openRescheduleModal(id) {
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      reschedulingBookingId = id;
+      document.getElementById('reschedule-pet-label').textContent = `🐾 ${b.petName} (${b.ownerName}) — Atual: ${formatDateBR(b.date)} às ${b.time}`;
+      document.getElementById('reschedule-date-input').value = b.date || getTomorrowLocalStr();
+      
+      const timeSel = document.getElementById('reschedule-time-select');
+      timeSel.innerHTML = config.timeSlots.map(t => `<option value="${t}" ${t === b.time ? 'selected' : ''}>${t}</option>`).join('');
+      
+      document.getElementById('reschedule-modal').classList.remove('hidden');
+      document.getElementById('reschedule-modal').classList.add('flex');
+    }
+
+    function closeRescheduleModal() {
+      reschedulingBookingId = null;
+      document.getElementById('reschedule-modal').classList.add('hidden');
+      document.getElementById('reschedule-modal').classList.remove('flex');
+    }
+
+    function confirmReschedule() {
+      if (!reschedulingBookingId) return;
+      const newDate = document.getElementById('reschedule-date-input').value;
+      const newTime = document.getElementById('reschedule-time-select').value;
+      if (!newDate) return alert('Escolha a nova data!');
+
+      const b = bookings.find(x => x.id === reschedulingBookingId);
+      if (b) {
+        b.date = newDate;
+        b.time = newTime;
+        localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      }
+      closeRescheduleModal();
+      refreshAllViews();
+      if (newDate > getTodayLocalStr()) {
+        switchClientTab('agenda');
+      } else {
+        switchClientTab('fila');
+      }
     }
 
     function notifyReady(id) {
@@ -1035,16 +1201,125 @@
       window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
+    function confirmScheduleWhatsApp(id) {
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      const phone = b.ownerPhone.replace(/\D/g, '');
+      const fullPhone = phone.startsWith('55') ? phone : '55' + phone;
+      const msg = `Olá, *${b.ownerName}*! 🐾 Passando para confirmar o agendamento do(a) *${b.petName}* (${b.serviceName}) para *${formatDateBR(b.date)} às ${b.time}* aqui no *${config.storeName}*. Qualquer dúvida ou se precisar remarcar é só avisar! ✨`;
+      window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
     function renderCounterFila() {
-      const activeBookings = bookings.filter(b => b.status !== 'Finalizado');
+      const todayStr = getTodayLocalStr();
+      // Pets na fila de hoje: não finalizados e com data de hoje ou anterior
+      const activeBookings = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= todayStr));
       const list = document.getElementById('counter-bookings-active');
+      
       document.getElementById('counter-badge-active').textContent = activeBookings.length;
+      const tabFilaBadge = document.getElementById('tab-fila-badge');
+      if (tabFilaBadge) tabFilaBadge.textContent = activeBookings.length;
 
       if (activeBookings.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet aguardando ou no banho.</p>`;
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum pet na fila de hoje no momento.</p>`;
         return;
       }
       list.innerHTML = activeBookings.map(b => buildBookingCardHtml(b, false)).join('');
+    }
+
+    function setAgendaFilter(mode) {
+      agendaFilterMode = mode;
+      document.querySelectorAll('.agfilter-btn').forEach(btn => {
+        btn.className = 'agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold';
+      });
+      if (mode !== 'date') {
+        const activeBtn = document.getElementById('agfilter-' + mode);
+        if (activeBtn) activeBtn.className = 'agfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold';
+        const dtInput = document.getElementById('agenda-specific-date');
+        if (dtInput) dtInput.value = '';
+      }
+      renderCounterAgenda();
+    }
+
+    function renderCounterAgenda() {
+      const todayStr = getTodayLocalStr();
+      const tomorrowStr = getTomorrowLocalStr();
+      const specDate = document.getElementById('agenda-specific-date')?.value;
+
+      // Contador do botão Agenda no topo mostra sempre quantos estão agendados para datas futuras
+      const futureBookingsCount = bookings.filter(b => b.status !== 'Finalizado' && b.date > todayStr).length;
+      const tabAgendaBadge = document.getElementById('tab-agenda-badge');
+      if (tabAgendaBadge) tabAgendaBadge.textContent = futureBookingsCount;
+
+      let filtered = bookings.filter(b => {
+        if (b.status === 'Finalizado') return false;
+        if (agendaFilterMode === 'tomorrow') return b.date === tomorrowStr;
+        if (agendaFilterMode === 'future') return b.date > todayStr;
+        if (agendaFilterMode === 'all') return b.date >= todayStr;
+        if (agendaFilterMode === 'date' && specDate) return b.date === specDate;
+        if (agendaFilterMode === '7d') {
+          if (!b.date || b.date <= todayStr) return false;
+          const now = new Date(todayStr + 'T00:00:00');
+          const rec = new Date(b.date + 'T00:00:00');
+          const diffDays = (rec - now) / (1000 * 60 * 60 * 24);
+          return diffDays >= 1 && diffDays <= 7;
+        }
+        return b.date > todayStr;
+      });
+
+      // Ordena por data e horário mais próximos primeiro
+      filtered.sort((a, b) => {
+        const cmpDate = (a.date || '').localeCompare(b.date || '');
+        if (cmpDate !== 0) return cmpDate;
+        return (a.time || '').localeCompare(b.time || '');
+      });
+
+      const list = document.getElementById('counter-bookings-agenda');
+      if (!list) return;
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum agendamento encontrado para este filtro.</p>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(b => {
+        const isToday = b.date === todayStr;
+        return `
+          <div class="p-3.5 rounded-xl border ${isToday ? 'border-cyan-300 bg-cyan-50/40' : 'border-slate-200 bg-slate-50'} space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-bold text-sm text-slate-800">🐾 ${b.petName}</span>
+                <span class="text-xs text-slate-500 ml-1">(${b.ownerName})</span>
+              </div>
+              <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span class="px-2.5 py-1 rounded-lg font-bold ${isToday ? 'bg-[#23B5C8] text-white' : 'bg-pink-100 text-[#EE3E80]'}">
+                📅 ${formatDateBR(b.date)} às ${b.time || '--:--'}
+              </span>
+              <span class="text-slate-600">📞 ${b.ownerPhone}</span>
+            </div>
+            <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
+            ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded">⚠️ Obs: ${b.notes}</p>` : ''}
+            <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200">
+              <button onclick="openRescheduleModal(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-[11px] font-bold flex items-center gap-1">
+                📅 Remarcar
+              </button>
+              <button onclick="confirmScheduleWhatsApp(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-[#6AB43E] text-white text-[11px] font-bold flex items-center gap-1">
+                📲 Confirmar Zap
+              </button>
+              ${!isToday ? `
+                <button onclick="pullToTodayQueue(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-[11px] font-bold flex items-center gap-1">
+                  🛁 Puxar p/ Fila Hoje
+                </button>
+              ` : ''}
+              <button onclick="cancelOrRemoveBooking(${b.id}, true)" class="ml-auto px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-[11px] font-bold flex items-center gap-1">
+                ❌ Cancelar
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function renderCounterFechamento() {
@@ -1075,11 +1350,14 @@
     }
 
     function encerrarDia() {
+      const todayStr = getTodayLocalStr();
       const doneBookings = bookings.filter(b => b.status === 'Finalizado');
-      if (bookings.length === 0) {
-        return alert('Não há atendimentos no balcão para encerrar hoje.');
+      const todayOpen = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= todayStr));
+
+      if (doneBookings.length === 0 && todayOpen.length === 0) {
+        return alert('Não há atendimentos de hoje no balcão para encerrar.');
       }
-      if (confirm('Encerrar o expediente? Os atendimentos finalizados serão salvos permanentemente na aba "📊 Histórico" do Painel do Dono e a fila do balcão será limpa para amanhã!')) {
+      if (confirm('Encerrar o expediente de hoje? Os atendimentos finalizados serão salvos na aba "📊 Histórico" e os agendamentos de dias futuros continuarão salvos na "📅 Agenda"!')) {
         if (doneBookings.length > 0) {
           doneBookings.forEach(item => {
             if (!historyArchive.find(h => h.id === item.id)) {
@@ -1089,14 +1367,12 @@
           localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
         }
 
-        bookings = [];
+        // Mantém todos os agendamentos futuros intactos na Agenda!
+        bookings = bookings.filter(b => b.status !== 'Finalizado' && b.date > todayStr);
         localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-        renderCounterFila();
-        renderCounterFechamento();
-        renderAdminBookings();
-        renderHistoryAnalytics();
+        refreshAllViews();
         switchClientTab('novo');
-        alert('✅ Expediente encerrado! O resumo de hoje foi arquivado no Histórico do Painel do Dono.');
+        alert('✅ Expediente encerrado! O caixa de hoje foi salvo no Histórico e os agendamentos futuros seguem na Agenda.');
       }
     }
 
@@ -1111,8 +1387,8 @@
       const isPronto = b.status === 'Pronto';
 
       const controlsHtml = isAdmin ? '' : `
-        <div class="flex items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
-          <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1">
+        <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
+          <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1 min-w-[140px]">
             <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
             <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
             <option value="Pronto" ${b.status === 'Pronto' ? 'selected' : ''}>✨ Pronto (Na Loja)</option>
@@ -1121,7 +1397,8 @@
           
           ${isPronto ? `<button onclick="notifyReady(${b.id})" class="px-2.5 py-2 rounded-lg bg-green-500 text-white text-[11px] font-bold flex shrink-0" title="Avisar WhatsApp">📲 Avisar</button>` : ''}
           
-          <button onclick="removeBooking(${b.id})" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0">🗑️</button>
+          <button onclick="openRescheduleModal(${b.id})" class="px-2.5 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 text-[11px] font-bold shrink-0" title="Remarcar para outro dia">📅 Remarcar</button>
+          <button onclick="cancelOrRemoveBooking(${b.id}, false)" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0" title="Cancelar / Remover">🗑️</button>
         </div>
       `;
 
@@ -1135,7 +1412,7 @@
             <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
           </div>
           <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
-          <p class="text-[11px] text-slate-500">🕒 ${b.date || ''} às ${b.time || '--:--'} • 👤 ${b.ownerName}</p>
+          <p class="text-[11px] text-slate-500">🕒 ${formatDateBR(b.date)} às ${b.time || '--:--'} • 👤 ${b.ownerName}</p>
           ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded mt-1">⚠️ Obs: ${b.notes}</p>` : ''}
           ${controlsHtml}
         </div>
@@ -1144,10 +1421,12 @@
 
     // ================= ROTINAS DO PAINEL DO DONO =================
     function renderAdminBookings() {
+      const todayStr = getTodayLocalStr();
       const list = document.getElementById('admin-bookings-list');
-      const doneBookings = bookings.filter(b => b.status === 'Finalizado');
+      const todayBookings = bookings.filter(b => !b.date || b.date <= todayStr || b.status === 'Finalizado');
+      const doneBookings = todayBookings.filter(b => b.status === 'Finalizado');
       
-      const inStore = bookings.length - doneBookings.length;
+      const inStore = todayBookings.length - doneBookings.length;
       const rev = doneBookings.reduce((sum, b) => sum + (Number(b.total) || 0), 0);
       const ticket = doneBookings.length ? (rev / doneBookings.length) : 0;
 
@@ -1156,11 +1435,11 @@
       document.getElementById('stat-revenue').textContent = `R$ ${formatMoney(rev)}`;
       document.getElementById('stat-ticket').textContent = `R$ ${formatMoney(ticket)}`;
 
-      if (bookings.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum atendimento aberto no balcão agora. Consulte os dias fechados na aba <strong>📊 Histórico</strong>.</p>`;
+      if (todayBookings.length === 0) {
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum atendimento aberto no balcão hoje. Consulte os dias fechados na aba <strong>📊 Histórico</strong>.</p>`;
         return;
       }
-      list.innerHTML = bookings.map(b => buildBookingCardHtml(b, true)).join('');
+      list.innerHTML = todayBookings.map(b => buildBookingCardHtml(b, true)).join('');
     }
 
     // ================= ABA HISTÓRICO & INTELIGÊNCIA =================
@@ -1178,14 +1457,13 @@
     }
 
     function renderHistoryAnalytics() {
-      // Junta o histórico já arquivado com os finalizados ainda abertos hoje
       const todayDone = bookings.filter(b => b.status === 'Finalizado');
       const allRecords = [...todayDone];
       historyArchive.forEach(h => {
         if (!allRecords.find(r => r.id === h.id)) allRecords.push(h);
       });
 
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = getTodayLocalStr();
       const now = new Date();
       const specDate = document.getElementById('hist-specific-date')?.value;
 
@@ -1220,7 +1498,6 @@
         return;
       }
 
-      // 1. Dia da semana mais movimentado
       const weekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
       const dayCounts = {};
       filtered.forEach(r => {
@@ -1233,7 +1510,6 @@
       const topDay = Object.entries(dayCounts).sort((a, b) => b[1] - a[1])[0];
       document.getElementById('hist-insight-day').textContent = topDay ? `${topDay[0]} (${topDay[1]}x)` : '—';
 
-      // 2. Horário de pico
       const hourCounts = {};
       filtered.forEach(r => {
         if (r.time) {
@@ -1243,7 +1519,6 @@
       const topHour = Object.entries(hourCounts).sort((a, b) => b[1] - a[1])[0];
       document.getElementById('hist-insight-hour').textContent = topHour ? `${topHour[0]} (${topHour[1]}x)` : '—';
 
-      // 3. Serviços mais realizados
       const srvCounts = {};
       filtered.forEach(r => {
         const baseSrv = (r.serviceName || 'Outros').split(' + [Extra]')[0];
@@ -1254,7 +1529,6 @@
       const topPct = topSrv ? Math.round((topSrv[1] / filtered.length) * 100) : 0;
       document.getElementById('hist-insight-service').textContent = topSrv ? `${topSrv[0]} (${topPct}%)` : '—';
 
-      // Barras de distribuição de serviços
       document.getElementById('hist-services-breakdown').innerHTML = sortedServices.map(([name, count]) => {
         const pct = Math.round((count / filtered.length) * 100);
         return `
@@ -1270,7 +1544,6 @@
         `;
       }).join('');
 
-      // Lista detalhada
       document.getElementById('hist-detailed-list').innerHTML = filtered.map(r => `
         <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
           <div>
@@ -1321,7 +1594,6 @@
         );
       });
 
-      // Ordenação
       filtered.sort((a, b) => {
         if (clientSortMode === 'az') return a.ownerName.localeCompare(b.ownerName, 'pt-BR');
         if (clientSortMode === 'pet_az') return a.petName.localeCompare(b.petName, 'pt-BR');
@@ -1382,7 +1654,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `clientes_recanto_petshop_${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `clientes_recanto_petshop_${getTodayLocalStr()}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -1400,7 +1672,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `backup_recanto_petshop_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `backup_recanto_petshop_${getTodayLocalStr()}.json`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -1428,12 +1700,7 @@
 
             applyStoreBranding();
             renderAllClient();
-            renderCounterFila();
-            renderCounterFechamento();
-            renderAdminBookings();
-            renderHistoryAnalytics();
-            renderClientsList();
-            renderReheatList();
+            refreshAllViews();
             renderAdminEditors();
             alert('✅ Backup restaurado com sucesso!');
           }
@@ -1529,10 +1796,7 @@
         document.getElementById('view-client').classList.add('hidden'); 
         document.getElementById('view-admin').classList.remove('hidden'); 
         document.getElementById('btn-exit-admin').classList.remove('hidden');
-        renderAdminBookings();
-        renderHistoryAnalytics();
-        renderClientsList(); 
-        renderReheatList(); 
+        refreshAllViews();
         renderAdminEditors(); 
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else { 
@@ -1558,7 +1822,6 @@
     }
 
     function renderAdminEditors() {
-      // Editor de Portes
       document.getElementById('admin-sizes-editor').innerHTML = config.sizes.map((sz, idx) => `
         <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
           <input type="text" id="edit-sz-name-${idx}" value="${sz.name}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white w-1/3" />
@@ -1567,7 +1830,6 @@
         </div>
       `).join('');
       
-      // Editor de Serviços
       document.getElementById('admin-services-editor').innerHTML = config.services.map((srv, sIdx) => `
         <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
           <div class="flex items-center justify-between gap-2">
@@ -1585,7 +1847,6 @@
         </div>
       `).join('');
       
-      // Editor de Adicionais
       document.getElementById('admin-extras-editor').innerHTML = config.extras.map((ex, eIdx) => `
         <div class="flex items-center gap-1.5 p-2 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden w-full">
           <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-slate-50" />
