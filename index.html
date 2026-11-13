@@ -806,8 +806,8 @@
   </footer>
 
   <script>
-    // ================= CONEXÃO COM A NUVEM (SUPABASE - URL CORRIGIDA) =================
-    const SUPABASE_URL = 'https://oqhbblxhwdpychcogigh.supabase.co';
+    // ================= CONEXÃO COM A NUVEM (SUPABASE - URL EXATA) =================
+    const SUPABASE_URL = 'https://oqhbbixhwdpychcogigh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_AFek0CJUPD4ONBOpeL518Q_H8gEGuTS';
     const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
@@ -1912,7 +1912,6 @@
       const todayStr = getTodayLocalStr();
       const todayBookings = bookings.filter(b => !b.date || b.date <= todayStr || b.status === 'Finalizado');
       
-      // Pendentes de pagamento hoje (pets na fila, prontos ou finalizados ainda não pagos)
       const pendingBookings = todayBookings.filter(b => !pdvState.paidBookings[b.id]);
       
       const tabUnpaidBadge = document.getElementById('tab-unpaid-badge');
@@ -1949,11 +1948,9 @@
         `).join('');
       }
 
-      // Cálculo por Forma de Pagamento
       const totalsByMethod = { 'Pix': 0, 'Crédito': 0, 'Débito': 0, 'Dinheiro': 0 };
       const movementsHtml = [];
 
-      // 1. Pagamentos de Banho & Tosa recebidos hoje
       Object.entries(pdvState.paidBookings).forEach(([id, info]) => {
         const amt = Number(info.amount) || 0;
         if (totalsByMethod[info.method] !== undefined) totalsByMethod[info.method] += amt;
@@ -1975,7 +1972,6 @@
         });
       });
 
-      // 2. Vendas Rápidas de Produtos
       pdvState.quickSales.forEach(qs => {
         const amt = Number(qs.amount) || 0;
         if (totalsByMethod[qs.method] !== undefined) totalsByMethod[qs.method] += amt;
@@ -1996,7 +1992,6 @@
         });
       });
 
-      // 3. Sangrias / Retiradas
       let totalWithdrawals = 0;
       pdvState.withdrawals.forEach(wd => {
         const amt = Number(wd.amount) || 0;
@@ -2215,7 +2210,6 @@
 
       if (!confirm(summaryMsg)) return;
 
-      // Arquiva fechamento de caixa
       if (totalEntries > 0 || doneBookings.length > 0) {
         pdvState.closedRegisters.unshift({
           id: Date.now(),
@@ -2231,7 +2225,6 @@
         });
       }
 
-      // Arquiva atendimentos finalizados no Histórico
       if (doneBookings.length > 0) {
         const toArchive = doneBookings.map(item => ({ ...item, closedAt: new Date().toISOString() }));
         toArchive.forEach(item => {
@@ -2243,7 +2236,6 @@
         cloudArchiveDay(toArchive);
       }
 
-      // Limpa fila aberta de hoje e reseta movimentações diárias do PDV (mantendo agendamentos futuros!)
       const todayOpen = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= todayStr));
       todayOpen.forEach(item => cloudDeleteBooking(item.id));
 
@@ -2382,7 +2374,6 @@
       document.getElementById('hist-kpi-rev').textContent = `R$ ${formatMoney(totalRev)}`;
       document.getElementById('hist-kpi-ticket').textContent = `R$ ${formatMoney(avgTicket)}`;
 
-      // Renderizar fechamentos de caixa salvos
       const regListEl = document.getElementById('hist-registers-list');
       if (regListEl) {
         if (!pdvState.closedRegisters || pdvState.closedRegisters.length === 0) {
