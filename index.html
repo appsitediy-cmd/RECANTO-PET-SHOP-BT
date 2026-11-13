@@ -106,7 +106,7 @@
           </div>
         </div>
 
-        <!-- Logo 1: Símbolo Redondo + Logo 2: Nome Retangular (Com Zoom Independente sem esticar a barra) -->
+        <!-- Logo 1: Símbolo Redondo + Logo 2: Nome Retangular -->
         <div id="custom-logos-wrapper" class="hidden flex items-center gap-3">
           <div id="header-symbol-frame" class="hidden w-11 h-11 rounded-full overflow-hidden border border-slate-200 shadow-sm shrink-0 flex items-center justify-center bg-white" style="transform-origin: center center;">
             <img id="custom-symbol-img" class="w-full h-full object-cover" alt="Símbolo" />
@@ -137,7 +137,7 @@
         <h1 class="font-brand text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
       </div>
 
-      <!-- 5 BOTÕES DE NAVEGAÇÃO DO BALCÃO (COM FUNDO DO TEMA) -->
+      <!-- 5 BOTÕES DE NAVEGAÇÃO DO BALCÃO -->
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 theme-nav-bar p-1.5 rounded-xl">
         <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm brand-primary-text flex items-center justify-center gap-1">
           <span>📝 Registrar</span>
@@ -160,7 +160,7 @@
         </button>
       </div>
 
-      <!-- ABA 1: NOVO REGISTRO (TODAS AS MOLDURAS ACOMPANHAM A COR DO TEMA) -->
+      <!-- ABA 1: NOVO REGISTRO -->
       <div id="client-sec-novo" class="space-y-4">
         
         <!-- MOLDURA DE BUSCA RÁPIDA -->
@@ -279,7 +279,7 @@
             </div>
           </div>
 
-          <!-- MOLDURA ETAPA 5: DATA DO ATENDIMENTO E HORÁRIO (NO FINAL) -->
+          <!-- MOLDURA ETAPA 5: DATA DO ATENDIMENTO E HORÁRIO -->
           <div class="p-4 rounded-2xl border-2 theme-stage-box space-y-3.5">
             <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-card-border);">
               <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">5</span>
@@ -369,85 +369,49 @@
         </div>
       </div>
 
-      <!-- ABA 5: CAIXA PDV (FINANCEIRO, PAGAMENTOS, GAVETA E FECHAMENTO) -->
+      <!-- ABA 5: CAIXA PDV (MODO DISCRETO NO BALCÃO + FECHAMENTO SEPARADO) -->
       <div id="client-sec-caixa" class="hidden space-y-4">
         
-        <!-- Barra Superior do PDV: Fundo de Troco + Ações Rápidas -->
-        <div class="bg-slate-900 text-white rounded-2xl p-4 shadow-md space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <span class="text-[10px] uppercase tracking-wider font-bold brand-primary-text">Frente de Caixa • PDV</span>
-              <h2 class="font-brand text-xl font-bold">Controle Financeiro do Dia</h2>
-            </div>
-            <div class="flex flex-wrap gap-1.5">
-              <button onclick="openFloatModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-bold text-amber-300">
-                🗄️ Troco Inicial: R$ <span id="pdv-float-display">0,00</span>
-              </button>
-              <button onclick="openQuickSaleModal()" class="px-3 py-1.5 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold shadow">
-                + Venda Produto
-              </button>
-              <button onclick="openWithdrawalModal()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow">
-                ➖ Sangria
-              </button>
-            </div>
+        <!-- Barra de Ações Rápidas do PDV (Sem expor faturamento ou saldo na tela do PC) -->
+        <div class="bg-slate-900 text-white rounded-2xl p-4 shadow-md flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider font-bold brand-primary-text">Frente de Caixa • PDV</span>
+            <h2 class="font-brand text-xl font-bold">Recebimentos e Balcão</h2>
           </div>
-
-          <!-- Resumo por Forma de Pagamento ("Bater o Caixa") -->
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
-            <div class="bg-slate-800/90 p-2.5 rounded-xl border border-slate-700 text-center">
-              <span class="text-[10px] text-slate-400 font-bold uppercase block">💠 Pix</span>
-              <strong id="pdv-sum-pix" class="font-brand text-base text-cyan-300">R$ 0,00</strong>
-            </div>
-            <div class="bg-slate-800/90 p-2.5 rounded-xl border border-slate-700 text-center">
-              <span class="text-[10px] text-slate-400 font-bold uppercase block">💳 Crédito</span>
-              <strong id="pdv-sum-credito" class="font-brand text-base text-purple-300">R$ 0,00</strong>
-            </div>
-            <div class="bg-slate-800/90 p-2.5 rounded-xl border border-slate-700 text-center">
-              <span class="text-[10px] text-slate-400 font-bold uppercase block">💳 Débito</span>
-              <strong id="pdv-sum-debito" class="font-brand text-base text-blue-300">R$ 0,00</strong>
-            </div>
-            <div class="bg-slate-800/90 p-2.5 rounded-xl border border-slate-700 text-center">
-              <span class="text-[10px] text-slate-400 font-bold uppercase block">💵 Dinheiro</span>
-              <strong id="pdv-sum-dinheiro" class="font-brand text-base text-emerald-300">R$ 0,00</strong>
-            </div>
-            <div class="col-span-2 sm:col-span-1 bg-emerald-950/90 p-2.5 rounded-xl border border-emerald-500/40 text-center">
-              <span class="text-[10px] text-emerald-300 font-bold uppercase block">💰 Total Entradas</span>
-              <strong id="pdv-sum-total" class="font-brand text-base text-[#FDD815]">R$ 0,00</strong>
-            </div>
-          </div>
-
-          <!-- Conferência de Gaveta (Dinheiro Físico) -->
-          <div class="bg-slate-800/70 rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs border border-slate-700">
-            <span class="text-slate-300">🗄️ <strong>Dinheiro Esperado na Gaveta</strong> (Troco + Dinheiro - Sangrias):</span>
-            <span id="pdv-drawer-expected" class="font-brand text-base font-bold text-amber-300">R$ 0,00</span>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="openFloatModal()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-bold text-amber-300">
+              🗄️ Troco Inicial
+            </button>
+            <button onclick="openQuickSaleModal()" class="px-3.5 py-2 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold shadow">
+              + Venda Produto
+            </button>
+            <button onclick="openWithdrawalModal()" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow">
+              ➖ Sangria
+            </button>
           </div>
         </div>
 
-        <!-- Bloco 1 do Caixa: Pets Aguardando Pagamento -->
+        <!-- Bloco Principal: Pets Aguardando Recebimento (Formas de Pagamento mantidas) -->
         <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-3" style="border-color: var(--brand-card-border);">
           <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--brand-card-border);">
             <div>
               <h3 class="font-bold text-slate-800 text-sm">⏳ Aguardando Recebimento (Banho & Tosa)</h3>
-              <p class="text-[11px] text-slate-500">Pets na loja ou finalizados que ainda não tiveram pagamento registrado.</p>
+              <p class="text-[11px] text-slate-500">Toque em "Receber" para escolher Pix, Crédito, Débito ou Dinheiro.</p>
             </div>
             <span id="pdv-pending-count" class="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
           <div id="pdv-pending-list" class="space-y-2.5"></div>
         </div>
 
-        <!-- Bloco 2 do Caixa: Lançamentos Pagos e Sangrias do Dia -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-3" style="border-color: var(--brand-card-border);">
-          <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--brand-card-border);">
-            <h3 class="font-bold text-slate-800 text-sm">🧾 Movimentações Registradas no Caixa Hoje</h3>
-            <span id="pdv-movements-count" class="text-xs bg-green-100 text-green-800 px-2.5 py-1 rounded-full font-bold">0</span>
+        <!-- Barra Discreta de Encerramento (Abre a conferência apenas ao clicar) -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 flex flex-col sm:flex-row items-center justify-between gap-3" style="border-color: var(--brand-card-border);">
+          <div class="text-xs text-slate-600 text-center sm:text-left">
+            <span class="font-bold text-slate-800 block">🔒 Conferência e Fechamento</span>
+            <span><strong id="pdv-main-ops-count">0</strong> lançamento(s) registrado(s) no turno atual (valores ocultos por privacidade).</span>
           </div>
-          <div id="pdv-movements-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
-
-          <div class="pt-3 border-t" style="border-color: var(--brand-card-border);">
-            <button onclick="baterEEncerrarCaixa()" class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow flex items-center justify-center gap-2">
-              🔒 Bater e Encerrar Caixa do Dia
-            </button>
-          </div>
+          <button onclick="openRegisterClosingModal()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow flex items-center justify-center gap-2 shrink-0">
+            🔒 Fechar Caixa do Dia
+          </button>
         </div>
 
       </div>
@@ -714,7 +678,7 @@
       <!-- SUB-ABA 7: LOJA (DUAS LOGOS INDEPENDENTES + ZOOM ISOLADO + PALETA DE CORES) -->
       <div id="admin-sec-horarios" class="hidden space-y-5">
         
-        <!-- BLOCO A: IDENTIDADE VISUAL (2 LOGOS + ZOOM SEM ESTICAR A BARRA) -->
+        <!-- BLOCO A: IDENTIDADE VISUAL -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <div>
             <h3 class="font-bold text-slate-800 text-base">🖼️ Logos da Loja (Símbolo + Nome Separados)</h3>
@@ -764,7 +728,7 @@
           </div>
         </div>
 
-        <!-- BLOCO B: CORES DO APLICATIVO (5 PALETAS DO SETOR PET + EXTRAÇÃO PELA LOGO) -->
+        <!-- BLOCO B: CORES DO APLICATIVO -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
@@ -776,10 +740,8 @@
             </button>
           </div>
 
-          <!-- 5 Paletas Inspiradas nos Principais Apps Pet -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="theme-presets-grid"></div>
 
-          <!-- Ajuste Fino Manual de Cor -->
           <div class="p-3 rounded-xl theme-stage-box border flex flex-wrap items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2">
               <label class="font-bold text-slate-700">Cor Principal:</label>
@@ -809,6 +771,78 @@
     </section>
 
   </main>
+
+  <!-- MODAL: CONFERÊNCIA E FECHAMENTO DE CAIXA DO DIA (PRIVADO) -->
+  <div id="register-closing-modal" class="fixed inset-0 bg-black/65 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="bg-slate-900 text-white p-4 flex items-center justify-between shrink-0">
+        <div>
+          <span class="text-[10px] uppercase tracking-wider font-bold brand-primary-text">Conferência Financeira</span>
+          <h3 class="font-brand text-lg font-bold">🔒 Fechamento de Caixa do Dia</h3>
+        </div>
+        <button onclick="closeRegisterClosingModal()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300">✕ Fechar</button>
+      </div>
+
+      <div class="p-4 space-y-4 overflow-y-auto flex-1">
+        <!-- Resumo por Forma de Pagamento -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <div class="p-2.5 rounded-xl theme-stage-box border text-center">
+            <span class="text-[10px] text-slate-600 font-bold uppercase block">💠 Pix</span>
+            <strong id="pdv-sum-pix" class="font-brand text-base brand-primary-text">R$ 0,00</strong>
+          </div>
+          <div class="p-2.5 rounded-xl theme-stage-box border text-center">
+            <span class="text-[10px] text-slate-600 font-bold uppercase block">💳 Crédito</span>
+            <strong id="pdv-sum-credito" class="font-brand text-base text-purple-700">R$ 0,00</strong>
+          </div>
+          <div class="p-2.5 rounded-xl theme-stage-box border text-center">
+            <span class="text-[10px] text-slate-600 font-bold uppercase block">💳 Débito</span>
+            <strong id="pdv-sum-debito" class="font-brand text-base text-blue-700">R$ 0,00</strong>
+          </div>
+          <div class="p-2.5 rounded-xl theme-stage-box border text-center">
+            <span class="text-[10px] text-slate-600 font-bold uppercase block">💵 Dinheiro</span>
+            <strong id="pdv-sum-dinheiro" class="font-brand text-base text-emerald-700">R$ 0,00</strong>
+          </div>
+          <div class="col-span-2 p-2.5 rounded-xl bg-slate-900 text-white text-center">
+            <span class="text-[10px] text-slate-300 font-bold uppercase block">💰 Total Entradas do Dia</span>
+            <strong id="pdv-sum-total" class="font-brand text-lg text-[#FDD815]">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <!-- Conferência de Gaveta (Dinheiro Físico) -->
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-700">🗄️ Fundo de Troco Inicial:</span>
+            <div class="flex items-center gap-2">
+              <strong class="text-slate-800">R$ <span id="pdv-float-display">0,00</span></strong>
+              <button type="button" onclick="openFloatModal()" class="text-[11px] font-bold brand-primary-text underline">Alterar</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-1.5 border-t border-amber-200">
+            <span class="font-bold text-amber-950">💵 Dinheiro Esperado na Gaveta:</span>
+            <span id="pdv-drawer-expected" class="font-brand text-base font-bold text-amber-800">R$ 0,00</span>
+          </div>
+        </div>
+
+        <!-- Movimentações Detalhadas (Apenas aqui dentro da conferência) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-slate-700 uppercase">🧾 Lançamentos do Turno</h4>
+            <span id="pdv-movements-count" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">0</span>
+          </div>
+          <div id="pdv-movements-list" class="space-y-2 max-h-52 overflow-y-auto pr-0.5"></div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-2 shrink-0">
+        <button onclick="closeRegisterClosingModal()" class="py-3 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700">
+          Voltar ao Balcão
+        </button>
+        <button onclick="baterEEncerrarCaixa()" class="py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold shadow">
+          ✅ Confirmar e Encerrar Caixa
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: RECEBER PAGAMENTO NO PDV -->
   <div id="checkout-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
@@ -1089,7 +1123,7 @@
       isCustomService: false
     };
 
-    // ================= MOTOR DE TEMAS E CORES (TODA A INTERFACE) =================
+    // ================= MOTOR DE TEMAS E CORES =================
     function shadeHexColor(hex, percent) {
       let num = parseInt(hex.replace('#', ''), 16);
       let amt = Math.round(2.55 * percent);
@@ -2332,7 +2366,18 @@
       }).join('');
     }
 
-    // ================= ABA 5: CAIXA PDV (FINANCEIRO & FECHAMENTO) =================
+    // ================= ABA 5: CAIXA PDV (MODO DISCRETO + FECHAMENTO EM MODAL) =================
+    function openRegisterClosingModal() {
+      renderCaixaPDV();
+      document.getElementById('register-closing-modal').classList.remove('hidden');
+      document.getElementById('register-closing-modal').classList.add('flex');
+    }
+
+    function closeRegisterClosingModal() {
+      document.getElementById('register-closing-modal').classList.add('hidden');
+      document.getElementById('register-closing-modal').classList.remove('flex');
+    }
+
     function renderCaixaPDV() {
       const todayStr = getTodayLocalStr();
       const todayBookings = bookings.filter(b => !b.date || b.date <= todayStr || b.status === 'Finalizado');
@@ -2442,6 +2487,11 @@
       const openingFloat = Number(pdvState.openingFloat) || 0;
       const expectedDrawer = openingFloat + totalsByMethod['Dinheiro'] - totalWithdrawals;
 
+      // Atualiza apenas o contador discreto na tela principal
+      const mainOpsEl = document.getElementById('pdv-main-ops-count');
+      if (mainOpsEl) mainOpsEl.textContent = movementsHtml.length;
+
+      // Preenche os valores detalhados dentro do Modal Privado de Fechamento
       document.getElementById('pdv-float-display').textContent = formatMoney(openingFloat);
       document.getElementById('pdv-sum-pix').textContent = `R$ ${formatMoney(totalsByMethod['Pix'])}`;
       document.getElementById('pdv-sum-credito').textContent = `R$ ${formatMoney(totalsByMethod['Crédito'])}`;
@@ -2556,6 +2606,7 @@
       savePdvState();
       closeQuickSaleModal();
       refreshAllViews();
+      alert(`✅ Venda rápida de R$ ${formatMoney(amount)} (${method}) registrada no caixa!`);
     }
     function removeQuickSale(id) {
       pdvState.quickSales = pdvState.quickSales.filter(q => q.id !== id);
@@ -2577,6 +2628,7 @@
       savePdvState();
       closeFloatModal();
       refreshAllViews();
+      alert(`✅ Fundo de troco inicial atualizado para R$ ${formatMoney(pdvState.openingFloat)}.`);
     }
 
     function openWithdrawalModal() {
@@ -2597,6 +2649,7 @@
       savePdvState();
       closeWithdrawalModal();
       refreshAllViews();
+      alert(`✅ Sangria de R$ ${formatMoney(amount)} (${desc}) registrada.`);
     }
     function removeWithdrawal(id) {
       pdvState.withdrawals = pdvState.withdrawals.filter(w => w.id !== id);
@@ -2673,6 +2726,7 @@
       pdvState.withdrawals = [];
       savePdvState();
 
+      closeRegisterClosingModal();
       refreshAllViews();
       switchClientTab('novo');
       alert('✅ Caixa batido e encerrado com sucesso! Todos os dados foram salvos na nuvem.');
@@ -2991,7 +3045,7 @@
 
     function exportFullBackup() {
       const backupData = {
-        version: 'v32',
+        version: 'v33',
         exportedAt: new Date().toISOString(),
         config,
         pdvState,
