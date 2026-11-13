@@ -806,8 +806,8 @@
   </footer>
 
   <script>
-    // ================= CONEXÃO COM A NUVEM (SUPABASE - URL CORRIGIDA COM 'D') =================
-    const SUPABASE_URL = 'https://oqhbbidwdpychcogigh.supabase.co';
+    // ================= CONEXÃO COM A NUVEM (SUPABASE - URL EXATA VERIFICADA) =================
+    const SUPABASE_URL = 'https://oqhbbixhvdpychcogigh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_AFek0CJUPD4ONBOpeL518Q_H8gEGuTS';
     const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
@@ -2277,7 +2277,7 @@
           </select>
           
           ${isPronto ? `<button onclick="notifyReady(${b.id})" class="px-2.5 py-2 rounded-lg bg-green-500 text-white text-[11px] font-bold flex shrink-0" title="Avisar WhatsApp">📲 Avisar</button>` : ''}
-          <button onclick="openRescheduleModal(${b.id})" class="px-2 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 text-[11px] font-bold shrink-0" title="Remarcar">📅</button>
+          <button onclick="openRescheduleModal(${b.id})" class="px-2.5 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 text-[11px] font-bold shrink-0" title="Remarcar">📅</button>
           <button onclick="cancelOrRemoveBooking(${b.id}, false)" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0" title="Remover">🗑️</button>
         </div>
       `;
@@ -2566,7 +2566,7 @@
 
     function exportFullBackup() {
       const backupData = {
-        version: 'v28',
+        version: 'v29',
         exportedAt: new Date().toISOString(),
         config,
         pdvState,
