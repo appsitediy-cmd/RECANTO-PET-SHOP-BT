@@ -95,102 +95,146 @@
         </button>
       </div>
 
-      <!-- ABA 1: NOVO REGISTRO -->
+      <!-- ABA 1: NOVO REGISTRO (SEPARADO POR MOLDURAS / ETAPAS) -->
       <div id="client-sec-novo" class="space-y-4">
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
+        
+        <!-- MOLDURA DE BUSCA RÁPIDA -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 border-cyan-200 space-y-2.5">
           <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
-            🔍 Buscar Cliente Cadastrado
+            🔍 Busca Rápida de Cliente Cadastrado
           </h3>
           <input type="text" id="counter-search-input" oninput="filterCounterClients(this.value)" placeholder="Digite nome do pet, tutor, telefone ou endereço..." 
             class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#23B5C8]" />
           <div id="counter-search-results" class="hidden space-y-2 max-h-48 overflow-y-auto pt-1"></div>
         </div>
 
-        <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100 space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+        <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-[#EE3E80] text-white text-xs font-bold flex items-center justify-center">+</span>
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base">Novo Atendimento</h2>
+              <h2 class="font-bold text-slate-800 text-sm sm:text-base">Ficha de Novo Atendimento</h2>
             </div>
-            <span class="text-[11px] text-slate-400 font-medium">Hoje = Fila | Data futura = Agenda</span>
+            <span class="text-[11px] text-slate-500 font-semibold bg-slate-100 px-2.5 py-1 rounded-lg">Hoje = Fila | Data futura = Agenda</span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Pet *</label>
-              <input type="text" id="pet-name" oninput="clearError(this)" placeholder="Ex: Thor..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+          <!-- MOLDURA ETAPA 1: DADOS DO PET -->
+          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
+            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">1</span>
+              <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">🐾 Dados do Pet</h3>
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Espécie *</label>
-              <div class="grid grid-cols-2 gap-2">
-                <button type="button" onclick="selectSpecies('Cachorro')" id="sp-dog" class="py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]">🐶 Cachorro</button>
-                <button type="button" onclick="selectSpecies('Gato')" id="sp-cat" class="py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold">🐱 Gato</button>
-              </div>
-            </div>
-          </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Porte, Peso ou Raça *</label>
-            <div id="sizes-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Tutor *</label>
-              <input type="text" id="owner-name" oninput="clearError(this)" placeholder="Nome do cliente" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp do Tutor *</label>
-              <input type="tel" id="owner-phone" oninput="clearError(this)" placeholder="(11) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Endereço / Bairro (Opcional)</label>
-            <input type="text" id="owner-address" placeholder="Ex: Rua das Flores, 120 - Centro" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Serviço Principal (Toque para desmarcar)</label>
-            <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-          </div>
-
-          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 space-y-3">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="custom-service-check" onchange="toggleCustomService(this)" class="w-4 h-4 text-[#EE3E80] rounded" />
-              <span class="font-bold text-xs text-amber-900">💡 Serviço Variável / Sob Avaliação na Hora</span>
-            </label>
-            <div id="custom-service-box" class="hidden space-y-2.5 pt-1">
-              <input type="text" id="custom-service-desc" oninput="clearError(this)" placeholder="O que foi feito? (ex: Limpeza extra)" class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs bg-white" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[10px] font-bold text-amber-900 mb-1">Valor Cobrado na Hora (R$)</label>
-                <input type="number" step="0.5" id="custom-service-price" oninput="clearError(this); updateSummary()" placeholder="Ex: 15.00" class="w-full sm:w-40 px-3 py-2 rounded-lg border border-amber-300 text-sm font-bold text-[#EE3E80] bg-white" />
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Pet *</label>
+                <input type="text" id="pet-name" oninput="clearError(this)" placeholder="Ex: Thor..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Espécie *</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button type="button" onclick="selectSpecies('Cachorro')" id="sp-dog" class="py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]">🐶 Cachorro</button>
+                  <button type="button" onclick="selectSpecies('Gato')" id="sp-cat" class="py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white">🐱 Gato</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Porte, Peso ou Raça *</label>
+              <div id="sizes-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+            </div>
+          </div>
+
+          <!-- MOLDURA ETAPA 2: DADOS DO TUTOR -->
+          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
+            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">2</span>
+              <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">👤 Dados do Tutor</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Tutor *</label>
+                <input type="text" id="owner-name" oninput="clearError(this)" placeholder="Nome do cliente" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp do Tutor *</label>
+                <input type="tel" id="owner-phone" oninput="clearError(this)" placeholder="(11) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Endereço / Bairro (Opcional)</label>
+              <input type="text" id="owner-address" placeholder="Ex: Rua das Flores, 120 - Centro" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+            </div>
+          </div>
+
+          <!-- MOLDURA ETAPA 3: SERVIÇO PRINCIPAL + ADICIONAIS + SERVIÇO VARIÁVEL -->
+          <div class="p-4 rounded-2xl border-2 border-cyan-200 bg-cyan-50/20 space-y-4">
+            <div class="flex items-center gap-2 border-b border-cyan-200/80 pb-2">
+              <span class="w-5 h-5 rounded-full bg-[#EE3E80] text-white text-[11px] font-bold flex items-center justify-center">3</span>
+              <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">🛁 Serviços e Adicionais</h3>
+            </div>
+
+            <!-- 3.1 Serviço Principal -->
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
+              <label class="block text-xs font-bold text-slate-700 uppercase">Serviço Principal (Toque para selecionar ou desmarcar)</label>
+              <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+            </div>
+
+            <!-- 3.2 Adicionais (Opcional) -->
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
+              <label class="block text-xs font-bold text-slate-700 uppercase">✨ Adicionais (Opcional)</label>
+              <div id="extras-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
+            </div>
+
+            <!-- 3.3 Serviço Variável -->
+            <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/70 space-y-3">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="custom-service-check" onchange="toggleCustomService(this)" class="w-4 h-4 text-[#EE3E80] rounded" />
+                <span class="font-bold text-xs text-amber-900">💡 Serviço Variável / Sob Avaliação na Hora</span>
+              </label>
+              <div id="custom-service-box" class="hidden space-y-2.5 pt-1">
+                <input type="text" id="custom-service-desc" oninput="clearError(this)" placeholder="O que foi feito? (ex: Limpeza extra / Tosa específica)" class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs bg-white" />
+                <div>
+                  <label class="block text-[10px] font-bold text-amber-900 mb-1">Valor Cobrado na Hora (R$)</label>
+                  <input type="number" step="0.5" id="custom-service-price" oninput="clearError(this); updateSummary()" placeholder="Ex: 15.00" class="w-full sm:w-40 px-3 py-2 rounded-lg border border-amber-300 text-sm font-bold text-[#EE3E80] bg-white" />
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="pt-1">
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Adicionais (Opcional)</label>
-            <div id="extras-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Data do Atendimento *</label>
-              <input type="date" id="booking-date" onchange="updateSubmitButtonLabel()" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+          <!-- MOLDURA ETAPA 4: OBSERVAÇÕES -->
+          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-2.5">
+            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">4</span>
+              <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">📝 Observações</h3>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
-              <div id="time-slots" class="grid grid-cols-4 gap-1.5"></div>
+              <input type="text" id="booking-notes" placeholder="Ex: pele sensível, alergia a perfume, nó atrás da orelha..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
             </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Observações</label>
-            <input type="text" id="booking-notes" placeholder="Ex: pele sensível..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" />
+          <!-- MOLDURA ETAPA 5: DATA DO ATENDIMENTO E HORÁRIO (NO FINAL) -->
+          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
+            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">5</span>
+              <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">📅 Data e Horário do Atendimento</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Data do Atendimento *</label>
+                <input type="date" id="booking-date" onchange="updateSubmitButtonLabel()" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white font-semibold" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
+                <div id="time-slots" class="grid grid-cols-4 gap-1.5"></div>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <!-- BARRA FINAL: TOTAL CALCULADO / INCLUIR NA FILA -->
+          <div class="bg-slate-900 text-white rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
             <div>
               <span class="text-[11px] text-slate-400 uppercase font-semibold">Total Calculado</span>
               <div class="flex items-baseline gap-2">
@@ -1342,10 +1386,10 @@
       clientState.species = sp;
       document.getElementById('sp-dog').className = sp === 'Cachorro'
         ? 'py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
-        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold';
+        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white';
       document.getElementById('sp-cat').className = sp === 'Gato'
         ? 'py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
-        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold';
+        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white';
     }
 
     function renderSizesClient() {
@@ -1407,7 +1451,7 @@
         const selected = clientState.selectedService === srv.id;
         const price = srv.prices[clientState.sizeId] ?? 0;
         return `
-          <div onclick="selectService('${srv.id}')" class="service-card ${selected ? 'selected' : ''} cursor-pointer p-3.5 rounded-xl border border-slate-200 transition-all bg-white">
+          <div onclick="selectService('${srv.id}')" class="service-card ${selected ? 'selected' : ''} cursor-pointer p-3.5 rounded-xl border border-slate-200 transition-all bg-slate-50/60">
             <div class="flex items-center justify-between">
               <h3 class="font-bold text-sm text-slate-800">${srv.name}</h3>
               <span class="font-brand text-base font-bold text-[#EE3E80]">R$ ${formatMoney(price)}</span>
@@ -1422,7 +1466,7 @@
       grid.innerHTML = config.extras.map(ex => {
         const active = clientState.selectedExtras.includes(ex.id);
         return `
-          <div onclick="toggleExtra('${ex.id}')" class="cursor-pointer p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${active ? 'border-[#6AB43E] bg-green-50 text-slate-800' : 'border-slate-200 text-slate-600 bg-white'}">
+          <div onclick="toggleExtra('${ex.id}')" class="cursor-pointer p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${active ? 'border-[#6AB43E] bg-green-50 text-slate-800' : 'border-slate-200 text-slate-600 bg-slate-50/60'}">
             <span>+ ${ex.name}</span>
             <span class="font-bold text-[#6AB43E]">R$ ${formatMoney(ex.price)}</span>
           </div>
@@ -1433,7 +1477,7 @@
     function renderTimeSlots() {
       const grid = document.getElementById('time-slots');
       grid.innerHTML = config.timeSlots.map(t => `
-        <button type="button" onclick="selectTime('${t}')" class="time-btn ${clientState.selectedTime === t ? 'selected' : 'border-slate-200 text-slate-700'} py-2 rounded-xl border text-xs font-bold bg-white">
+        <button type="button" onclick="selectTime('${t}')" class="time-btn ${clientState.selectedTime === t ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2 rounded-xl border text-xs font-bold">
           ${t}
         </button>
       `).join('');
@@ -2123,777 +2167,4 @@
       document.getElementById('quicksale-modal').classList.remove('flex');
     }
     function saveQuickSale() {
-      const desc = document.getElementById('qs-desc').value.trim();
-      const amount = parseFloat(document.getElementById('qs-amount').value) || 0;
-      const method = document.getElementById('qs-method').value;
-      if (!desc || amount <= 0) return alert('Preencha o produto e o valor!');
-      pdvState.quickSales.unshift({ id: Date.now(), desc, amount, method, createdAt: new Date().toISOString() });
-      savePdvState();
-      closeQuickSaleModal();
-      refreshAllViews();
-    }
-    function removeQuickSale(id) {
-      pdvState.quickSales = pdvState.quickSales.filter(q => q.id !== id);
-      savePdvState();
-      refreshAllViews();
-    }
-
-    function openFloatModal() {
-      document.getElementById('float-amount-input').value = pdvState.openingFloat || '';
-      document.getElementById('float-modal').classList.remove('hidden');
-      document.getElementById('float-modal').classList.add('flex');
-    }
-    function closeFloatModal() {
-      document.getElementById('float-modal').classList.add('hidden');
-      document.getElementById('float-modal').classList.remove('flex');
-    }
-    function saveOpeningFloat() {
-      pdvState.openingFloat = parseFloat(document.getElementById('float-amount-input').value) || 0;
-      savePdvState();
-      closeFloatModal();
-      refreshAllViews();
-    }
-
-    function openWithdrawalModal() {
-      document.getElementById('wd-desc').value = '';
-      document.getElementById('wd-amount').value = '';
-      document.getElementById('withdrawal-modal').classList.remove('hidden');
-      document.getElementById('withdrawal-modal').classList.add('flex');
-    }
-    function closeWithdrawalModal() {
-      document.getElementById('withdrawal-modal').classList.add('hidden');
-      document.getElementById('withdrawal-modal').classList.remove('flex');
-    }
-    function saveWithdrawal() {
-      const desc = document.getElementById('wd-desc').value.trim();
-      const amount = parseFloat(document.getElementById('wd-amount').value) || 0;
-      if (!desc || amount <= 0) return alert('Preencha o motivo e o valor retirado!');
-      pdvState.withdrawals.unshift({ id: Date.now(), desc, amount, createdAt: new Date().toISOString() });
-      savePdvState();
-      closeWithdrawalModal();
-      refreshAllViews();
-    }
-    function removeWithdrawal(id) {
-      pdvState.withdrawals = pdvState.withdrawals.filter(w => w.id !== id);
-      savePdvState();
-      refreshAllViews();
-    }
-
-    function baterEEncerrarCaixa() {
-      const todayStr = getTodayLocalStr();
-      const doneBookings = bookings.filter(b => b.status === 'Finalizado');
-      const unpaidDone = doneBookings.filter(b => !pdvState.paidBookings[b.id]);
-
-      if (unpaidDone.length > 0) {
-        const names = unpaidDone.map(u => `${u.petName} (R$ ${formatMoney(u.total)})`).join(', ');
-        if (!confirm(`⚠️ ATENÇÃO — CONFERÊNCIA DE CAIXA:\n\nExistem ${unpaidDone.length} pet(s) FINALIZADO(S) sem pagamento registrado:\n👉 ${names}\n\nClique em CANCELAR para cobrar esses pets antes de fechar, ou OK se realmente deseja encerrar mesmo assim.`)) {
-          return;
-        }
-      }
-
-      const totals = { 'Pix': 0, 'Crédito': 0, 'Débito': 0, 'Dinheiro': 0 };
-      Object.values(pdvState.paidBookings).forEach(p => { if (totals[p.method] !== undefined) totals[p.method] += Number(p.amount) || 0; });
-      pdvState.quickSales.forEach(q => { if (totals[q.method] !== undefined) totals[q.method] += Number(q.amount) || 0; });
-      const totalWithdrawals = pdvState.withdrawals.reduce((s, w) => s + (Number(w.amount) || 0), 0);
-      const totalEntries = totals['Pix'] + totals['Crédito'] + totals['Débito'] + totals['Dinheiro'];
-      const expectedDrawer = (Number(pdvState.openingFloat) || 0) + totals['Dinheiro'] - totalWithdrawals;
-
-      const summaryMsg = `CONFIRMAR FECHAMENTO DO CAIXA DE HOJE?\n\n` +
-        `💠 Pix: R$ ${formatMoney(totals['Pix'])}\n` +
-        `💳 Crédito: R$ ${formatMoney(totals['Crédito'])}\n` +
-        `💳 Débito: R$ ${formatMoney(totals['Débito'])}\n` +
-        `💵 Dinheiro (Vendas): R$ ${formatMoney(totals['Dinheiro'])}\n` +
-        `➖ Sangrias: R$ ${formatMoney(totalWithdrawals)}\n` +
-        `🗄️ Dinheiro Esperado na Gaveta: R$ ${formatMoney(expectedDrawer)}\n` +
-        `💰 TOTAL FATURADO: R$ ${formatMoney(totalEntries)}\n\n` +
-        `Os atendimentos finalizados irão para o Histórico na nuvem e os agendamentos futuros seguem na Agenda.`;
-
-      if (!confirm(summaryMsg)) return;
-
-      if (totalEntries > 0 || doneBookings.length > 0) {
-        pdvState.closedRegisters.unshift({
-          id: Date.now(),
-          date: todayStr,
-          closedAt: new Date().toISOString(),
-          openingFloat: Number(pdvState.openingFloat) || 0,
-          totals,
-          totalWithdrawals,
-          expectedDrawer,
-          totalEntries,
-          petsCount: doneBookings.length,
-          quickSalesCount: pdvState.quickSales.length
-        });
-      }
-
-      if (doneBookings.length > 0) {
-        const toArchive = doneBookings.map(item => ({ ...item, closedAt: new Date().toISOString() }));
-        toArchive.forEach(item => {
-          if (!historyArchive.find(h => h.id === item.id)) {
-            historyArchive.unshift(item);
-          }
-        });
-        localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
-        cloudArchiveDay(toArchive);
-      }
-
-      const todayOpen = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= todayStr));
-      todayOpen.forEach(item => cloudDeleteBooking(item.id));
-
-      bookings = bookings.filter(b => b.status !== 'Finalizado' && b.date > todayStr);
-      localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-
-      pdvState.openingFloat = 0;
-      pdvState.paidBookings = {};
-      pdvState.quickSales = [];
-      pdvState.withdrawals = [];
-      savePdvState();
-
-      refreshAllViews();
-      switchClientTab('novo');
-      alert('✅ Caixa batido e encerrado com sucesso! Todos os dados foram salvos na nuvem.');
-    }
-
-    function buildBookingCardHtml(b, isAdmin = false) {
-      const statusColors = {
-        'Aguardando': 'bg-amber-100 text-amber-800',
-        'No Banho / Tosa': 'bg-cyan-100 text-cyan-800',
-        'Pronto': 'bg-purple-100 text-purple-800',
-        'Finalizado': 'bg-green-100 text-green-800'
-      };
-      
-      const isPronto = b.status === 'Pronto';
-      const payInfo = pdvState.paidBookings[b.id];
-      const payBadge = payInfo
-        ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 ml-1">💚 Pago (${payInfo.method})</span>`
-        : `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-200 text-slate-600 ml-1">⏳ A pagar</span>`;
-
-      const controlsHtml = isAdmin ? '' : `
-        <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
-          <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1 min-w-[130px]">
-            <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
-            <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
-            <option value="Pronto" ${b.status === 'Pronto' ? 'selected' : ''}>✨ Pronto (Na Loja)</option>
-            <option value="Finalizado" ${b.status === 'Finalizado' ? 'selected' : ''}>✅ Finalizado (Serviço OK)</option>
-          </select>
-          
-          ${isPronto ? `<button onclick="notifyReady(${b.id})" class="px-2.5 py-2 rounded-lg bg-green-500 text-white text-[11px] font-bold flex shrink-0" title="Avisar WhatsApp">📲 Avisar</button>` : ''}
-          <button onclick="openRescheduleModal(${b.id})" class="px-2.5 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 text-[11px] font-bold shrink-0" title="Remarcar">📅</button>
-          <button onclick="cancelOrRemoveBooking(${b.id}, false)" class="px-2 py-2 text-xs text-red-500 hover:bg-red-50 rounded-lg shrink-0" title="Remover">🗑️</button>
-        </div>
-      `;
-
-      return `
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
-          <div class="flex flex-wrap items-center justify-between gap-1">
-            <div>
-              <span class="font-bold text-sm text-slate-800">${b.petName}</span>
-              <span class="text-[11px] px-2 py-0.5 rounded-full font-bold ml-1 ${statusColors[b.status] || ''}">${b.status}</span>
-              ${payBadge}
-            </div>
-            <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
-          </div>
-          <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
-          <p class="text-[11px] text-slate-500">🕒 ${formatDateBR(b.date)} às ${b.time || '--:--'} • 👤 ${b.ownerName}</p>
-          ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded mt-1">⚠️ Obs: ${b.notes}</p>` : ''}
-          ${controlsHtml}
-        </div>
-      `;
-    }
-
-    // ================= ROTINAS DO PAINEL DO DONO =================
-    function renderAdminBookings() {
-      const todayStr = getTodayLocalStr();
-      const list = document.getElementById('admin-bookings-list');
-      const todayBookings = bookings.filter(b => !b.date || b.date <= todayStr || b.status === 'Finalizado');
-      const doneBookings = todayBookings.filter(b => b.status === 'Finalizado');
-      
-      const inStore = todayBookings.length - doneBookings.length;
-      let paidRev = 0;
-      Object.values(pdvState.paidBookings).forEach(p => { paidRev += Number(p.amount) || 0; });
-      pdvState.quickSales.forEach(q => { paidRev += Number(q.amount) || 0; });
-      const paidCount = Object.keys(pdvState.paidBookings).length + pdvState.quickSales.length;
-      const ticket = paidCount ? (paidRev / paidCount) : 0;
-
-      document.getElementById('stat-total').textContent = inStore;
-      document.getElementById('stat-ready').textContent = doneBookings.length;
-      document.getElementById('stat-revenue').textContent = `R$ ${formatMoney(paidRev)}`;
-      document.getElementById('stat-ticket').textContent = `R$ ${formatMoney(ticket)}`;
-
-      if (todayBookings.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum atendimento aberto no balcão hoje. Consulte os dias fechados na aba <strong>📊 Histórico</strong>.</p>`;
-        return;
-      }
-      list.innerHTML = todayBookings.map(b => buildBookingCardHtml(b, true)).join('');
-    }
-
-    // ================= ABA HISTÓRICO & INTELIGÊNCIA =================
-    function setHistoryFilter(mode) {
-      historyFilterMode = mode;
-      document.querySelectorAll('.hfilter-btn').forEach(btn => {
-        btn.className = 'hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold';
-      });
-      if (mode !== 'date') {
-        const activeBtn = document.getElementById('hfilter-' + mode);
-        if (activeBtn) activeBtn.className = 'hfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold';
-        document.getElementById('hist-specific-date').value = '';
-      }
-      renderHistoryAnalytics();
-    }
-
-    function renderHistoryAnalytics() {
-      const todayDone = bookings.filter(b => b.status === 'Finalizado');
-      const allRecords = [...todayDone];
-      historyArchive.forEach(h => {
-        if (!allRecords.find(r => r.id === h.id)) allRecords.push(h);
-      });
-
-      const todayStr = getTodayLocalStr();
-      const now = new Date();
-      const specDate = document.getElementById('hist-specific-date')?.value;
-
-      const filtered = allRecords.filter(r => {
-        if (!r.date) return historyFilterMode === 'all';
-        if (historyFilterMode === 'today') return r.date === todayStr;
-        if (historyFilterMode === 'date' && specDate) return r.date === specDate;
-        if (historyFilterMode === '7d' || historyFilterMode === '30d') {
-          const days = historyFilterMode === '7d' ? 7 : 30;
-          const recDate = new Date(r.date + 'T00:00:00');
-          const diffDays = (now - recDate) / (1000 * 60 * 60 * 24);
-          return diffDays >= 0 && diffDays <= days;
-        }
-        return true;
-      });
-
-      document.getElementById('hist-records-badge').textContent = `${filtered.length} atendimento(s)`;
-
-      const totalRev = filtered.reduce((acc, r) => acc + (Number(r.total) || 0), 0);
-      const avgTicket = filtered.length ? totalRev / filtered.length : 0;
-
-      document.getElementById('hist-kpi-count').textContent = filtered.length;
-      document.getElementById('hist-kpi-rev').textContent = `R$ ${formatMoney(totalRev)}`;
-      document.getElementById('hist-kpi-ticket').textContent = `R$ ${formatMoney(avgTicket)}`;
-
-      const regListEl = document.getElementById('hist-registers-list');
-      if (regListEl) {
-        if (!pdvState.closedRegisters || pdvState.closedRegisters.length === 0) {
-          regListEl.innerHTML = `<p class="text-xs text-slate-400">Nenhum fechamento de caixa arquivado ainda.</p>`;
-        } else {
-          regListEl.innerHTML = pdvState.closedRegisters.map(reg => `
-            <div class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/40 text-xs space-y-1">
-              <div class="flex items-center justify-between">
-                <strong class="text-slate-800">📅 Fechamento: ${formatDateBR(reg.date)}</strong>
-                <span class="font-brand text-sm font-bold text-[#6AB43E]">Total: R$ ${formatMoney(reg.totalEntries)}</span>
-              </div>
-              <p class="text-[11px] text-slate-600">
-                💠 Pix: R$ ${formatMoney(reg.totals?.Pix)} • 💳 Créd: R$ ${formatMoney(reg.totals?.['Crédito'])} • 💳 Déb: R$ ${formatMoney(reg.totals?.['Débito'])} • 💵 Din: R$ ${formatMoney(reg.totals?.Dinheiro)}
-              </p>
-              <p class="text-[11px] text-slate-500">🗄️ Gaveta esperada: R$ ${formatMoney(reg.expectedDrawer)} (${reg.petsCount || 0} pets)</p>
-            </div>
-          `).join('');
-        }
-      }
-
-      if (filtered.length === 0) {
-        document.getElementById('hist-insight-day').textContent = 'Sem dados';
-        document.getElementById('hist-insight-hour').textContent = 'Sem dados';
-        document.getElementById('hist-insight-service').textContent = 'Sem dados';
-        document.getElementById('hist-services-breakdown').innerHTML = `<p class="text-slate-400">Nenhum registro encontrado para este filtro.</p>`;
-        document.getElementById('hist-detailed-list').innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum atendimento finalizado neste período.</p>`;
-        return;
-      }
-
-      const weekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-      const dayCounts = {};
-      filtered.forEach(r => {
-        if (r.date) {
-          const d = new Date(r.date + 'T12:00:00');
-          const name = weekDays[d.getDay()];
-          dayCounts[name] = (dayCounts[name] || 0) + 1;
-        }
-      });
-      const topDay = Object.entries(dayCounts).sort((a, b) => b[1] - a[1])[0];
-      document.getElementById('hist-insight-day').textContent = topDay ? `${topDay[0]} (${topDay[1]}x)` : '—';
-
-      const hourCounts = {};
-      filtered.forEach(r => {
-        if (r.time) {
-          hourCounts[r.time] = (hourCounts[r.time] || 0) + 1;
-        }
-      });
-      const topHour = Object.entries(hourCounts).sort((a, b) => b[1] - a[1])[0];
-      document.getElementById('hist-insight-hour').textContent = topHour ? `${topHour[0]} (${topHour[1]}x)` : '—';
-
-      const srvCounts = {};
-      filtered.forEach(r => {
-        const baseSrv = (r.serviceName || 'Outros').split(' + [Extra]')[0];
-        srvCounts[baseSrv] = (srvCounts[baseSrv] || 0) + 1;
-      });
-      const sortedServices = Object.entries(srvCounts).sort((a, b) => b[1] - a[1]);
-      const topSrv = sortedServices[0];
-      const topPct = topSrv ? Math.round((topSrv[1] / filtered.length) * 100) : 0;
-      document.getElementById('hist-insight-service').textContent = topSrv ? `${topSrv[0]} (${topPct}%)` : '—';
-
-      document.getElementById('hist-services-breakdown').innerHTML = sortedServices.map(([name, count]) => {
-        const pct = Math.round((count / filtered.length) * 100);
-        return `
-          <div>
-            <div class="flex justify-between font-semibold text-slate-700 mb-1">
-              <span>${name}</span>
-              <span>${count} (${pct}%)</span>
-            </div>
-            <div class="w-full bg-slate-200 rounded-full h-2">
-              <div class="bg-[#23B5C8] h-2 rounded-full" style="width: ${pct}%"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('hist-detailed-list').innerHTML = filtered.map(r => `
-        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
-          <div>
-            <strong class="text-slate-800">🐾 ${r.petName}</strong> <span class="text-slate-500">(${r.ownerName})</span>
-            <span class="block text-slate-600 mt-0.5">${r.serviceName}</span>
-            <span class="block text-[10px] text-slate-400 mt-0.5">📅 ${r.date} às ${r.time || '--:--'}</span>
-          </div>
-          <span class="font-brand text-sm font-bold text-[#6AB43E] shrink-0">R$ ${formatMoney(r.total)}</span>
-        </div>
-      `).join('');
-    }
-
-    // ================= CLIENTES, BUSCA, ORDENAÇÃO E BACKUP =================
-    function setClientSort(mode) {
-      clientSortMode = mode;
-      document.querySelectorAll('.csort-btn').forEach(btn => {
-        btn.className = 'csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold';
-      });
-      const active = document.getElementById('csort-' + mode);
-      if (active) active.className = 'csort-btn px-2.5 py-1 rounded-lg bg-[#23B5C8] text-white text-[11px] font-bold';
-      renderClientsList();
-    }
-
-    function editClientAddress(id) {
-      const client = clientsDb.find(c => c.id === id);
-      if (!client) return;
-      const newAddr = prompt(`Digite o endereço/bairro de ${client.ownerName} (Pet: ${client.petName}):`, client.address || '');
-      if (newAddr !== null) {
-        client.address = newAddr.trim();
-        localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
-        cloudUpsertClient(client);
-        renderClientsList();
-      }
-    }
-
-    function renderClientsList() {
-      const list = document.getElementById('admin-clients-list');
-      const badge = document.getElementById('client-total-badge');
-      const searchInput = document.getElementById('admin-client-search');
-      const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-
-      let filtered = clientsDb.filter(c => {
-        if (!query) return true;
-        return (
-          c.ownerName.toLowerCase().includes(query) ||
-          c.petName.toLowerCase().includes(query) ||
-          c.phone.includes(query) ||
-          (c.address && c.address.toLowerCase().includes(query))
-        );
-      });
-
-      filtered.sort((a, b) => {
-        if (clientSortMode === 'az') return a.ownerName.localeCompare(b.ownerName, 'pt-BR');
-        if (clientSortMode === 'pet_az') return a.petName.localeCompare(b.petName, 'pt-BR');
-        if (clientSortMode === 'visits') return (b.visitsCount || 1) - (a.visitsCount || 1);
-        if (clientSortMode === 'recent') return (b.lastVisitDate || '').localeCompare(a.lastVisitDate || '');
-        return 0;
-      });
-
-      if (badge) badge.textContent = `${filtered.length} de ${clientsDb.length}`;
-      
-      if (filtered.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente encontrado.</p>`; 
-        return;
-      }
-      
-      list.innerHTML = filtered.map(c => {
-        const safeOwner = c.ownerName.replace(/'/g, "\\'");
-        const safePet = c.petName.replace(/'/g, "\\'");
-        return `
-          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-bold">🐾 Pet: ${c.petName}</span>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 text-xs text-slate-600 pt-1">
-              <div>📞 <strong>Tel:</strong> ${c.phone}</div>
-              <div>🔄 <strong>Frequência:</strong> ${c.visitsCount} visita(s)</div>
-              <div>📅 <strong>Última Visita:</strong> ${c.lastVisitDate || 'N/A'}</div>
-            </div>
-            <div class="flex items-center justify-between text-xs text-slate-600 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
-              <span>📍 <strong>Endereço:</strong> ${c.address || 'Não informado'}</span>
-              <button onclick="editClientAddress(${c.id})" class="text-[11px] font-bold text-[#23B5C8] underline shrink-0 ml-2">✏️ Editar</button>
-            </div>
-            <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
-              <span class="text-slate-500"><strong>Último Serviço:</strong> ${c.lastService || 'Banho'}</span>
-              <button onclick="callClientWhatsApp('${c.phone}', '${safeOwner}', '${safePet}')" class="px-3 py-1 bg-[#6AB43E] text-white font-bold rounded-lg">💬 Enviar WhatsApp</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function exportClientsCSV() {
-      if (clientsDb.length === 0) return alert('Nenhum cliente cadastrado para exportar.');
-      const headers = ['Tutor', 'Pet', 'Telefone', 'Endereco', 'Visitas', 'Ultima Visita', 'Ultimo Servico'];
-      const rows = clientsDb.map(c => [
-        `"${(c.ownerName || '').replace(/"/g, '""')}"`,
-        `"${(c.petName || '').replace(/"/g, '""')}"`,
-        `"${(c.phone || '').replace(/"/g, '""')}"`,
-        `"${(c.address || '').replace(/"/g, '""')}"`,
-        c.visitsCount || 1,
-        `"${c.lastVisitDate || ''}"`,
-        `"${(c.lastService || '').replace(/"/g, '""')}"`
-      ].join(';'));
-
-      const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `clientes_recanto_petshop_${getTodayLocalStr()}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function exportFullBackup() {
-      const backupData = {
-        version: 'v29',
-        exportedAt: new Date().toISOString(),
-        config,
-        pdvState,
-        clientsDb,
-        bookings,
-        historyArchive
-      };
-      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `backup_recanto_petshop_${getTodayLocalStr()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function importFullBackup(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const data = JSON.parse(e.target.result);
-          if (!data.clientsDb && !data.config) {
-            return alert('Arquivo de backup inválido.');
-          }
-          if (confirm('Deseja restaurar este backup? Os dados serão salvos na nuvem e neste aparelho.')) {
-            if (data.config) config = data.config;
-            if (data.pdvState) pdvState = { ...DEFAULT_PDV, ...data.pdvState };
-            if (data.clientsDb) clientsDb = data.clientsDb;
-            if (data.bookings) bookings = data.bookings;
-            if (data.historyArchive) historyArchive = data.historyArchive;
-
-            localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
-            localStorage.setItem('recanto_pdv_v25', JSON.stringify(pdvState));
-            localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
-            localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
-            localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
-
-            if (sb) {
-              setCloudStatus('syncing');
-              await sb.from('recanto_config').upsert({ id: 'main', data: config, updated_at: new Date().toISOString() });
-              await sb.from('recanto_config').upsert({ id: 'pdv_state', data: pdvState, updated_at: new Date().toISOString() });
-              if (clientsDb.length > 0) await sb.from('recanto_clientes').upsert(clientsDb.map(clientToRow));
-              if (bookings.length > 0) await sb.from('recanto_atendimentos').upsert(bookings.map(bookingToRow));
-              if (historyArchive.length > 0) await sb.from('recanto_historico').upsert(historyArchive.map(historyToRow));
-              setCloudStatus('online');
-            }
-
-            applyStoreBranding();
-            renderAllClient();
-            refreshAllViews();
-            renderAdminEditors();
-            alert('✅ Backup restaurado e sincronizado na nuvem com sucesso!');
-          }
-        } catch (err) {
-          alert('Erro ao ler o arquivo de backup.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // ================= ABA CLIENTES SUMIDOS (REAQUECER) =================
-    function setReheatDays(days) {
-      document.getElementById('reheat-days-input').value = days;
-      renderReheatList();
-    }
-
-    function renderReheatList() {
-      const container = document.getElementById('admin-reheat-list');
-      const inputVal = document.getElementById('reheat-days-input').value;
-      const daysLimit = parseInt(inputVal) || 30;
-      
-      const today = new Date();
-      
-      const inactiveClients = clientsDb.filter(c => {
-        if (!c.lastVisitDate) return true;
-        const lastDate = new Date(c.lastVisitDate + 'T00:00:00');
-        const diffTime = today - lastDate;
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays >= daysLimit;
-      });
-
-      if (inactiveClients.length === 0) {
-        container.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Nenhum cliente sumido há mais de ${daysLimit} dias.</p>`;
-        return;
-      }
-
-      container.innerHTML = inactiveClients.map((c, idx) => {
-        const defaultMsg = `Olá, ${c.ownerName}! 🐾 Sentimos falta do(a) ${c.petName} aqui no ${config.storeName}! Já faz um tempinho desde o último banho. Que tal agendarmos um horário esta semana para ele(a) ficar cheiroso(a)? ✨`;
-        return `
-          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2">
-            <div class="flex items-center justify-between">
-              <div>
-                <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold ml-1">🐾 Pet: ${c.petName}</span>
-              </div>
-              <span class="text-xs text-slate-500">Última visita: <strong>${c.lastVisitDate || 'Desconhecida'}</strong></span>
-            </div>
-            
-            <div class="space-y-1">
-              <label class="block text-[10px] font-bold text-slate-600 uppercase">Mensagem Personalizada para ${c.ownerName}:</label>
-              <textarea id="reheat-msg-${idx}" rows="3" class="w-full p-2 text-xs rounded-lg border border-slate-300 bg-white">${defaultMsg}</textarea>
-            </div>
-
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[11px] text-slate-600">📞 ${c.phone}</span>
-              <button onclick="sendReheatWhatsApp('${c.phone}', 'reheat-msg-${idx}')" class="px-3 py-1.5 bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold rounded-lg text-xs flex items-center gap-1 shadow-sm">
-                💬 Enviar WhatsApp
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function sendReheatWhatsApp(phone, textareaId) {
-      const cleanPhone = phone.replace(/\D/g, '');
-      const fullPhone = cleanPhone.startsWith('55') ? cleanPhone : '55' + cleanPhone;
-      const msg = document.getElementById(textareaId).value;
-      window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function callClientWhatsApp(phone, ownerName, petName) {
-      const full = phone.replace(/\D/g, '').startsWith('55') ? phone.replace(/\D/g, '') : '55' + phone.replace(/\D/g, '');
-      window.open(`https://wa.me/${full}?text=${encodeURIComponent(`Olá, *${ownerName}*! Passando para saber como está o(a) *${petName}*! 🐾`)}`, '_blank');
-    }
-
-    // ================= MENUS E CONFIGURAÇÕES =================
-    function openPinModal() { 
-      document.getElementById('pin-input').value = ''; 
-      document.getElementById('pin-modal').classList.remove('hidden'); 
-      document.getElementById('pin-modal').classList.add('flex'); 
-      document.getElementById('pin-input').focus(); 
-    }
-    
-    function closePinModal() { 
-      document.getElementById('pin-modal').classList.add('hidden'); 
-      document.getElementById('pin-modal').classList.remove('flex'); 
-    }
-    
-    function verifyPin() {
-      if (document.getElementById('pin-input').value.trim() === config.pin) {
-        closePinModal(); 
-        document.getElementById('view-client').classList.add('hidden'); 
-        document.getElementById('view-admin').classList.remove('hidden'); 
-        document.getElementById('btn-exit-admin').classList.remove('hidden');
-        syncWithCloud(false, false);
-        refreshAllViews();
-        renderAdminEditors(); 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else { 
-        alert('Senha incorreta!'); 
-      }
-    }
-    
-    function exitAdmin() { 
-      document.getElementById('view-admin').classList.add('hidden'); 
-      document.getElementById('view-client').classList.remove('hidden'); 
-      document.getElementById('btn-exit-admin').classList.add('hidden'); 
-      window.scrollTo({ top: 0, behavior: 'smooth' }); 
-    }
-    
-    function switchAdminTab(tab) {
-      ['fila', 'historico', 'clientes', 'reaquecer', 'portes', 'precos', 'horarios'].forEach(t => {
-        document.getElementById('admin-sec-' + t).classList.toggle('hidden', t !== tab);
-        document.getElementById('adm-tab-' + t).className = t === tab ? 'px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white' : 'px-2 py-2 rounded-lg text-xs font-bold text-slate-300';
-      });
-      if (tab === 'reaquecer') renderReheatList();
-      if (tab === 'historico') renderHistoryAnalytics();
-      if (tab === 'clientes') renderClientsList();
-    }
-
-    function renderAdminEditors() {
-      document.getElementById('admin-sizes-editor').innerHTML = config.sizes.map((sz, idx) => `
-        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
-          <input type="text" id="edit-sz-name-${idx}" value="${sz.name}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white w-1/3" />
-          <input type="text" id="edit-sz-sub-${idx}" value="${sz.subtitle}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white flex-1" />
-          <button onclick="deleteSizeCategory('${sz.id}')" class="text-xs text-red-500 font-bold px-2 py-1">🗑️</button>
-        </div>
-      `).join('');
-      
-      document.getElementById('admin-services-editor').innerHTML = config.services.map((srv, sIdx) => `
-        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
-          <div class="flex items-center justify-between gap-2">
-            <input type="text" id="edit-srv-name-${sIdx}" value="${srv.name}" class="font-bold text-sm text-slate-800 bg-white px-3 py-1.5 rounded-lg border border-slate-300 flex-1" />
-            <button onclick="deleteService('${srv.id}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold flex items-center shrink-0">🗑️</button>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            ${config.sizes.map(sz => `
-              <div class="bg-white p-2 rounded-lg border border-slate-200">
-                <label class="block text-[10px] font-bold text-slate-600 truncate">${sz.name} (R$)</label>
-                <input type="number" step="0.5" id="edit-price-${sIdx}-${sz.id}" value="${srv.prices[sz.id] ?? 50}" class="w-full mt-1 px-2 py-1 rounded border border-slate-300 text-sm font-bold text-[#EE3E80]" />
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-      
-      document.getElementById('admin-extras-editor').innerHTML = config.extras.map((ex, eIdx) => `
-        <div class="flex items-center gap-1.5 p-2 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden w-full">
-          <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-slate-50" />
-          <div class="flex items-center gap-1 shrink-0">
-            <span class="text-[10px] text-slate-500 font-bold">R$</span>
-            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold text-[#EE3E80] bg-slate-50 text-center" />
-          </div>
-          <button onclick="deleteExtra('${ex.id}')" class="text-red-500 hover:bg-red-50 rounded-lg shrink-0 px-1" title="Excluir">🗑️</button>
-        </div>
-      `).join('');
-
-      document.getElementById('cfg-store-name').value = config.storeName;
-      document.getElementById('cfg-banner-title').value = config.bannerTitle || 'Painel de Balcão — Banho & Tosa';
-      document.getElementById('cfg-store-address').value = config.storeAddress;
-      document.getElementById('cfg-whatsapp').value = config.whatsapp;
-      document.getElementById('cfg-pin').value = config.pin;
-    }
-
-    function openNewServiceModal() { 
-      document.getElementById('service-modal').classList.remove('hidden'); 
-      document.getElementById('service-modal').classList.add('flex'); 
-    }
-    
-    function closeNewServiceModal() { 
-      document.getElementById('service-modal').classList.add('hidden'); 
-      document.getElementById('service-modal').classList.remove('flex'); 
-    }
-    
-    function saveNewService() {
-      const name = document.getElementById('new-srv-name').value.trim(); 
-      const base = parseFloat(document.getElementById('new-srv-base').value) || 60;
-      if (!name) return alert('Digite o nome!');
-      
-      const pricesObj = {}; 
-      config.sizes.forEach((sz, i) => { pricesObj[sz.id] = base + (i * 15); });
-      
-      config.services.push({ id: 'srv_' + Date.now(), name, desc: document.getElementById('new-srv-desc').value.trim() || 'Serviço', prices: pricesObj });
-      closeNewServiceModal(); 
-      saveConfig(); 
-      alert('✅ Serviço adicionado e salvo na nuvem!');
-    }
-    
-    function deleteService(id) { 
-      if (config.services.length <= 1) return alert('Mantenha pelo menos 1 serviço.'); 
-      config.services = config.services.filter(s => s.id !== id); 
-      saveConfig(); 
-    }
-
-    function addNewSizeCategory() {
-      const name = document.getElementById('new-size-name').value.trim();
-      const subtitle = document.getElementById('new-size-sub').value.trim() || 'Categoria personalizada';
-      if (!name) return alert('Digite o nome do novo porte/categoria!');
-      const newId = 'sz_' + Date.now();
-      config.sizes.push({ id: newId, name, subtitle });
-      config.services.forEach(srv => {
-        srv.prices[newId] = 60;
-      });
-      document.getElementById('new-size-name').value = '';
-      document.getElementById('new-size-sub').value = '';
-      saveConfig();
-      alert('✅ Novo porte cadastrado e salvo na nuvem! Ajuste os valores dele na aba "💰 Preços".');
-    }
-    
-    function deleteSizeCategory(id) {
-      if (config.sizes.length <= 1) return alert('Mantenha pelo menos 1 porte de animal.');
-      config.sizes = config.sizes.filter(s => s.id !== id);
-      saveConfig();
-    }
-    
-    function addNewExtra() {
-      const name = document.getElementById('new-extra-name').value.trim(); 
-      const price = parseFloat(document.getElementById('new-extra-price').value) || 15;
-      if (!name) return alert('Digite o nome do adicional!');
-      config.extras.push({ id: 'ext_' + Date.now(), name, price });
-      document.getElementById('new-extra-name').value = ''; 
-      document.getElementById('new-extra-price').value = ''; 
-      saveConfig();
-    }
-    
-    function deleteExtra(id) { 
-      config.extras = config.extras.filter(e => e.id !== id); 
-      saveConfig(); 
-    }
-    
-    function saveExtrasFromEditor() {
-      config.extras.forEach((ex, eIdx) => {
-        const nEl = document.getElementById(`edit-extra-name-${eIdx}`); 
-        const pEl = document.getElementById(`edit-extra-price-${eIdx}`);
-        if (nEl && nEl.value.trim()) ex.name = nEl.value.trim(); 
-        if (pEl) ex.price = parseFloat(pEl.value) || 0;
-      });
-      saveConfig(); 
-      alert('✅ Adicionais salvos na nuvem!');
-    }
-    
-    function saveSizesChanges() {
-      config.sizes.forEach((sz, idx) => {
-        const n = document.getElementById(`edit-sz-name-${idx}`); 
-        const s = document.getElementById(`edit-sz-sub-${idx}`);
-        if (n && n.value.trim()) sz.name = n.value.trim(); 
-        if (s) sz.subtitle = s.value.trim();
-      }); 
-      saveConfig(); 
-      alert('✅ Categorias salvas na nuvem!');
-    }
-    
-    function savePricesFromEditor() {
-      config.services.forEach((srv, sIdx) => {
-        const nameEl = document.getElementById(`edit-srv-name-${sIdx}`); 
-        if (nameEl && nameEl.value.trim()) srv.name = nameEl.value.trim();
-        config.sizes.forEach(sz => { 
-          const priceInput = document.getElementById(`edit-price-${sIdx}-${sz.id}`); 
-          if (priceInput) srv.prices[sz.id] = Number(priceInput.value) || 0; 
-        });
-      }); 
-      saveConfig(); 
-      alert('✅ Preços salvos na nuvem!');
-    }
-    
-    function saveStoreDataConfig() {
-      config.storeName = document.getElementById('cfg-store-name').value.trim(); 
-      config.bannerTitle = document.getElementById('cfg-banner-title').value.trim();
-      config.storeAddress = document.getElementById('cfg-store-address').value.trim(); 
-      config.whatsapp = document.getElementById('cfg-whatsapp').value.trim();
-      config.pin = document.getElementById('cfg-pin').value.trim(); 
-      saveConfig(); 
-      alert('✅ Configurações salvas na nuvem!');
-    }
-  </script>
-</body>
-</html>
+      const
