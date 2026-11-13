@@ -9,16 +9,47 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --brand-primary: #23B5C8;
+      --brand-primary-dark: #1994a4;
+      --brand-primary-soft: #ECFEFF;
+      --brand-primary-border: #A5F3FC;
+      --brand-accent: #EE3E80;
+      --brand-accent-soft: #FDF2F8;
+    }
     body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
     .font-brand { font-family: 'Fredoka', sans-serif; }
     .brand-gradient-bar {
-      background: linear-gradient(90deg, #EE3E80 0%, #EE3E80 25%, #6AB43E 25%, #6AB43E 50%, #23B5C8 50%, #23B5C8 75%, #FDD815 75%, #FDD815 100%);
+      background: linear-gradient(90deg, var(--brand-accent) 0%, var(--brand-accent) 35%, #6AB43E 35%, #6AB43E 65%, var(--brand-primary) 65%, var(--brand-primary) 100%);
       height: 6px;
     }
-    .service-card.selected { border-color: #23B5C8; background-color: #ECFEFF; box-shadow: 0 0 0 2px #23B5C8; }
-    .size-btn.selected { background-color: #23B5C8; color: white; border-color: #23B5C8; }
-    .time-btn.selected { background-color: #EE3E80; color: white; border-color: #EE3E80; }
-    .pay-method-btn.selected { background-color: #23B5C8; color: white; border-color: #23B5C8; }
+    .brand-banner-bg {
+      background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+    }
+    .brand-primary-bg { background-color: var(--brand-primary); border-color: var(--brand-primary); color: #ffffff; }
+    .brand-accent-bg { background-color: var(--brand-accent); border-color: var(--brand-accent); color: #ffffff; }
+    .brand-primary-text { color: var(--brand-primary); }
+    .brand-accent-text { color: var(--brand-accent); }
+    .service-card.selected {
+      border-color: var(--brand-primary);
+      background-color: var(--brand-primary-soft);
+      box-shadow: 0 0 0 2px var(--brand-primary);
+    }
+    .size-btn.selected {
+      background-color: var(--brand-primary);
+      color: #ffffff;
+      border-color: var(--brand-primary);
+    }
+    .time-btn.selected {
+      background-color: var(--brand-accent);
+      color: #ffffff;
+      border-color: var(--brand-accent);
+    }
+    .pay-method-btn.selected {
+      background-color: var(--brand-primary);
+      color: #ffffff;
+      border-color: var(--brand-primary);
+    }
     input, select, textarea { transition: all 0.25s ease; }
   </style>
 </head>
@@ -26,33 +57,41 @@
 
   <div class="brand-gradient-bar w-full sticky top-0 z-50"></div>
 
-  <!-- Cabeçalho -->
-  <header class="bg-white shadow-sm sticky top-1.5 z-40">
-    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-3">
-        <div id="header-logo-container" class="flex items-center gap-3">
-          <div id="default-logo-elements" class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full border-2 border-[#23B5C8] flex items-center justify-center bg-cyan-50 shadow-sm shrink-0">
-              <span class="font-brand text-2xl font-bold text-[#23B5C8] leading-none">R</span>
-            </div>
-            <div>
-              <div class="font-brand text-2xl tracking-tight leading-none flex items-center">
-                <span class="text-[#EE3E80]">R</span>
-                <span class="text-[#6AB43E]">e</span>
-                <span class="text-[#23B5C8]">c</span>
-                <span class="text-[#FDD815] drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">a</span>
-                <span class="text-[#EE3E80]">n</span>
-                <span class="text-[#6AB43E]">t</span>
-                <span class="text-[#23B5C8]">o</span>
-              </div>
-              <span class="block text-[10px] font-bold tracking-[0.28em] text-slate-600 uppercase mt-0.5">PETSHOP</span>
-            </div>
+  <!-- Cabeçalho com Altura Travada (h-16 = 64px) para Zoom Isolado na Logo -->
+  <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center">
+    <div class="max-w-4xl w-full mx-auto px-4 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 h-12">
+        <!-- Logo Padrão (aparece apenas se nenhuma logo foi enviada) -->
+        <div id="default-logo-elements" class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full border-2 flex items-center justify-center shadow-sm shrink-0" style="border-color: var(--brand-primary); background-color: var(--brand-primary-soft);">
+            <span class="font-brand text-2xl font-bold leading-none brand-primary-text">R</span>
           </div>
-          <img id="custom-logo-img" class="object-contain hidden rounded-lg" alt="Logo" />
+          <div>
+            <div class="font-brand text-2xl tracking-tight leading-none flex items-center">
+              <span class="text-[#EE3E80]">R</span>
+              <span class="text-[#6AB43E]">e</span>
+              <span class="text-[#23B5C8]">c</span>
+              <span class="text-[#FDD815] drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">a</span>
+              <span class="text-[#EE3E80]">n</span>
+              <span class="text-[#6AB43E]">t</span>
+              <span class="text-[#23B5C8]">o</span>
+            </div>
+            <span class="block text-[10px] font-bold tracking-[0.28em] text-slate-600 uppercase mt-0.5">PETSHOP</span>
+          </div>
+        </div>
+
+        <!-- Logo 1: Símbolo Redondo + Logo 2: Nome Retangular (Com Zoom Independente sem esticar a barra) -->
+        <div id="custom-logos-wrapper" class="hidden flex items-center gap-3">
+          <div id="header-symbol-frame" class="hidden w-11 h-11 rounded-full overflow-hidden border border-slate-200 shadow-sm shrink-0 flex items-center justify-center bg-white" style="transform-origin: center center;">
+            <img id="custom-symbol-img" class="w-full h-full object-cover" alt="Símbolo" />
+          </div>
+          <div id="header-name-frame" class="hidden h-10 flex items-center" style="transform-origin: left center;">
+            <img id="custom-name-img" class="h-full max-w-[175px] object-contain" alt="Nome da Loja" />
+          </div>
         </div>
       </div>
 
-      <div class="flex items-center gap-1.5">
+      <div class="flex items-center gap-1.5 shrink-0">
         <button onclick="manualCloudSync()" id="cloud-status-badge" title="Toque para sincronizar agora" class="px-2.5 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-95">
           🔄 Conectando...
         </button>
@@ -68,22 +107,22 @@
     <!-- ==================== TELA 1: BALCÃO (5 ABAS NO TOPO) ==================== -->
     <section id="view-client" class="space-y-4">
       
-      <div class="bg-gradient-to-r from-[#23B5C8] to-[#1ba0b2] rounded-2xl p-5 text-white shadow-md">
+      <div class="brand-banner-bg rounded-2xl p-5 text-white shadow-md">
         <h1 class="font-brand text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
       </div>
 
       <!-- 5 BOTÕES DE NAVEGAÇÃO DO BALCÃO -->
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 bg-slate-200 p-1.5 rounded-xl">
-        <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8] flex items-center justify-center gap-1">
+        <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm brand-primary-text flex items-center justify-center gap-1">
           <span>📝 Registrar</span>
         </button>
         <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
           <span>📋 Pets na Fila</span>
-          <span id="tab-fila-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-[#23B5C8] text-white font-bold leading-none">0</span>
+          <span id="tab-fila-badge" class="px-1.5 py-0.5 text-[10px] rounded-full brand-primary-bg font-bold leading-none">0</span>
         </button>
         <button onclick="switchClientTab('agenda')" id="tab-cli-agenda" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
           <span>📅 Agenda</span>
-          <span id="tab-agenda-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-[#EE3E80] text-white font-bold leading-none">0</span>
+          <span id="tab-agenda-badge" class="px-1.5 py-0.5 text-[10px] rounded-full brand-accent-bg font-bold leading-none">0</span>
         </button>
         <button onclick="switchClientTab('finalizados')" id="tab-cli-finalizados" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
           <span>✅ Finalizados</span>
@@ -99,19 +138,19 @@
       <div id="client-sec-novo" class="space-y-4">
         
         <!-- MOLDURA DE BUSCA RÁPIDA -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 border-cyan-200 space-y-2.5">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-2.5" style="border-color: var(--brand-primary-border);">
           <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
             🔍 Busca Rápida de Cliente Cadastrado
           </h3>
           <input type="text" id="counter-search-input" oninput="filterCounterClients(this.value)" placeholder="Digite nome do pet, tutor, telefone ou endereço..." 
-            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#23B5C8]" />
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none" />
           <div id="counter-search-results" class="hidden space-y-2 max-h-48 overflow-y-auto pt-1"></div>
         </div>
 
         <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-[#EE3E80] text-white text-xs font-bold flex items-center justify-center">+</span>
+              <span class="w-6 h-6 rounded-full brand-accent-bg text-xs font-bold flex items-center justify-center">+</span>
               <h2 class="font-bold text-slate-800 text-sm sm:text-base">Ficha de Novo Atendimento</h2>
             </div>
             <span class="text-[11px] text-slate-500 font-semibold bg-slate-100 px-2.5 py-1 rounded-lg">Hoje = Fila | Data futura = Agenda</span>
@@ -120,7 +159,7 @@
           <!-- MOLDURA ETAPA 1: DADOS DO PET -->
           <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
             <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">1</span>
+              <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">1</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">🐾 Dados do Pet</h3>
             </div>
 
@@ -132,7 +171,7 @@
               <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Espécie *</label>
                 <div class="grid grid-cols-2 gap-2">
-                  <button type="button" onclick="selectSpecies('Cachorro')" id="sp-dog" class="py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]">🐶 Cachorro</button>
+                  <button type="button" onclick="selectSpecies('Cachorro')" id="sp-dog" class="py-2.5 px-3 rounded-xl border text-xs font-bold brand-primary-bg">🐶 Cachorro</button>
                   <button type="button" onclick="selectSpecies('Gato')" id="sp-cat" class="py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white">🐱 Gato</button>
                 </div>
               </div>
@@ -147,7 +186,7 @@
           <!-- MOLDURA ETAPA 2: DADOS DO TUTOR -->
           <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
             <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">2</span>
+              <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">2</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">👤 Dados do Tutor</h3>
             </div>
 
@@ -169,9 +208,9 @@
           </div>
 
           <!-- MOLDURA ETAPA 3: SERVIÇO PRINCIPAL + ADICIONAIS + SERVIÇO VARIÁVEL -->
-          <div class="p-4 rounded-2xl border-2 border-cyan-200 bg-cyan-50/20 space-y-4">
-            <div class="flex items-center gap-2 border-b border-cyan-200/80 pb-2">
-              <span class="w-5 h-5 rounded-full bg-[#EE3E80] text-white text-[11px] font-bold flex items-center justify-center">3</span>
+          <div class="p-4 rounded-2xl border-2 space-y-4" style="border-color: var(--brand-primary-border); background-color: var(--brand-primary-soft);">
+            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-primary-border);">
+              <span class="w-5 h-5 rounded-full brand-accent-bg text-[11px] font-bold flex items-center justify-center">3</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">🛁 Serviços e Adicionais</h3>
             </div>
 
@@ -188,16 +227,16 @@
             </div>
 
             <!-- 3.3 Serviço Variável -->
-            <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/70 space-y-3">
+            <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/90 space-y-3">
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="custom-service-check" onchange="toggleCustomService(this)" class="w-4 h-4 text-[#EE3E80] rounded" />
+                <input type="checkbox" id="custom-service-check" onchange="toggleCustomService(this)" class="w-4 h-4 rounded" />
                 <span class="font-bold text-xs text-amber-900">💡 Serviço Variável / Sob Avaliação na Hora</span>
               </label>
               <div id="custom-service-box" class="hidden space-y-2.5 pt-1">
                 <input type="text" id="custom-service-desc" oninput="clearError(this)" placeholder="O que foi feito? (ex: Limpeza extra / Tosa específica)" class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs bg-white" />
                 <div>
                   <label class="block text-[10px] font-bold text-amber-900 mb-1">Valor Cobrado na Hora (R$)</label>
-                  <input type="number" step="0.5" id="custom-service-price" oninput="clearError(this); updateSummary()" placeholder="Ex: 15.00" class="w-full sm:w-40 px-3 py-2 rounded-lg border border-amber-300 text-sm font-bold text-[#EE3E80] bg-white" />
+                  <input type="number" step="0.5" id="custom-service-price" oninput="clearError(this); updateSummary()" placeholder="Ex: 15.00" class="w-full sm:w-40 px-3 py-2 rounded-lg border border-amber-300 text-sm font-bold brand-accent-text bg-white" />
                 </div>
               </div>
             </div>
@@ -206,7 +245,7 @@
           <!-- MOLDURA ETAPA 4: OBSERVAÇÕES -->
           <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-2.5">
             <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">4</span>
+              <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">4</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">📝 Observações</h3>
             </div>
             <div>
@@ -217,7 +256,7 @@
           <!-- MOLDURA ETAPA 5: DATA DO ATENDIMENTO E HORÁRIO (NO FINAL) -->
           <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
             <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-              <span class="w-5 h-5 rounded-full bg-[#23B5C8] text-white text-[11px] font-bold flex items-center justify-center">5</span>
+              <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">5</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">📅 Data e Horário do Atendimento</h3>
             </div>
 
@@ -257,7 +296,7 @@
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">📋 Pets na Fila de Hoje</h3>
               <p class="text-[11px] text-slate-400">Pets agendados para hoje aparecem aqui automaticamente.</p>
             </div>
-            <span id="counter-badge-active" class="text-xs bg-[#23B5C8] text-white px-2.5 py-1 rounded-full font-bold">0</span>
+            <span id="counter-badge-active" class="text-xs brand-primary-bg px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
           <div id="counter-bookings-active" class="space-y-3"></div>
         </div>
@@ -271,7 +310,7 @@
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">📅 Agenda de Marcações</h3>
               <p class="text-[11px] text-slate-500">Consulte horários marcados, remarque para outro dia ou cancele.</p>
             </div>
-            <button onclick="prepareFutureBooking()" class="px-3 py-1.5 rounded-xl bg-[#EE3E80] text-white text-xs font-bold shadow-sm">
+            <button onclick="prepareFutureBooking()" class="px-3 py-1.5 rounded-xl brand-accent-bg text-xs font-bold shadow-sm">
               + Agendar Novo
             </button>
           </div>
@@ -279,7 +318,7 @@
           <div class="flex flex-wrap items-center gap-1.5">
             <button onclick="setAgendaFilter('tomorrow')" id="agfilter-tomorrow" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Amanhã</button>
             <button onclick="setAgendaFilter('7d')" id="agfilter-7d" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Próx. 7 Dias</button>
-            <button onclick="setAgendaFilter('future')" id="agfilter-future" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold">Todos Futuros</button>
+            <button onclick="setAgendaFilter('future')" id="agfilter-future" class="agfilter-btn px-2.5 py-1.5 rounded-lg brand-primary-bg text-xs font-bold">Todos Futuros</button>
             <button onclick="setAgendaFilter('all')" id="agfilter-all" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Hoje + Futuros</button>
             <div class="flex items-center gap-1 ml-auto">
               <input type="date" id="agenda-specific-date" onchange="setAgendaFilter('date')" class="px-2 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
@@ -311,7 +350,7 @@
         <div class="bg-slate-900 text-white rounded-2xl p-4 shadow-md space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <span class="text-[10px] uppercase tracking-wider text-cyan-400 font-bold">Frente de Caixa • PDV</span>
+              <span class="text-[10px] uppercase tracking-wider font-bold brand-primary-text">Frente de Caixa • PDV</span>
               <h2 class="font-brand text-xl font-bold">Controle Financeiro do Dia</h2>
             </div>
             <div class="flex flex-wrap gap-1.5">
@@ -394,7 +433,7 @@
       <div class="bg-slate-900 text-white rounded-2xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <div>
-            <span class="text-[10px] bg-[#EE3E80] px-2.5 py-0.5 rounded-full font-bold uppercase">Painel Gestor</span>
+            <span class="text-[10px] brand-accent-bg px-2.5 py-0.5 rounded-full font-bold uppercase">Painel Gestor</span>
             <h2 class="font-brand text-xl font-bold mt-0.5" id="admin-store-title">Controle Recanto Petshop</h2>
           </div>
           <button onclick="resetToFactory()" class="text-[11px] text-slate-400 underline hover:text-white">
@@ -404,7 +443,7 @@
 
         <!-- ABAS DO DONO -->
         <div class="grid grid-cols-2 sm:grid-cols-7 gap-1 bg-slate-800 p-1 rounded-xl">
-          <button onclick="switchAdminTab('fila')" id="adm-tab-fila" class="px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white">
+          <button onclick="switchAdminTab('fila')" id="adm-tab-fila" class="px-2 py-2 rounded-lg text-xs font-bold brand-primary-bg">
             📋 Hoje
           </button>
           <button onclick="switchAdminTab('historico')" id="adm-tab-historico" class="px-2 py-2 rounded-lg text-xs font-bold text-cyan-300">
@@ -437,15 +476,15 @@
           </div>
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
             <span class="text-[10px] text-slate-500 font-semibold uppercase">Finalizados Hoje</span>
-            <p id="stat-ready" class="font-brand text-xl font-bold text-[#23B5C8]">0</p>
+            <p id="stat-ready" class="font-brand text-xl font-bold brand-primary-text">0</p>
           </div>
           <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
             <span class="text-[10px] text-slate-500 font-semibold uppercase">Caixa Recebido</span>
             <p id="stat-revenue" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
           </div>
-          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center border-b-4 border-b-[#EE3E80]">
+          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center border-b-4" style="border-bottom-color: var(--brand-accent);">
             <span class="text-[10px] text-slate-500 font-semibold uppercase">Ticket Médio</span>
-            <p id="stat-ticket" class="font-brand text-xl font-bold text-[#EE3E80]">R$ 0,00</p>
+            <p id="stat-ticket" class="font-brand text-xl font-bold brand-accent-text">R$ 0,00</p>
           </div>
         </div>
 
@@ -461,14 +500,14 @@
           <div class="border-b border-slate-100 pb-3 space-y-3">
             <div class="flex items-center justify-between">
               <h3 class="font-bold text-slate-800 text-base">📊 Inteligência & Histórico de Caixa</h3>
-              <span id="hist-records-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 registros</span>
+              <span id="hist-records-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 brand-primary-text">0 registros</span>
             </div>
 
             <div class="flex flex-wrap items-center gap-1.5">
               <button onclick="setHistoryFilter('today')" id="hfilter-today" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Hoje</button>
               <button onclick="setHistoryFilter('7d')" id="hfilter-7d" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">7 dias</button>
               <button onclick="setHistoryFilter('30d')" id="hfilter-30d" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">30 dias</button>
-              <button onclick="setHistoryFilter('all')" id="hfilter-all" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold">Tudo</button>
+              <button onclick="setHistoryFilter('all')" id="hfilter-all" class="hfilter-btn px-2.5 py-1.5 rounded-lg brand-primary-bg text-xs font-bold">Tudo</button>
               <div class="flex items-center gap-1 ml-auto">
                 <span class="text-[11px] font-semibold text-slate-500">Data:</span>
                 <input type="date" id="hist-specific-date" onchange="setHistoryFilter('date')" class="px-2 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
@@ -487,13 +526,13 @@
             </div>
             <div class="bg-pink-50/70 p-3 rounded-xl border border-pink-200 text-center">
               <span class="text-[10px] text-pink-700 font-bold uppercase">Ticket Médio</span>
-              <p id="hist-kpi-ticket" class="font-brand text-xl font-bold text-[#EE3E80]">R$ 0,00</p>
+              <p id="hist-kpi-ticket" class="font-brand text-xl font-bold brand-accent-text">R$ 0,00</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            <div class="p-3 rounded-xl bg-cyan-50/60 border border-cyan-100">
-              <span class="text-[10px] font-bold text-[#23B5C8] uppercase block">📅 Dia Mais Movimentado</span>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-[10px] font-bold brand-primary-text uppercase block">📅 Dia Mais Movimentado</span>
               <strong id="hist-insight-day" class="text-sm text-slate-800 mt-0.5 block">—</strong>
             </div>
             <div class="p-3 rounded-xl bg-amber-50/60 border border-amber-100">
@@ -511,7 +550,6 @@
             <div id="hist-services-breakdown" class="space-y-2 text-xs"></div>
           </div>
 
-          <!-- Fechamentos de Caixa Salvos -->
           <div class="space-y-2">
             <h4 class="text-xs font-bold text-slate-700 uppercase">🔒 Fechamentos de Caixa Registrados</h4>
             <div id="hist-registers-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
@@ -532,14 +570,14 @@
               <h3 class="font-bold text-slate-800 text-base">👥 Base de Clientes Cadastrados</h3>
               <p class="text-[11px] text-emerald-600 font-semibold">☁️ Sincronizado na nuvem (Supabase) + opção de exportar planilha.</p>
             </div>
-            <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 cadastrados</span>
+            <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 brand-primary-text">0 cadastrados</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
             <button onclick="exportClientsCSV()" class="py-2 px-3 rounded-lg bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
               📥 Baixar Excel (CSV)
             </button>
-            <button onclick="exportFullBackup()" class="py-2 px-3 rounded-lg bg-[#23B5C8] hover:bg-[#1ba0b2] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
+            <button onclick="exportFullBackup()" class="py-2 px-3 rounded-lg brand-primary-bg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
               💾 Salvar Backup (.JSON)
             </button>
             <label class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm cursor-pointer text-center">
@@ -550,11 +588,11 @@
 
           <div class="space-y-2">
             <input type="text" id="admin-client-search" oninput="renderClientsList()" placeholder="🔍 Buscar por nome, pet, telefone ou endereço..." 
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-[#23B5C8]" />
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none" />
             
             <div class="flex flex-wrap items-center gap-1.5">
               <span class="text-[11px] font-bold text-slate-500">Ordenar:</span>
-              <button onclick="setClientSort('az')" id="csort-az" class="csort-btn px-2.5 py-1 rounded-lg bg-[#23B5C8] text-white text-[11px] font-bold">A - Z (Tutor)</button>
+              <button onclick="setClientSort('az')" id="csort-az" class="csort-btn px-2.5 py-1 rounded-lg brand-primary-bg text-[11px] font-bold">A - Z (Tutor)</button>
               <button onclick="setClientSort('pet_az')" id="csort-pet_az" class="csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">A - Z (Pet)</button>
               <button onclick="setClientSort('recent')" id="csort-recent" class="csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">Mais Recentes</button>
               <button onclick="setClientSort('visits')" id="csort-visits" class="csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">Mais Frequentes</button>
@@ -608,7 +646,7 @@
               <input type="text" id="new-size-name" placeholder="Nome (ex: Gato Pelo Longo)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-semibold" />
               <input type="text" id="new-size-sub" placeholder="Descrição (ex: Persa, Maine Coon...)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
             </div>
-            <button onclick="addNewSizeCategory()" class="w-full py-2.5 rounded-xl bg-[#23B5C8] hover:bg-[#1ba0b2] text-white font-bold text-xs shadow-sm">
+            <button onclick="addNewSizeCategory()" class="w-full py-2.5 rounded-xl brand-primary-bg font-bold text-xs shadow-sm">
               + Adicionar Novo Porte
             </button>
           </div>
@@ -620,7 +658,7 @@
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
             <h3 class="font-bold text-slate-800 text-base">💰 Tabela de Preços dos Serviços (R$)</h3>
-            <button onclick="openNewServiceModal()" class="px-3 py-1.5 bg-[#23B5C8] text-white rounded-xl text-xs font-bold">+ Novo</button>
+            <button onclick="openNewServiceModal()" class="px-3 py-1.5 brand-primary-bg rounded-xl text-xs font-bold">+ Novo</button>
           </div>
           <div id="admin-services-editor" class="space-y-4"></div>
           <button onclick="savePricesFromEditor()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">
@@ -635,9 +673,9 @@
             <span class="block text-xs font-bold text-slate-700">➕ Cadastrar Novo Adicional</span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <input type="text" id="new-extra-name" placeholder="Nome (ex: Escovação de Dentes)" class="min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
-              <input type="number" step="0.5" id="new-extra-price" placeholder="Valor (R$)" class="min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold text-[#EE3E80]" />
+              <input type="number" step="0.5" id="new-extra-price" placeholder="Valor (R$)" class="min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold brand-accent-text" />
             </div>
-            <button onclick="addNewExtra()" class="w-full py-2.5 rounded-xl bg-[#23B5C8] hover:bg-[#1ba0b2] text-white font-bold text-xs shadow-sm">
+            <button onclick="addNewExtra()" class="w-full py-2.5 rounded-xl brand-primary-bg font-bold text-xs shadow-sm">
               + Adicionar Serviço Adicional
             </button>
           </div>
@@ -647,33 +685,99 @@
         </div>
       </div>
 
-      <!-- SUB-ABA 7: LOJA -->
+      <!-- SUB-ABA 7: LOJA (DUAS LOGOS INDEPENDENTES + ZOOM ISOLADO + PALETA DE CORES) -->
       <div id="admin-sec-horarios" class="hidden space-y-5">
+        
+        <!-- BLOCO A: IDENTIDADE VISUAL (2 LOGOS + ZOOM SEM ESTICAR A BARRA) -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <h3 class="font-bold text-slate-800 text-base">📍 Dados, Logo e Zoom</h3>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">🖼️ Enviar Logo da Loja</label>
-            <input type="file" id="cfg-logo-file" accept="image/*" onchange="handleLogoUpload(event)"
-              class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-[#23B5C8]" />
+            <h3 class="font-bold text-slate-800 text-base">🖼️ Logos da Loja (Símbolo + Nome Separados)</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Envie até 2 imagens independentes. O zoom amplia <strong>apenas a logo</strong> sem aumentar a altura da barra superior.</p>
           </div>
-          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
-            <span class="block text-xs font-bold text-slate-700">🔎 Pré-visualização e Zoom da Logo</span>
-            <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 h-24">
-              <img id="preview-logo-box" class="object-contain max-h-16 hidden" alt="Preview" />
-              <span id="preview-logo-placeholder" class="text-xs text-slate-400">Nenhuma logo enviada</span>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- LOGO 1: SÍMBOLO REDONDO -->
+            <div class="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-800">🔵 Logo 1: Símbolo (Redonda)</span>
+                <button type="button" onclick="removeLogoPart('symbol')" class="text-[11px] text-red-500 font-bold underline">Remover</button>
+              </div>
+              <input type="file" id="cfg-symbol-file" accept="image/*" onchange="handleDualLogoUpload(event, 'symbol')"
+                class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-white file:text-slate-700" />
+              <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 h-28 overflow-hidden">
+                <div id="preview-symbol-circle" class="hidden w-14 h-14 rounded-full overflow-hidden border border-slate-200 shadow-sm flex items-center justify-center">
+                  <img id="preview-symbol-img" class="w-full h-full object-cover" alt="Símbolo" />
+                </div>
+                <span id="preview-symbol-placeholder" class="text-[11px] text-slate-400">Sem símbolo enviado</span>
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <button type="button" onclick="adjustDualLogoZoom('symbol', -0.1)" class="px-2.5 py-1 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖</button>
+                <span id="zoom-symbol-label" class="text-[11px] font-bold text-slate-600">Zoom: 100%</span>
+                <button type="button" onclick="adjustDualLogoZoom('symbol', 0.1)" class="px-2.5 py-1 brand-primary-bg font-bold rounded-lg text-xs">➕</button>
+              </div>
             </div>
-            <div class="flex items-center justify-between gap-3">
-              <button type="button" onclick="adjustLogoZoom(-10)" class="px-3 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖ Menor</button>
-              <span id="zoom-level-label" class="text-xs font-bold text-slate-600">Altura: 45px</span>
-              <button type="button" onclick="adjustLogoZoom(10)" class="px-3 py-1.5 bg-[#23B5C8] text-white font-bold rounded-lg text-xs">➕ Maior</button>
+
+            <!-- LOGO 2: NOME / LOGOTIPO RETANGULAR -->
+            <div class="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-800">▭ Logo 2: Nome (Retangular)</span>
+                <button type="button" onclick="removeLogoPart('name')" class="text-[11px] text-red-500 font-bold underline">Remover</button>
+              </div>
+              <input type="file" id="cfg-name-file" accept="image/*" onchange="handleDualLogoUpload(event, 'name')"
+                class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-white file:text-slate-700" />
+              <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 h-28 overflow-hidden">
+                <img id="preview-name-img" class="hidden h-12 max-w-[180px] object-contain" alt="Nome" />
+                <span id="preview-name-placeholder" class="text-[11px] text-slate-400">Sem nome/banner enviado</span>
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <button type="button" onclick="adjustDualLogoZoom('name', -0.1)" class="px-2.5 py-1 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖</button>
+                <span id="zoom-name-label" class="text-[11px] font-bold text-slate-600">Zoom: 100%</span>
+                <button type="button" onclick="adjustDualLogoZoom('name', 0.1)" class="px-2.5 py-1 brand-primary-bg font-bold rounded-lg text-xs">➕</button>
+              </div>
             </div>
           </div>
+        </div>
+
+        <!-- BLOCO B: CORES DO APLICATIVO (5 PALETAS DO SETOR PET + EXTRAÇÃO PELA LOGO) -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="font-bold text-slate-800 text-base">🎨 Cores e Tema Visual do Aplicativo</h3>
+              <p class="text-xs text-slate-500">Puxe as cores automaticamente da logo enviada ou escolha uma paleta pronta:</p>
+            </div>
+            <button type="button" onclick="extractColorsFromUploadedLogo()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow flex items-center gap-1.5">
+              ✨ Puxar Cores da Minha Logo
+            </button>
+          </div>
+
+          <!-- 5 Paletas Inspiradas nos Principais Apps Pet -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="theme-presets-grid"></div>
+
+          <!-- Ajuste Fino Manual de Cor -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700">Cor Principal:</label>
+              <input type="color" id="cfg-color-primary" onchange="applyCustomManualColors()" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent" />
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700">Cor de Destaque:</label>
+              <input type="color" id="cfg-color-accent" onchange="applyCustomManualColors()" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent" />
+            </div>
+            <span id="active-theme-label" class="text-[11px] font-bold text-slate-500">Tema ativo: Recanto Original</span>
+          </div>
+        </div>
+
+        <!-- BLOCO C: DADOS CADASTRAIS DA LOJA -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+          <h3 class="font-bold text-slate-800 text-base">📍 Dados da Loja e Senha</h3>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome da Loja</label><input type="text" id="cfg-store-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título do Banner</label><input type="text" id="cfg-banner-title" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Endereço Completo</label><input type="text" id="cfg-store-address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp da Loja (com DDD)</label><input type="text" id="cfg-whatsapp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
           <div><label class="block text-xs font-semibold text-slate-600 mb-1">Senha PIN do Painel</label><input type="text" id="cfg-pin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
-          <button onclick="saveStoreDataConfig()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-sm shadow">💾 Salvar Dados</button>
+          <button onclick="saveStoreDataConfig()" class="w-full py-3.5 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-sm shadow">
+            💾 Salvar Logos, Cores e Dados na Nuvem
+          </button>
         </div>
       </div>
     </section>
@@ -692,7 +796,7 @@
         <p id="checkout-item-sub" class="text-xs text-slate-500"></p>
         <div class="pt-1 flex items-baseline justify-between">
           <span class="text-xs font-semibold text-slate-500">Valor a Cobrar (R$):</span>
-          <input type="number" step="0.5" id="checkout-final-amount" oninput="updateCheckoutChange()" class="w-28 text-right font-brand text-xl font-bold text-[#EE3E80] px-2 py-1 rounded-lg border border-slate-300 bg-white" />
+          <input type="number" step="0.5" id="checkout-final-amount" oninput="updateCheckoutChange()" class="w-28 text-right font-brand text-xl font-bold brand-accent-text px-2 py-1 rounded-lg border border-slate-300 bg-white" />
         </div>
       </div>
 
@@ -737,7 +841,7 @@
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1">Valor Total (R$) *</label>
-        <input type="number" step="0.5" id="qs-amount" placeholder="Ex: 35.00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-[#EE3E80]" />
+        <input type="number" step="0.5" id="qs-amount" placeholder="Ex: 35.00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-bold brand-accent-text" />
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1">Forma de Pagamento *</label>
@@ -763,7 +867,7 @@
       <input type="number" step="1" id="float-amount-input" placeholder="Ex: 100.00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base font-bold text-center" />
       <div class="grid grid-cols-2 gap-2">
         <button onclick="closeFloatModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
-        <button onclick="saveOpeningFloat()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold">Salvar Troco</button>
+        <button onclick="saveOpeningFloat()" class="py-2.5 rounded-xl brand-primary-bg text-xs font-bold">Salvar Troco</button>
       </div>
     </div>
   </div>
@@ -805,7 +909,7 @@
       </div>
       <div class="grid grid-cols-2 gap-2 pt-2">
         <button onclick="closeRescheduleModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Voltar</button>
-        <button onclick="confirmReschedule()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold shadow-sm">💾 Salvar Nova Data</button>
+        <button onclick="confirmReschedule()" class="py-2.5 rounded-xl brand-primary-bg text-xs font-bold shadow-sm">💾 Salvar Nova Data</button>
       </div>
     </div>
   </div>
@@ -816,17 +920,17 @@
       <h3 class="font-bold text-slate-800 text-base">➕ Adicionar Novo Serviço Principal</h3>
       <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Serviço *</label><input type="text" id="new-srv-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" /></div>
       <div><label class="block text-xs font-semibold text-slate-600 mb-1">Descrição Curta</label><input type="text" id="new-srv-desc" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" /></div>
-      <div><label class="block text-xs font-semibold text-slate-600 mb-1">Preço Inicial Padrão (R$)</label><input type="number" id="new-srv-base" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-[#EE3E80]" /></div>
+      <div><label class="block text-xs font-semibold text-slate-600 mb-1">Preço Inicial Padrão (R$)</label><input type="number" id="new-srv-base" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-bold brand-accent-text" /></div>
       <div class="grid grid-cols-2 gap-2 pt-2">
         <button onclick="closeNewServiceModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
-        <button onclick="saveNewService()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold">Adicionar</button>
+        <button onclick="saveNewService()" class="py-2.5 rounded-xl brand-primary-bg text-xs font-bold">Adicionar</button>
       </div>
     </div>
   </div>
 
   <div id="pin-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xs w-full p-5 space-y-4 text-center shadow-xl">
-      <div class="w-12 h-12 rounded-full bg-pink-50 text-[#EE3E80] flex items-center justify-center mx-auto font-bold text-xl">🔒</div>
+      <div class="w-12 h-12 rounded-full bg-slate-100 brand-accent-text flex items-center justify-center mx-auto font-bold text-xl">🔒</div>
       <div>
         <h3 class="font-bold text-slate-800 text-base">Acesso Restrito — Gestor</h3>
         <p class="text-xs text-slate-500 mt-0.5">Digite sua senha (Padrão: <strong>1234</strong>)</p>
@@ -834,7 +938,7 @@
       <input type="password" id="pin-input" placeholder="••••" maxlength="8" class="w-full text-center text-xl tracking-widest font-bold px-3 py-2.5 rounded-xl border border-slate-300" />
       <div class="grid grid-cols-2 gap-2">
         <button onclick="closePinModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
-        <button onclick="verifyPin()" class="py-2.5 rounded-xl bg-[#23B5C8] text-white text-xs font-bold">Entrar</button>
+        <button onclick="verifyPin()" class="py-2.5 rounded-xl brand-primary-bg text-xs font-bold">Entrar</button>
       </div>
     </div>
   </div>
@@ -850,12 +954,21 @@
   </footer>
 
   <script>
-    // ================= CONEXÃO COM A NUVEM (SUPABASE - URL EXATA VERIFICADA) =================
+    // ================= CONEXÃO COM A NUVEM (SUPABASE) =================
     const SUPABASE_URL = 'https://oqhbbixhvdpychcogigh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_AFek0CJUPD4ONBOpeL518Q_H8gEGuTS';
     const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
     let lastSyncError = '';
+
+    // 5 Paletas Profissionais Inspiradas nos Maiores Apps do Setor Pet
+    const THEME_PRESETS = [
+      { id: 'recanto', name: 'Recanto Original', desc: 'Ciano & Rosa vibrante', primary: '#23B5C8', accent: '#EE3E80' },
+      { id: 'boutique', name: 'Boutique & Grooming', desc: 'Roxo & Coral (estilo Petlove)', primary: '#6D28D9', accent: '#F43F5E' },
+      { id: 'clinica', name: 'Clínica & Confiança', desc: 'Azul Royal & Menta (estilo Petz)', primary: '#1D4ED8', accent: '#0D9488' },
+      { id: 'natural', name: 'Natural & Rações', desc: 'Verde Floresta & Âmbar (estilo Cobasi)', primary: '#15803D', accent: '#D97706' },
+      { id: 'urbano', name: 'Urbano & Contraste', desc: 'Grafite & Laranja (estilo Zee.Dog)', primary: '#1E293B', accent: '#EA580C' }
+    ];
 
     function setCloudStatus(state) {
       const el = document.getElementById('cloud-status-badge');
@@ -878,8 +991,13 @@
       storeAddress: 'Rua Lorena, 237 - Jardim Dom José, Embu das Artes - SP',
       whatsapp: '5511999999999',
       pin: '1234',
-      logoBase64: '',
-      logoHeight: 45,
+      logoSymbolBase64: '',
+      logoSymbolScale: 1.0,
+      logoNameBase64: '',
+      logoNameScale: 1.0,
+      themeId: 'recanto',
+      primaryColor: '#23B5C8',
+      accentColor: '#EE3E80',
       sizes: [
         { id: 'mini', name: 'Mini', subtitle: 'Até 5kg (Pinscher...)' },
         { id: 'pequeno', name: 'Pequeno', subtitle: '5 a 10kg (Shih Tzu...)' },
@@ -909,7 +1027,16 @@
     };
 
     let config = JSON.parse(localStorage.getItem('recanto_cfg_v25')) || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-    if (!config.logoHeight) config.logoHeight = 45;
+    // Migração suave de logo antiga (se existir) para o novo modelo de 2 logos
+    if (config.logoBase64 && !config.logoSymbolBase64 && !config.logoNameBase64) {
+      config.logoNameBase64 = config.logoBase64;
+      delete config.logoBase64;
+    }
+    if (!config.logoSymbolScale) config.logoSymbolScale = 1.0;
+    if (!config.logoNameScale) config.logoNameScale = 1.0;
+    if (!config.primaryColor) config.primaryColor = '#23B5C8';
+    if (!config.accentColor) config.accentColor = '#EE3E80';
+    if (!config.themeId) config.themeId = 'recanto';
 
     let pdvState = JSON.parse(localStorage.getItem('recanto_pdv_v25')) || JSON.parse(JSON.stringify(DEFAULT_PDV));
     if (!pdvState.paidBookings) pdvState.paidBookings = {};
@@ -936,6 +1063,155 @@
       selectedTime: config.timeSlots[0] || '09:00',
       isCustomService: false
     };
+
+    // ================= MOTOR DE TEMAS E CORES =================
+    function shadeHexColor(hex, percent) {
+      let num = parseInt(hex.replace('#', ''), 16);
+      let amt = Math.round(2.55 * percent);
+      let R = Math.min(255, Math.max(0, (num >> 16) + amt));
+      let G = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amt));
+      let B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
+      return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+    }
+
+    function hexToRgba(hex, alpha) {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+    }
+
+    function applyBrandTheme() {
+      const primary = config.primaryColor || '#23B5C8';
+      const accent = config.accentColor || '#EE3E80';
+      const root = document.documentElement;
+      root.style.setProperty('--brand-primary', primary);
+      root.style.setProperty('--brand-primary-dark', shadeHexColor(primary, -16));
+      root.style.setProperty('--brand-primary-soft', hexToRgba(primary, 0.08));
+      root.style.setProperty('--brand-primary-border', hexToRgba(primary, 0.32));
+      root.style.setProperty('--brand-accent', accent);
+      root.style.setProperty('--brand-accent-soft', hexToRgba(accent, 0.09));
+
+      const pInput = document.getElementById('cfg-color-primary');
+      const aInput = document.getElementById('cfg-color-accent');
+      if (pInput) pInput.value = primary;
+      if (aInput) aInput.value = accent;
+
+      const preset = THEME_PRESETS.find(t => t.id === config.themeId);
+      const label = document.getElementById('active-theme-label');
+      if (label) {
+        label.textContent = preset ? `Tema ativo: ${preset.name}` : 'Tema ativo: Personalizado / Logo';
+      }
+      renderThemePresetsGrid();
+    }
+
+    function renderThemePresetsGrid() {
+      const grid = document.getElementById('theme-presets-grid');
+      if (!grid) return;
+      grid.innerHTML = THEME_PRESETS.map(t => {
+        const isActive = config.themeId === t.id;
+        return `
+          <button type="button" onclick="selectThemePreset('${t.id}')" class="p-3 rounded-xl border-2 text-left transition-all ${isActive ? 'border-slate-900 bg-slate-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'}">
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full border border-black/10" style="background-color: ${t.primary};"></span>
+                <span class="w-4 h-4 rounded-full border border-black/10" style="background-color: ${t.accent};"></span>
+              </div>
+              ${isActive ? '<span class="text-[10px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-full">Ativo</span>' : ''}
+            </div>
+            <strong class="block text-xs text-slate-800">${t.name}</strong>
+            <span class="block text-[10px] text-slate-500 mt-0.5">${t.desc}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectThemePreset(id) {
+      const preset = THEME_PRESETS.find(t => t.id === id);
+      if (!preset) return;
+      config.themeId = preset.id;
+      config.primaryColor = preset.primary;
+      config.accentColor = preset.accent;
+      applyBrandTheme();
+    }
+
+    function applyCustomManualColors() {
+      const p = document.getElementById('cfg-color-primary').value;
+      const a = document.getElementById('cfg-color-accent').value;
+      config.themeId = 'custom';
+      config.primaryColor = p;
+      config.accentColor = a;
+      applyBrandTheme();
+    }
+
+    function extractColorsFromUploadedLogo() {
+      const src = config.logoSymbolBase64 || config.logoNameBase64;
+      if (!src) {
+        return alert('⚠️ Envie primeiro a Logo 1 (Símbolo) ou a Logo 2 (Nome) acima para extrair as cores dela!');
+      }
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 80;
+        canvas.height = 80;
+        ctx.drawImage(img, 0, 0, 80, 80);
+        const data = ctx.getImageData(0, 0, 80, 80).data;
+
+        const buckets = {};
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+          if (a < 140) continue; // ignora fundo transparente
+          if (r > 232 && g > 232 && b > 232) continue; // ignora branco
+          if (r < 28 && g < 28 && b < 28) continue; // ignora preto puro
+
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          const sat = max === 0 ? 0 : (max - min) / max;
+          if (sat < 0.18) continue; // ignora cinzas neutros
+
+          const qr = Math.round(r / 24) * 24;
+          const qg = Math.round(g / 24) * 24;
+          const qb = Math.round(b / 24) * 24;
+          const key = `${qr},${qg},${qb}`;
+          if (!buckets[key]) buckets[key] = { r: 0, g: 0, b: 0, count: 0, sat };
+          buckets[key].r += r;
+          buckets[key].g += g;
+          buckets[key].b += b;
+          buckets[key].count += 1;
+        }
+
+        const sorted = Object.values(buckets)
+          .map(b => ({
+            r: Math.round(b.r / b.count),
+            g: Math.round(b.g / b.count),
+            b: Math.round(b.b / b.count),
+            score: b.count * (b.sat + 0.4)
+          }))
+          .sort((a, b) => b.score - a.score);
+
+        if (sorted.length === 0) {
+          return alert('Sua logo possui apenas tons neutros (preto/branco/cinza). Escolha uma das 5 paletas prontas abaixo!');
+        }
+
+        const toHex = c => '#' + [c.r, c.g, c.b].map(v => Math.min(255, Math.max(0, v)).toString(16).padStart(2, '0')).join('');
+        const primaryHex = toHex(sorted[0]);
+
+        // Procura uma segunda cor distinta para destaque
+        let second = sorted.find(c => {
+          const dist = Math.hypot(c.r - sorted[0].r, c.g - sorted[0].g, c.b - sorted[0].b);
+          return dist > 85;
+        });
+
+        const accentHex = second ? toHex(second) : shadeHexColor(primaryHex, -28);
+
+        config.themeId = 'custom';
+        config.primaryColor = primaryHex;
+        config.accentColor = accentHex;
+        applyBrandTheme();
+        alert('✨ Cores extraídas da sua logo e aplicadas no visual do app! Clique em "Salvar Logos, Cores e Dados na Nuvem" para gravar.');
+      };
+      img.src = src;
+    }
 
     // Conversores de formato entre o App e o Supabase
     function clientToRow(c) {
@@ -1059,7 +1335,14 @@
         if (cfgErr) throw cfgErr;
         if (cfgData && cfgData.data) {
           config = cfgData.data;
-          if (!config.logoHeight) config.logoHeight = 45;
+          if (config.logoBase64 && !config.logoSymbolBase64 && !config.logoNameBase64) {
+            config.logoNameBase64 = config.logoBase64;
+            delete config.logoBase64;
+          }
+          if (!config.logoSymbolScale) config.logoSymbolScale = 1.0;
+          if (!config.logoNameScale) config.logoNameScale = 1.0;
+          if (!config.primaryColor) config.primaryColor = '#23B5C8';
+          if (!config.accentColor) config.accentColor = '#EE3E80';
           localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
         } else {
           await sb.from('recanto_config').upsert({ id: 'main', data: config, updated_at: new Date().toISOString() });
@@ -1117,6 +1400,7 @@
         localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
 
         lastSyncError = '';
+        applyBrandTheme();
         applyStoreBranding();
         renderAllClient();
         refreshAllViews();
@@ -1217,6 +1501,7 @@
 
     function saveConfig() {
       localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
+      applyBrandTheme();
       applyStoreBranding();
       renderAllClient();
       renderAdminEditors();
@@ -1236,6 +1521,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('booking-date').value = getTodayLocalStr();
+      applyBrandTheme();
       applyStoreBranding();
       renderAllClient();
       switchClientTab('novo');
@@ -1273,7 +1559,7 @@
       if (!btn) return;
       if (dateVal && dateVal > getTodayLocalStr()) {
         btn.innerHTML = '📅 Salvar na Agenda';
-        btn.className = 'w-full sm:w-auto px-5 py-3 rounded-xl bg-[#EE3E80] hover:bg-pink-600 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5';
+        btn.className = 'w-full sm:w-auto px-5 py-3 rounded-xl brand-accent-bg font-bold text-xs shadow flex items-center justify-center gap-1.5';
       } else {
         btn.innerHTML = '✅ Incluir na Fila';
         btn.className = 'w-full sm:w-auto px-5 py-3 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-xs shadow flex items-center justify-center gap-1.5';
@@ -1296,6 +1582,7 @@
       }
     }
 
+    // ================= APLICAÇÃO DAS 2 LOGOS + ZOOM ISOLADO =================
     function applyStoreBranding() {
       document.getElementById('banner-title').textContent = config.bannerTitle || 'Painel de Balcão — Banho & Tosa';
       document.getElementById('admin-store-title').textContent = `Controle ${config.storeName}`;
@@ -1303,29 +1590,69 @@
       document.getElementById('footer-store-address').textContent = `📍 ${config.storeAddress}`;
 
       const defLogo = document.getElementById('default-logo-elements');
-      const customLogo = document.getElementById('custom-logo-img');
-      const previewBox = document.getElementById('preview-logo-box');
-      const previewPlaceholder = document.getElementById('preview-logo-placeholder');
+      const customWrapper = document.getElementById('custom-logos-wrapper');
 
-      if (config.logoBase64) {
-        defLogo.classList.add('hidden');
-        customLogo.src = config.logoBase64;
-        customLogo.style.height = `${config.logoHeight}px`;
-        customLogo.classList.remove('hidden');
-        previewBox.src = config.logoBase64;
-        previewBox.style.height = `${config.logoHeight}px`;
-        previewBox.classList.remove('hidden');
-        previewPlaceholder.classList.add('hidden');
-      } else {
+      const hdrSymFrame = document.getElementById('header-symbol-frame');
+      const hdrSymImg = document.getElementById('custom-symbol-img');
+      const prevSymCircle = document.getElementById('preview-symbol-circle');
+      const prevSymImg = document.getElementById('preview-symbol-img');
+      const prevSymPlace = document.getElementById('preview-symbol-placeholder');
+
+      const hdrNameFrame = document.getElementById('header-name-frame');
+      const hdrNameImg = document.getElementById('custom-name-img');
+      const prevNameImg = document.getElementById('preview-name-img');
+      const prevNamePlace = document.getElementById('preview-name-placeholder');
+
+      const hasSymbol = Boolean(config.logoSymbolBase64);
+      const hasName = Boolean(config.logoNameBase64);
+      const symScale = Number(config.logoSymbolScale) || 1.0;
+      const nameScale = Number(config.logoNameScale) || 1.0;
+
+      if (!hasSymbol && !hasName) {
         defLogo.classList.remove('hidden');
-        customLogo.classList.add('hidden');
-        previewBox.classList.add('hidden');
-        previewPlaceholder.classList.remove('hidden');
+        customWrapper.classList.add('hidden');
+      } else {
+        defLogo.classList.add('hidden');
+        customWrapper.classList.remove('hidden');
       }
-      document.getElementById('zoom-level-label').textContent = `Altura: ${config.logoHeight}px`;
+
+      if (hasSymbol) {
+        hdrSymImg.src = config.logoSymbolBase64;
+        hdrSymFrame.style.transform = `scale(${symScale})`;
+        hdrSymFrame.classList.remove('hidden');
+
+        prevSymImg.src = config.logoSymbolBase64;
+        prevSymCircle.style.transform = `scale(${symScale})`;
+        prevSymCircle.classList.remove('hidden');
+        prevSymPlace.classList.add('hidden');
+      } else {
+        hdrSymFrame.classList.add('hidden');
+        prevSymCircle.classList.add('hidden');
+        prevSymPlace.classList.remove('hidden');
+      }
+
+      if (hasName) {
+        hdrNameImg.src = config.logoNameBase64;
+        hdrNameFrame.style.transform = `scale(${nameScale})`;
+        hdrNameFrame.classList.remove('hidden');
+
+        prevNameImg.src = config.logoNameBase64;
+        prevNameImg.style.transform = `scale(${nameScale})`;
+        prevNameImg.classList.remove('hidden');
+        prevNamePlace.classList.add('hidden');
+      } else {
+        hdrNameFrame.classList.add('hidden');
+        prevNameImg.classList.add('hidden');
+        prevNamePlace.classList.remove('hidden');
+      }
+
+      const zSym = document.getElementById('zoom-symbol-label');
+      const zName = document.getElementById('zoom-name-label');
+      if (zSym) zSym.textContent = `Zoom: ${Math.round(symScale * 100)}%`;
+      if (zName) zName.textContent = `Zoom: ${Math.round(nameScale * 100)}%`;
     }
 
-    function handleLogoUpload(event) {
+    function handleDualLogoUpload(event, part) {
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
@@ -1333,7 +1660,7 @@
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const maxDim = 280;
+          const maxDim = part === 'symbol' ? 240 : 420;
           let w = img.width, h = img.height;
           if (w > maxDim || h > maxDim) {
             if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
@@ -1342,7 +1669,12 @@
           canvas.width = w;
           canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          config.logoBase64 = canvas.toDataURL('image/png', 0.85);
+          const dataUrl = canvas.toDataURL('image/png', 0.88);
+          if (part === 'symbol') {
+            config.logoSymbolBase64 = dataUrl;
+          } else {
+            config.logoNameBase64 = dataUrl;
+          }
           applyStoreBranding();
         };
         img.src = e.target.result;
@@ -1350,9 +1682,29 @@
       reader.readAsDataURL(file);
     }
 
-    function adjustLogoZoom(amount) {
-      if (!config.logoBase64) return;
-      config.logoHeight = Math.min(100, Math.max(25, config.logoHeight + amount));
+    function adjustDualLogoZoom(part, delta) {
+      if (part === 'symbol') {
+        if (!config.logoSymbolBase64) return;
+        config.logoSymbolScale = Math.min(1.45, Math.max(0.7, Number(((config.logoSymbolScale || 1.0) + delta).toFixed(2))));
+      } else {
+        if (!config.logoNameBase64) return;
+        config.logoNameScale = Math.min(1.45, Math.max(0.7, Number(((config.logoNameScale || 1.0) + delta).toFixed(2))));
+      }
+      applyStoreBranding();
+    }
+
+    function removeLogoPart(part) {
+      if (part === 'symbol') {
+        config.logoSymbolBase64 = '';
+        config.logoSymbolScale = 1.0;
+        const inp = document.getElementById('cfg-symbol-file');
+        if (inp) inp.value = '';
+      } else {
+        config.logoNameBase64 = '';
+        config.logoNameScale = 1.0;
+        const inp = document.getElementById('cfg-name-file');
+        if (inp) inp.value = '';
+      }
       applyStoreBranding();
     }
 
@@ -1362,7 +1714,7 @@
         const btn = document.getElementById('tab-cli-' + t);
         const spanClass = t === 'caixa' ? 'col-span-2 sm:col-span-1 ' : '';
         if (t === tab) {
-          btn.className = spanClass + 'px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm text-[#23B5C8] transition-colors flex items-center justify-center gap-1';
+          btn.className = spanClass + 'px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm brand-primary-text transition-colors flex items-center justify-center gap-1';
         } else {
           btn.className = spanClass + 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1';
         }
@@ -1385,10 +1737,10 @@
     function selectSpecies(sp) {
       clientState.species = sp;
       document.getElementById('sp-dog').className = sp === 'Cachorro'
-        ? 'py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
+        ? 'py-2.5 px-3 rounded-xl border text-xs font-bold brand-primary-bg'
         : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white';
       document.getElementById('sp-cat').className = sp === 'Gato'
-        ? 'py-2.5 px-3 rounded-xl border text-xs font-bold bg-[#23B5C8] text-white border-[#23B5C8]'
+        ? 'py-2.5 px-3 rounded-xl border text-xs font-bold brand-primary-bg'
         : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white';
     }
 
@@ -1454,7 +1806,7 @@
           <div onclick="selectService('${srv.id}')" class="service-card ${selected ? 'selected' : ''} cursor-pointer p-3.5 rounded-xl border border-slate-200 transition-all bg-slate-50/60">
             <div class="flex items-center justify-between">
               <h3 class="font-bold text-sm text-slate-800">${srv.name}</h3>
-              <span class="font-brand text-base font-bold text-[#EE3E80]">R$ ${formatMoney(price)}</span>
+              <span class="font-brand text-base font-bold brand-accent-text">R$ ${formatMoney(price)}</span>
             </div>
           </div>
         `;
@@ -1536,12 +1888,12 @@
         const safePet = c.petName.replace(/'/g, "\\'");
         const safeAddr = (c.address || '').replace(/'/g, "\\'");
         return `
-          <div onclick="selectClientForBooking('${safeOwner}', '${c.phone}', '${safePet}', '${safeAddr}')" class="p-2.5 rounded-xl border border-cyan-200 bg-cyan-50/50 hover:bg-cyan-100 cursor-pointer flex items-center justify-between text-xs">
+          <div onclick="selectClientForBooking('${safeOwner}', '${c.phone}', '${safePet}', '${safeAddr}')" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between text-xs">
             <div>
               <strong>🐶 ${c.petName}</strong> (${c.ownerName}) — 📞 ${c.phone}
               ${c.address ? `<span class="block text-[10px] text-slate-500">📍 ${c.address}</span>` : ''}
             </div>
-            <span class="bg-[#23B5C8] text-white px-2 py-1 rounded-lg font-bold shrink-0">Usar</span>
+            <span class="brand-primary-bg px-2 py-1 rounded-lg font-bold shrink-0">Usar</span>
           </div>
         `;
       }).join('');
@@ -1812,7 +2164,7 @@
       });
       if (mode !== 'date') {
         const activeBtn = document.getElementById('agfilter-' + mode);
-        if (activeBtn) activeBtn.className = 'agfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold';
+        if (activeBtn) activeBtn.className = 'agfilter-btn px-2.5 py-1.5 rounded-lg brand-primary-bg text-xs font-bold';
         const dtInput = document.getElementById('agenda-specific-date');
         if (dtInput) dtInput.value = '';
       }
@@ -1861,16 +2213,16 @@
       list.innerHTML = filtered.map(b => {
         const isToday = b.date === todayStr;
         return `
-          <div class="p-3.5 rounded-xl border ${isToday ? 'border-cyan-300 bg-cyan-50/40' : 'border-slate-200 bg-slate-50'} space-y-2">
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
             <div class="flex items-center justify-between">
               <div>
                 <span class="font-bold text-sm text-slate-800">🐾 ${b.petName}</span>
                 <span class="text-xs text-slate-500 ml-1">(${b.ownerName})</span>
               </div>
-              <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
+              <span class="font-brand text-sm font-bold brand-accent-text">R$ ${formatMoney(b.total)}</span>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-xs">
-              <span class="px-2.5 py-1 rounded-lg font-bold ${isToday ? 'bg-[#23B5C8] text-white' : 'bg-pink-100 text-[#EE3E80]'}">
+              <span class="px-2.5 py-1 rounded-lg font-bold ${isToday ? 'brand-primary-bg' : 'brand-accent-bg'}">
                 📅 ${formatDateBR(b.date)} às ${b.time || '--:--'}
               </span>
               <span class="text-slate-600">📞 ${b.ownerPhone}</span>
@@ -1885,7 +2237,7 @@
                 📲 Confirmar Zap
               </button>
               ${!isToday ? `
-                <button onclick="pullToTodayQueue(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-[11px] font-bold flex items-center gap-1">
+                <button onclick="pullToTodayQueue(${b.id})" class="px-2.5 py-1.5 rounded-lg brand-primary-bg text-[11px] font-bold flex items-center gap-1">
                   🛁 Puxar p/ Fila Hoje
                 </button>
               ` : ''}
@@ -1925,7 +2277,7 @@
                 <span class="text-[11px] text-slate-500 ml-1">(${b.sizeName || 'Padrão'})</span>
                 <span class="ml-1">${payBadge}</span>
               </div>
-              <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(payInfo ? payInfo.amount : b.total)}</span>
+              <span class="font-brand text-sm font-bold brand-accent-text">R$ ${formatMoney(payInfo ? payInfo.amount : b.total)}</span>
             </div>
             <div class="text-xs text-slate-600 space-y-0.5">
               <p><strong>Serviço realizado:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
@@ -1983,7 +2335,7 @@
               <span class="block text-xs text-slate-600 mt-0.5">${b.serviceName} • 👤 ${b.ownerName}</span>
             </div>
             <div class="text-right shrink-0">
-              <span class="block font-brand text-base font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
+              <span class="block font-brand text-base font-bold brand-accent-text">R$ ${formatMoney(b.total)}</span>
               <button onclick="openCheckoutModal(${b.id})" class="mt-1 px-3 py-1.5 rounded-lg bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold shadow-sm">
                 💳 Receber
               </button>
@@ -2334,7 +2686,7 @@
               <span class="text-[11px] px-2 py-0.5 rounded-full font-bold ml-1 ${statusColors[b.status] || ''}">${b.status}</span>
               ${payBadge}
             </div>
-            <span class="font-brand text-sm font-bold text-[#EE3E80]">R$ ${formatMoney(b.total)}</span>
+            <span class="font-brand text-sm font-bold brand-accent-text">R$ ${formatMoney(b.total)}</span>
           </div>
           <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
           <p class="text-[11px] text-slate-500">🕒 ${formatDateBR(b.date)} às ${b.time || '--:--'} • 👤 ${b.ownerName}</p>
@@ -2378,7 +2730,7 @@
       });
       if (mode !== 'date') {
         const activeBtn = document.getElementById('hfilter-' + mode);
-        if (activeBtn) activeBtn.className = 'hfilter-btn px-2.5 py-1.5 rounded-lg bg-[#23B5C8] text-white text-xs font-bold';
+        if (activeBtn) activeBtn.className = 'hfilter-btn px-2.5 py-1.5 rounded-lg brand-primary-bg text-xs font-bold';
         document.getElementById('hist-specific-date').value = '';
       }
       renderHistoryAnalytics();
@@ -2486,7 +2838,7 @@
               <span>${count} (${pct}%)</span>
             </div>
             <div class="w-full bg-slate-200 rounded-full h-2">
-              <div class="bg-[#23B5C8] h-2 rounded-full" style="width: ${pct}%"></div>
+              <div class="h-2 rounded-full" style="width: ${pct}%; background-color: var(--brand-primary);"></div>
             </div>
           </div>
         `;
@@ -2511,7 +2863,7 @@
         btn.className = 'csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold';
       });
       const active = document.getElementById('csort-' + mode);
-      if (active) active.className = 'csort-btn px-2.5 py-1 rounded-lg bg-[#23B5C8] text-white text-[11px] font-bold';
+      if (active) active.className = 'csort-btn px-2.5 py-1 rounded-lg brand-primary-bg text-[11px] font-bold';
       renderClientsList();
     }
 
@@ -2565,7 +2917,7 @@
           <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-bold">🐾 Pet: ${c.petName}</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-white border border-slate-200 brand-primary-text font-bold">🐾 Pet: ${c.petName}</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 text-xs text-slate-600 pt-1">
               <div>📞 <strong>Tel:</strong> ${c.phone}</div>
@@ -2574,7 +2926,7 @@
             </div>
             <div class="flex items-center justify-between text-xs text-slate-600 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
               <span>📍 <strong>Endereço:</strong> ${c.address || 'Não informado'}</span>
-              <button onclick="editClientAddress(${c.id})" class="text-[11px] font-bold text-[#23B5C8] underline shrink-0 ml-2">✏️ Editar</button>
+              <button onclick="editClientAddress(${c.id})" class="text-[11px] font-bold brand-primary-text underline shrink-0 ml-2">✏️ Editar</button>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
               <span class="text-slate-500"><strong>Último Serviço:</strong> ${c.lastService || 'Banho'}</span>
@@ -2610,7 +2962,7 @@
 
     function exportFullBackup() {
       const backupData = {
-        version: 'v30',
+        version: 'v31',
         exportedAt: new Date().toISOString(),
         config,
         pdvState,
@@ -2660,6 +3012,7 @@
               setCloudStatus('online');
             }
 
+            applyBrandTheme();
             applyStoreBranding();
             renderAllClient();
             refreshAllViews();
@@ -2777,11 +3130,15 @@
     function switchAdminTab(tab) {
       ['fila', 'historico', 'clientes', 'reaquecer', 'portes', 'precos', 'horarios'].forEach(t => {
         document.getElementById('admin-sec-' + t).classList.toggle('hidden', t !== tab);
-        document.getElementById('adm-tab-' + t).className = t === tab ? 'px-2 py-2 rounded-lg text-xs font-bold bg-[#23B5C8] text-white' : 'px-2 py-2 rounded-lg text-xs font-bold text-slate-300';
+        document.getElementById('adm-tab-' + t).className = t === tab ? 'px-2 py-2 rounded-lg text-xs font-bold brand-primary-bg' : 'px-2 py-2 rounded-lg text-xs font-bold text-slate-300';
       });
       if (tab === 'reaquecer') renderReheatList();
       if (tab === 'historico') renderHistoryAnalytics();
       if (tab === 'clientes') renderClientsList();
+      if (tab === 'horarios') {
+        applyBrandTheme();
+        applyStoreBranding();
+      }
     }
 
     function renderAdminEditors() {
@@ -2803,7 +3160,7 @@
             ${config.sizes.map(sz => `
               <div class="bg-white p-2 rounded-lg border border-slate-200">
                 <label class="block text-[10px] font-bold text-slate-600 truncate">${sz.name} (R$)</label>
-                <input type="number" step="0.5" id="edit-price-${sIdx}-${sz.id}" value="${srv.prices[sz.id] ?? 50}" class="w-full mt-1 px-2 py-1 rounded border border-slate-300 text-sm font-bold text-[#EE3E80]" />
+                <input type="number" step="0.5" id="edit-price-${sIdx}-${sz.id}" value="${srv.prices[sz.id] ?? 50}" class="w-full mt-1 px-2 py-1 rounded border border-slate-300 text-sm font-bold brand-accent-text" />
               </div>
             `).join('')}
           </div>
@@ -2815,7 +3172,7 @@
           <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-slate-50" />
           <div class="flex items-center gap-1 shrink-0">
             <span class="text-[10px] text-slate-500 font-bold">R$</span>
-            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold text-[#EE3E80] bg-slate-50 text-center" />
+            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold brand-accent-text bg-slate-50 text-center" />
           </div>
           <button onclick="deleteExtra('${ex.id}')" class="text-red-500 hover:bg-red-50 rounded-lg shrink-0 px-1" title="Excluir">🗑️</button>
         </div>
@@ -2936,7 +3293,7 @@
       config.whatsapp = document.getElementById('cfg-whatsapp').value.trim();
       config.pin = document.getElementById('cfg-pin').value.trim(); 
       saveConfig(); 
-      alert('✅ Configurações salvas na nuvem!');
+      alert('✅ Logos, cores e configurações salvas na nuvem!');
     }
   </script>
 </body>
