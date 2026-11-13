@@ -6,6 +6,7 @@
   <title>Recanto Petshop | CRM e Gestão Completa</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
@@ -26,7 +27,7 @@
 
   <!-- Cabeçalho -->
   <header class="bg-white shadow-sm sticky top-1.5 z-40">
-    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
       <div class="flex items-center gap-3">
         <div id="header-logo-container" class="flex items-center gap-3">
           <div id="default-logo-elements" class="flex items-center gap-3">
@@ -49,9 +50,15 @@
           <img id="custom-logo-img" class="object-contain hidden rounded-lg" alt="Logo" />
         </div>
       </div>
-      <button id="btn-exit-admin" onclick="exitAdmin()" class="hidden px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5">
-        ⬅️ Voltar
-      </button>
+
+      <div class="flex items-center gap-1.5">
+        <button onclick="manualCloudSync()" id="cloud-status-badge" title="Toque para sincronizar agora" class="px-2.5 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold flex items-center gap-1">
+          🔄 Conectando...
+        </button>
+        <button id="btn-exit-admin" onclick="exitAdmin()" class="hidden px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5">
+          ⬅️ Voltar
+        </button>
+      </div>
     </div>
   </header>
 
@@ -214,7 +221,7 @@
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">📅 Agenda de Marcações</h3>
               <p class="text-[11px] text-slate-500">Consulte horários marcados, remarque para outro dia ou cancele.</p>
             </div>
-            <button onclick=" prepareFutureBooking()" class="px-3 py-1.5 rounded-xl bg-[#EE3E80] text-white text-xs font-bold shadow-sm">
+            <button onclick="prepareFutureBooking()" class="px-3 py-1.5 rounded-xl bg-[#EE3E80] text-white text-xs font-bold shadow-sm">
               + Agendar Novo
             </button>
           </div>
@@ -394,7 +401,7 @@
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
               <h3 class="font-bold text-slate-800 text-base">👥 Base de Clientes Cadastrados</h3>
-              <p class="text-[11px] text-slate-500">Salvo localmente neste aparelho. Exporte o backup regularmente.</p>
+              <p class="text-[11px] text-emerald-600 font-semibold">☁️ Sincronizado na nuvem (Supabase) + opção de exportar planilha.</p>
             </div>
             <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-[#23B5C8]">0 cadastrados</span>
           </div>
@@ -607,6 +614,26 @@
   </footer>
 
   <script>
+    // ================= CONEXÃO COM A NUVEM (SUPABASE) =================
+    const SUPABASE_URL = 'https://oqhbbixhwdpychcogigh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_AFek0CJUPD4ONBOpeL518Q_H8gEGuTS';
+    const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+    function setCloudStatus(state) {
+      const el = document.getElementById('cloud-status-badge');
+      if (!el) return;
+      if (state === 'syncing') {
+        el.className = 'px-2.5 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold flex items-center gap-1';
+        el.innerHTML = '🔄 Sincronizando...';
+      } else if (state === 'online') {
+        el.className = 'px-2.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold flex items-center gap-1';
+        el.innerHTML = '☁️ Online';
+      } else {
+        el.className = 'px-2.5 py-1.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[11px] font-bold flex items-center gap-1';
+        el.innerHTML = '⚠️ Offline (Local)';
+      }
+    }
+
     const DEFAULT_CONFIG = {
       storeName: 'Recanto Petshop',
       bannerTitle: 'Painel de Balcão — Banho & Tosa',
@@ -656,6 +683,222 @@
       isCustomService: false
     };
 
+    // Conversores de formato entre o App e o Supabase
+    function clientToRow(c) {
+      return {
+        id: Number(c.id),
+        owner_name: c.ownerName || '',
+        phone: c.phone || '',
+        pet_name: c.petName || '',
+        address: c.address || '',
+        visits_count: Number(c.visitsCount) || 1,
+        last_visit_date: c.lastVisitDate || '',
+        last_service: c.lastService || '',
+        updated_at: new Date().toISOString()
+      };
+    }
+
+    function rowToClient(r) {
+      return {
+        id: Number(r.id),
+        ownerName: r.owner_name || '',
+        phone: r.phone || '',
+        petName: r.pet_name || '',
+        address: r.address || '',
+        visitsCount: Number(r.visits_count) || 1,
+        lastVisitDate: r.last_visit_date || '',
+        lastService: r.last_service || ''
+      };
+    }
+
+    function bookingToRow(b) {
+      return {
+        id: Number(b.id),
+        pet_name: b.petName || '',
+        species: b.species || 'Cachorro',
+        size_name: b.sizeName || 'Padrão',
+        owner_name: b.ownerName || '',
+        owner_phone: b.ownerPhone || '',
+        owner_address: b.ownerAddress || '',
+        service_name: b.serviceName || '',
+        extras: Array.isArray(b.extras) ? b.extras : [],
+        date: b.date || '',
+        time: b.time || '',
+        notes: b.notes || '',
+        total: Number(b.total) || 0,
+        status: b.status || 'Aguardando',
+        updated_at: new Date().toISOString()
+      };
+    }
+
+    function rowToBooking(r) {
+      return {
+        id: Number(r.id),
+        petName: r.pet_name || '',
+        species: r.species || 'Cachorro',
+        sizeName: r.size_name || 'Padrão',
+        ownerName: r.owner_name || '',
+        ownerPhone: r.owner_phone || '',
+        ownerAddress: r.owner_address || '',
+        serviceName: r.service_name || '',
+        extras: Array.isArray(r.extras) ? r.extras : [],
+        date: r.date || '',
+        time: r.time || '',
+        notes: r.notes || '',
+        total: Number(r.total) || 0,
+        status: r.status || 'Aguardando'
+      };
+    }
+
+    function historyToRow(h) {
+      return {
+        id: Number(h.id),
+        pet_name: h.petName || '',
+        species: h.species || 'Cachorro',
+        size_name: h.sizeName || 'Padrão',
+        owner_name: h.ownerName || '',
+        owner_phone: h.ownerPhone || '',
+        owner_address: h.ownerAddress || '',
+        service_name: h.serviceName || '',
+        extras: Array.isArray(h.extras) ? h.extras : [],
+        date: h.date || '',
+        time: h.time || '',
+        notes: h.notes || '',
+        total: Number(h.total) || 0,
+        status: 'Finalizado',
+        closed_at: h.closedAt || new Date().toISOString()
+      };
+    }
+
+    function rowToHistory(r) {
+      return {
+        id: Number(r.id),
+        petName: r.pet_name || '',
+        species: r.species || 'Cachorro',
+        sizeName: r.size_name || 'Padrão',
+        ownerName: r.owner_name || '',
+        ownerPhone: r.owner_phone || '',
+        ownerAddress: r.owner_address || '',
+        serviceName: r.service_name || '',
+        extras: Array.isArray(r.extras) ? r.extras : [],
+        date: r.date || '',
+        time: r.time || '',
+        notes: r.notes || '',
+        total: Number(r.total) || 0,
+        status: 'Finalizado',
+        closedAt: r.closed_at || ''
+      };
+    }
+
+    // Sincronização Principal (Puxa da nuvem e migra dados locais se necessário)
+    async function syncWithCloud(isInitial = false) {
+      if (!sb) { setCloudStatus('offline'); return; }
+      setCloudStatus('syncing');
+      try {
+        // 1. Configurações
+        const { data: cfgData, error: cfgErr } = await sb.from('recanto_config').select('*').eq('id', 'main').maybeSingle();
+        if (cfgErr) throw cfgErr;
+        if (cfgData && cfgData.data) {
+          config = cfgData.data;
+          if (!config.logoHeight) config.logoHeight = 45;
+          localStorage.setItem('recanto_cfg_v25', JSON.stringify(config));
+        } else {
+          await sb.from('recanto_config').upsert({ id: 'main', data: config, updated_at: new Date().toISOString() });
+        }
+
+        // 2. Clientes
+        const { data: cliRows, error: cliErr } = await sb.from('recanto_clientes').select('*');
+        if (cliErr) throw cliErr;
+        const cloudClients = (cliRows || []).map(rowToClient);
+        if (isInitial && clientsDb.length > 0) {
+          const cloudIds = new Set(cloudClients.map(c => c.id));
+          const localOnlyClients = clientsDb.filter(c => !cloudIds.has(Number(c.id)));
+          if (localOnlyClients.length > 0) {
+            await sb.from('recanto_clientes').upsert(localOnlyClients.map(clientToRow));
+            cloudClients.push(...localOnlyClients);
+          }
+        }
+        clientsDb = cloudClients;
+        localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+
+        // 3. Atendimentos / Fila / Agenda
+        const { data: bkRows, error: bkErr } = await sb.from('recanto_atendimentos').select('*').order('id', { ascending: false });
+        if (bkErr) throw bkErr;
+        const cloudBookings = (bkRows || []).map(rowToBooking);
+        if (isInitial && bookings.length > 0 && cloudBookings.length === 0) {
+          await sb.from('recanto_atendimentos').upsert(bookings.map(bookingToRow));
+          cloudBookings.push(...bookings);
+        }
+        bookings = cloudBookings;
+        localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+
+        // 4. Histórico Arquivado
+        const { data: histRows, error: histErr } = await sb.from('recanto_historico').select('*').order('id', { ascending: false });
+        if (histErr) throw histErr;
+        const cloudHist = (histRows || []).map(rowToHistory);
+        if (isInitial && historyArchive.length > 0) {
+          const cloudHistIds = new Set(cloudHist.map(h => h.id));
+          const localOnlyHist = historyArchive.filter(h => !cloudHistIds.has(Number(h.id)));
+          if (localOnlyHist.length > 0) {
+            await sb.from('recanto_historico').upsert(localOnlyHist.map(historyToRow));
+            cloudHist.unshift(...localOnlyHist);
+          }
+        }
+        historyArchive = cloudHist;
+        localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
+
+        applyStoreBranding();
+        renderAllClient();
+        refreshAllViews();
+        renderAdminEditors();
+        setCloudStatus('online');
+      } catch (err) {
+        console.error('Erro na sincronização:', err);
+        setCloudStatus('offline');
+      }
+    }
+
+    function manualCloudSync() {
+      syncWithCloud(false);
+    }
+
+    async function cloudSaveConfig() {
+      if (!sb) return;
+      setCloudStatus('syncing');
+      const { error } = await sb.from('recanto_config').upsert({ id: 'main', data: config, updated_at: new Date().toISOString() });
+      setCloudStatus(error ? 'offline' : 'online');
+    }
+
+    async function cloudUpsertClient(clientObj) {
+      if (!sb) return;
+      setCloudStatus('syncing');
+      const { error } = await sb.from('recanto_clientes').upsert(clientToRow(clientObj));
+      setCloudStatus(error ? 'offline' : 'online');
+    }
+
+    async function cloudUpsertBooking(bookingObj) {
+      if (!sb) return;
+      setCloudStatus('syncing');
+      const { error } = await sb.from('recanto_atendimentos').upsert(bookingToRow(bookingObj));
+      setCloudStatus(error ? 'offline' : 'online');
+    }
+
+    async function cloudDeleteBooking(id) {
+      if (!sb) return;
+      setCloudStatus('syncing');
+      const { error } = await sb.from('recanto_atendimentos').delete().eq('id', Number(id));
+      setCloudStatus(error ? 'offline' : 'online');
+    }
+
+    async function cloudArchiveDay(doneList) {
+      if (!sb || doneList.length === 0) return;
+      setCloudStatus('syncing');
+      const { error: insErr } = await sb.from('recanto_historico').upsert(doneList.map(historyToRow));
+      const ids = doneList.map(d => Number(d.id));
+      const { error: delErr } = await sb.from('recanto_atendimentos').delete().in('id', ids);
+      setCloudStatus(insErr || delErr ? 'offline' : 'online');
+    }
+
     // Retorna YYYY-MM-DD respeitando o fuso horário local do aparelho
     function getTodayLocalStr() {
       const d = new Date();
@@ -692,6 +935,7 @@
       applyStoreBranding();
       renderAllClient();
       renderAdminEditors();
+      cloudSaveConfig();
     }
 
     function resetToFactory() {
@@ -712,6 +956,21 @@
       switchClientTab('novo');
       refreshAllViews();
       renderAdminEditors();
+
+      // Sincroniza automaticamente ao abrir
+      syncWithCloud(true);
+
+      // Atualiza ao voltar para a aba do navegador
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) syncWithCloud(false);
+      });
+
+      // Mantém sincronizado em segundo plano a cada 30 segundos
+      setInterval(() => {
+        if (!document.hidden && !reschedulingBookingId) {
+          syncWithCloud(false);
+        }
+      }, 30000);
     });
 
     function refreshAllViews() {
@@ -810,6 +1069,9 @@
           btn.className = 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1.5';
         }
       });
+      if (tab === 'fila' || tab === 'agenda' || tab === 'fechamento') {
+        syncWithCloud(false);
+      }
     }
 
     function renderAllClient() {
@@ -1077,6 +1339,8 @@
 
       bookings.unshift(newItem);
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      cloudUpsertBooking(newItem);
+
       upsertClientRecord(ownerName, ownerPhone, petName, ownerAddress, combinedServiceName, dateVal);
 
       document.getElementById('booking-form').reset();
@@ -1107,8 +1371,8 @@
         client.ownerName = ownerName;
         if (address) client.address = address;
       } else {
-        clientsDb.push({ 
-          id: Date.now(), 
+        client = { 
+          id: Date.now() + 1, 
           ownerName, 
           phone, 
           petName, 
@@ -1116,15 +1380,25 @@
           visitsCount: 1, 
           lastVisitDate: dateStr, 
           lastService: serviceName 
-        });
+        };
+        clientsDb.push(client);
       }
       localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+      cloudUpsertClient(client);
     }
 
     // ================= ROTINAS DE FILA, AGENDA E CAIXA (INTEGRADAS) =================
     function changeStatus(id, st) {
-      bookings = bookings.map(b => b.id === id ? { ...b, status: st } : b);
+      let updatedItem = null;
+      bookings = bookings.map(b => {
+        if (b.id === id) {
+          updatedItem = { ...b, status: st };
+          return updatedItem;
+        }
+        return b;
+      });
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      if (updatedItem) cloudUpsertBooking(updatedItem);
       refreshAllViews();
     }
 
@@ -1137,6 +1411,7 @@
       if (confirm(msg)) {
         bookings = bookings.filter(x => x.id !== id);
         localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+        cloudDeleteBooking(id);
         refreshAllViews();
       }
     }
@@ -1147,6 +1422,7 @@
       b.date = getTodayLocalStr();
       b.status = 'Aguardando';
       localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+      cloudUpsertBooking(b);
       refreshAllViews();
       switchClientTab('fila');
     }
@@ -1182,6 +1458,7 @@
         b.date = newDate;
         b.time = newTime;
         localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
+        cloudUpsertBooking(b);
       }
       closeRescheduleModal();
       refreshAllViews();
@@ -1212,7 +1489,6 @@
 
     function renderCounterFila() {
       const todayStr = getTodayLocalStr();
-      // Pets na fila de hoje: não finalizados e com data de hoje ou anterior
       const activeBookings = bookings.filter(b => b.status !== 'Finalizado' && (!b.date || b.date <= todayStr));
       const list = document.getElementById('counter-bookings-active');
       
@@ -1246,7 +1522,6 @@
       const tomorrowStr = getTomorrowLocalStr();
       const specDate = document.getElementById('agenda-specific-date')?.value;
 
-      // Contador do botão Agenda no topo mostra sempre quantos estão agendados para datas futuras
       const futureBookingsCount = bookings.filter(b => b.status !== 'Finalizado' && b.date > todayStr).length;
       const tabAgendaBadge = document.getElementById('tab-agenda-badge');
       if (tabAgendaBadge) tabAgendaBadge.textContent = futureBookingsCount;
@@ -1267,7 +1542,6 @@
         return b.date > todayStr;
       });
 
-      // Ordena por data e horário mais próximos primeiro
       filtered.sort((a, b) => {
         const cmpDate = (a.date || '').localeCompare(b.date || '');
         if (cmpDate !== 0) return cmpDate;
@@ -1357,22 +1631,27 @@
       if (doneBookings.length === 0 && todayOpen.length === 0) {
         return alert('Não há atendimentos de hoje no balcão para encerrar.');
       }
-      if (confirm('Encerrar o expediente de hoje? Os atendimentos finalizados serão salvos na aba "📊 Histórico" e os agendamentos de dias futuros continuarão salvos na "📅 Agenda"!')) {
+      if (confirm('Encerrar o expediente de hoje? Os atendimentos finalizados serão salvos na aba "📊 Histórico" na nuvem e os agendamentos de dias futuros continuarão salvos na "📅 Agenda"!')) {
         if (doneBookings.length > 0) {
-          doneBookings.forEach(item => {
+          const toArchive = doneBookings.map(item => ({ ...item, closedAt: new Date().toISOString() }));
+          toArchive.forEach(item => {
             if (!historyArchive.find(h => h.id === item.id)) {
-              historyArchive.unshift({ ...item, closedAt: new Date().toISOString() });
+              historyArchive.unshift(item);
             }
           });
           localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
+          cloudArchiveDay(toArchive);
         }
+
+        // Remove da nuvem eventuais itens abertos de hoje que não foram finalizados
+        todayOpen.forEach(item => cloudDeleteBooking(item.id));
 
         // Mantém todos os agendamentos futuros intactos na Agenda!
         bookings = bookings.filter(b => b.status !== 'Finalizado' && b.date > todayStr);
         localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
         refreshAllViews();
         switchClientTab('novo');
-        alert('✅ Expediente encerrado! O caixa de hoje foi salvo no Histórico e os agendamentos futuros seguem na Agenda.');
+        alert('✅ Expediente encerrado! O caixa de hoje foi salvo na nuvem e os agendamentos futuros seguem na Agenda.');
       }
     }
 
@@ -1574,6 +1853,7 @@
       if (newAddr !== null) {
         client.address = newAddr.trim();
         localStorage.setItem('recanto_clients_v25', JSON.stringify(clientsDb));
+        cloudUpsertClient(client);
         renderClientsList();
       }
     }
@@ -1681,13 +1961,13 @@
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         try {
           const data = JSON.parse(e.target.result);
           if (!data.clientsDb && !data.config) {
             return alert('Arquivo de backup inválido.');
           }
-          if (confirm('Deseja restaurar este backup? Os dados atuais serão substituídos pelos do arquivo.')) {
+          if (confirm('Deseja restaurar este backup? Os dados serão salvos na nuvem e neste aparelho.')) {
             if (data.config) config = data.config;
             if (data.clientsDb) clientsDb = data.clientsDb;
             if (data.bookings) bookings = data.bookings;
@@ -1698,11 +1978,20 @@
             localStorage.setItem('recanto_bookings_v25', JSON.stringify(bookings));
             localStorage.setItem('recanto_history_v25', JSON.stringify(historyArchive));
 
+            if (sb) {
+              setCloudStatus('syncing');
+              await sb.from('recanto_config').upsert({ id: 'main', data: config, updated_at: new Date().toISOString() });
+              if (clientsDb.length > 0) await sb.from('recanto_clientes').upsert(clientsDb.map(clientToRow));
+              if (bookings.length > 0) await sb.from('recanto_atendimentos').upsert(bookings.map(bookingToRow));
+              if (historyArchive.length > 0) await sb.from('recanto_historico').upsert(historyArchive.map(historyToRow));
+              setCloudStatus('online');
+            }
+
             applyStoreBranding();
             renderAllClient();
             refreshAllViews();
             renderAdminEditors();
-            alert('✅ Backup restaurado com sucesso!');
+            alert('✅ Backup restaurado e sincronizado na nuvem com sucesso!');
           }
         } catch (err) {
           alert('Erro ao ler o arquivo de backup.');
@@ -1796,6 +2085,7 @@
         document.getElementById('view-client').classList.add('hidden'); 
         document.getElementById('view-admin').classList.remove('hidden'); 
         document.getElementById('btn-exit-admin').classList.remove('hidden');
+        syncWithCloud(false);
         refreshAllViews();
         renderAdminEditors(); 
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1886,7 +2176,7 @@
       config.services.push({ id: 'srv_' + Date.now(), name, desc: document.getElementById('new-srv-desc').value.trim() || 'Serviço', prices: pricesObj });
       closeNewServiceModal(); 
       saveConfig(); 
-      alert('✅ Serviço adicionado!');
+      alert('✅ Serviço adicionado e salvo na nuvem!');
     }
     
     function deleteService(id) { 
@@ -1907,7 +2197,7 @@
       document.getElementById('new-size-name').value = '';
       document.getElementById('new-size-sub').value = '';
       saveConfig();
-      alert('✅ Novo porte cadastrado! Ajuste os valores dele na aba "💰 Preços".');
+      alert('✅ Novo porte cadastrado e salvo na nuvem! Ajuste os valores dele na aba "💰 Preços".');
     }
     
     function deleteSizeCategory(id) {
@@ -1939,7 +2229,7 @@
         if (pEl) ex.price = parseFloat(pEl.value) || 0;
       });
       saveConfig(); 
-      alert('✅ Adicionais salvos!');
+      alert('✅ Adicionais salvos na nuvem!');
     }
     
     function saveSizesChanges() {
@@ -1950,7 +2240,7 @@
         if (s) sz.subtitle = s.value.trim();
       }); 
       saveConfig(); 
-      alert('✅ Categorias salvas!');
+      alert('✅ Categorias salvas na nuvem!');
     }
     
     function savePricesFromEditor() {
@@ -1963,7 +2253,7 @@
         });
       }); 
       saveConfig(); 
-      alert('✅ Preços salvos!');
+      alert('✅ Preços salvos na nuvem!');
     }
     
     function saveStoreDataConfig() {
@@ -1973,7 +2263,7 @@
       config.whatsapp = document.getElementById('cfg-whatsapp').value.trim();
       config.pin = document.getElementById('cfg-pin').value.trim(); 
       saveConfig(); 
-      alert('✅ Configurações salvas!');
+      alert('✅ Configurações salvas na nuvem!');
     }
   </script>
 </body>
