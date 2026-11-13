@@ -12,12 +12,19 @@
     :root {
       --brand-primary: #23B5C8;
       --brand-primary-dark: #1994a4;
-      --brand-primary-soft: #ECFEFF;
-      --brand-primary-border: #A5F3FC;
+      --brand-page-bg: #effafb;
+      --brand-card-bg: #e1f5f8;
+      --brand-card-border: #a7e3ec;
       --brand-accent: #EE3E80;
-      --brand-accent-soft: #FDF2F8;
+      --brand-accent-bg: #fde8f0;
+      --brand-accent-border: #f8b8d0;
     }
-    body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--brand-page-bg);
+      color: #1E293B;
+      transition: background-color 0.3s ease;
+    }
     .font-brand { font-family: 'Fredoka', sans-serif; }
     .brand-gradient-bar {
       background: linear-gradient(90deg, var(--brand-accent) 0%, var(--brand-accent) 35%, #6AB43E 35%, #6AB43E 65%, var(--brand-primary) 65%, var(--brand-primary) 100%);
@@ -30,9 +37,28 @@
     .brand-accent-bg { background-color: var(--brand-accent); border-color: var(--brand-accent); color: #ffffff; }
     .brand-primary-text { color: var(--brand-primary); }
     .brand-accent-text { color: var(--brand-accent); }
+    .theme-stage-box {
+      background-color: var(--brand-card-bg);
+      border-color: var(--brand-card-border);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .theme-nav-bar {
+      background-color: var(--brand-card-bg);
+      border: 1px solid var(--brand-card-border);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .theme-footer {
+      background-color: var(--brand-card-bg);
+      border-color: var(--brand-card-border);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .service-card {
+      background-color: var(--brand-page-bg);
+      border-color: var(--brand-card-border);
+    }
     .service-card.selected {
       border-color: var(--brand-primary);
-      background-color: var(--brand-primary-soft);
+      background-color: var(--brand-card-bg);
       box-shadow: 0 0 0 2px var(--brand-primary);
     }
     .size-btn.selected {
@@ -58,12 +84,12 @@
   <div class="brand-gradient-bar w-full sticky top-0 z-50"></div>
 
   <!-- Cabeçalho com Altura Travada (h-16 = 64px) para Zoom Isolado na Logo -->
-  <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center">
+  <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center border-b" style="border-color: var(--brand-card-border);">
     <div class="max-w-4xl w-full mx-auto px-4 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 h-12">
         <!-- Logo Padrão (aparece apenas se nenhuma logo foi enviada) -->
         <div id="default-logo-elements" class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-full border-2 flex items-center justify-center shadow-sm shrink-0" style="border-color: var(--brand-primary); background-color: var(--brand-primary-soft);">
+          <div class="w-11 h-11 rounded-full border-2 flex items-center justify-center shadow-sm shrink-0" style="border-color: var(--brand-primary); background-color: var(--brand-card-bg);">
             <span class="font-brand text-2xl font-bold leading-none brand-primary-text">R</span>
           </div>
           <div>
@@ -111,123 +137,123 @@
         <h1 class="font-brand text-2xl font-bold leading-tight" id="banner-title">Painel de Balcão — Banho & Tosa</h1>
       </div>
 
-      <!-- 5 BOTÕES DE NAVEGAÇÃO DO BALCÃO -->
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 bg-slate-200 p-1.5 rounded-xl">
+      <!-- 5 BOTÕES DE NAVEGAÇÃO DO BALCÃO (COM FUNDO DO TEMA) -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 theme-nav-bar p-1.5 rounded-xl">
         <button onclick="switchClientTab('novo')" id="tab-cli-novo" class="px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm brand-primary-text flex items-center justify-center gap-1">
           <span>📝 Registrar</span>
         </button>
-        <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
+        <button onclick="switchClientTab('fila')" id="tab-cli-fila" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white/60 transition-colors flex items-center justify-center gap-1">
           <span>📋 Pets na Fila</span>
           <span id="tab-fila-badge" class="px-1.5 py-0.5 text-[10px] rounded-full brand-primary-bg font-bold leading-none">0</span>
         </button>
-        <button onclick="switchClientTab('agenda')" id="tab-cli-agenda" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
+        <button onclick="switchClientTab('agenda')" id="tab-cli-agenda" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white/60 transition-colors flex items-center justify-center gap-1">
           <span>📅 Agenda</span>
           <span id="tab-agenda-badge" class="px-1.5 py-0.5 text-[10px] rounded-full brand-accent-bg font-bold leading-none">0</span>
         </button>
-        <button onclick="switchClientTab('finalizados')" id="tab-cli-finalizados" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
+        <button onclick="switchClientTab('finalizados')" id="tab-cli-finalizados" class="px-2 py-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white/60 transition-colors flex items-center justify-center gap-1">
           <span>✅ Finalizados</span>
-          <span id="tab-done-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-slate-600 text-white font-bold leading-none">0</span>
+          <span id="tab-done-badge" class="px-1.5 py-0.5 text-[10px] rounded-full bg-slate-700 text-white font-bold leading-none">0</span>
         </button>
-        <button onclick="switchClientTab('caixa')" id="tab-cli-caixa" class="col-span-2 sm:col-span-1 px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1">
+        <button onclick="switchClientTab('caixa')" id="tab-cli-caixa" class="col-span-2 sm:col-span-1 px-2 py-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white/60 transition-colors flex items-center justify-center gap-1">
           <span>💵 Caixa PDV</span>
           <span id="tab-unpaid-badge" class="hidden px-1.5 py-0.5 text-[10px] rounded-full bg-amber-500 text-white font-bold leading-none">0</span>
         </button>
       </div>
 
-      <!-- ABA 1: NOVO REGISTRO (SEPARADO POR MOLDURAS / ETAPAS) -->
+      <!-- ABA 1: NOVO REGISTRO (TODAS AS MOLDURAS ACOMPANHAM A COR DO TEMA) -->
       <div id="client-sec-novo" class="space-y-4">
         
         <!-- MOLDURA DE BUSCA RÁPIDA -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-2.5" style="border-color: var(--brand-primary-border);">
+        <div class="theme-stage-box rounded-2xl p-4 shadow-sm border-2 space-y-2.5">
           <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
             🔍 Busca Rápida de Cliente Cadastrado
           </h3>
           <input type="text" id="counter-search-input" oninput="filterCounterClients(this.value)" placeholder="Digite nome do pet, tutor, telefone ou endereço..." 
-            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none" />
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none" />
           <div id="counter-search-results" class="hidden space-y-2 max-h-48 overflow-y-auto pt-1"></div>
         </div>
 
-        <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <form id="booking-form" onsubmit="handleBookingSubmit(event)" novalidate class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border-2 space-y-4" style="border-color: var(--brand-card-border);">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-3" style="border-color: var(--brand-card-border);">
             <div class="flex items-center gap-2">
               <span class="w-6 h-6 rounded-full brand-accent-bg text-xs font-bold flex items-center justify-center">+</span>
               <h2 class="font-bold text-slate-800 text-sm sm:text-base">Ficha de Novo Atendimento</h2>
             </div>
-            <span class="text-[11px] text-slate-500 font-semibold bg-slate-100 px-2.5 py-1 rounded-lg">Hoje = Fila | Data futura = Agenda</span>
+            <span class="text-[11px] text-slate-600 font-semibold px-2.5 py-1 rounded-lg theme-stage-box border">Hoje = Fila | Data futura = Agenda</span>
           </div>
 
           <!-- MOLDURA ETAPA 1: DADOS DO PET -->
-          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
-            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+          <div class="p-4 rounded-2xl border-2 theme-stage-box space-y-3.5">
+            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-card-border);">
               <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">1</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">🐾 Dados do Pet</h3>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Pet *</label>
-                <input type="text" id="pet-name" oninput="clearError(this)" placeholder="Ex: Thor..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nome do Pet *</label>
+                <input type="text" id="pet-name" oninput="clearError(this)" placeholder="Ex: Thor..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Espécie *</label>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Espécie *</label>
                 <div class="grid grid-cols-2 gap-2">
                   <button type="button" onclick="selectSpecies('Cachorro')" id="sp-dog" class="py-2.5 px-3 rounded-xl border text-xs font-bold brand-primary-bg">🐶 Cachorro</button>
-                  <button type="button" onclick="selectSpecies('Gato')" id="sp-cat" class="py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white">🐱 Gato</button>
+                  <button type="button" onclick="selectSpecies('Gato')" id="sp-cat" class="py-2.5 px-3 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold bg-white">🐱 Gato</button>
                 </div>
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Porte, Peso ou Raça *</label>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Porte, Peso ou Raça *</label>
               <div id="sizes-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
             </div>
           </div>
 
           <!-- MOLDURA ETAPA 2: DADOS DO TUTOR -->
-          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
-            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+          <div class="p-4 rounded-2xl border-2 theme-stage-box space-y-3.5">
+            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-card-border);">
               <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">2</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">👤 Dados do Tutor</h3>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Nome do Tutor *</label>
-                <input type="text" id="owner-name" oninput="clearError(this)" placeholder="Nome do cliente" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nome do Tutor *</label>
+                <input type="text" id="owner-name" oninput="clearError(this)" placeholder="Nome do cliente" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp do Tutor *</label>
-                <input type="tel" id="owner-phone" oninput="clearError(this)" placeholder="(11) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+                <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp do Tutor *</label>
+                <input type="tel" id="owner-phone" oninput="clearError(this)" placeholder="(11) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" />
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Endereço / Bairro (Opcional)</label>
-              <input type="text" id="owner-address" placeholder="Ex: Rua das Flores, 120 - Centro" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Endereço / Bairro (Opcional)</label>
+              <input type="text" id="owner-address" placeholder="Ex: Rua das Flores, 120 - Centro" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" />
             </div>
           </div>
 
           <!-- MOLDURA ETAPA 3: SERVIÇO PRINCIPAL + ADICIONAIS + SERVIÇO VARIÁVEL -->
-          <div class="p-4 rounded-2xl border-2 space-y-4" style="border-color: var(--brand-primary-border); background-color: var(--brand-primary-soft);">
-            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-primary-border);">
+          <div class="p-4 rounded-2xl border-2 theme-stage-box space-y-4">
+            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-card-border);">
               <span class="w-5 h-5 rounded-full brand-accent-bg text-[11px] font-bold flex items-center justify-center">3</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">🛁 Serviços e Adicionais</h3>
             </div>
 
             <!-- 3.1 Serviço Principal -->
-            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
+            <div class="bg-white p-3.5 rounded-xl border space-y-2" style="border-color: var(--brand-card-border);">
               <label class="block text-xs font-bold text-slate-700 uppercase">Serviço Principal (Toque para selecionar ou desmarcar)</label>
               <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
             </div>
 
             <!-- 3.2 Adicionais (Opcional) -->
-            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
+            <div class="bg-white p-3.5 rounded-xl border space-y-2" style="border-color: var(--brand-card-border);">
               <label class="block text-xs font-bold text-slate-700 uppercase">✨ Adicionais (Opcional)</label>
               <div id="extras-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
             </div>
 
             <!-- 3.3 Serviço Variável -->
-            <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/90 space-y-3">
+            <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/95 space-y-3">
               <label class="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" id="custom-service-check" onchange="toggleCustomService(this)" class="w-4 h-4 rounded" />
                 <span class="font-bold text-xs text-amber-900">💡 Serviço Variável / Sob Avaliação na Hora</span>
@@ -243,30 +269,30 @@
           </div>
 
           <!-- MOLDURA ETAPA 4: OBSERVAÇÕES -->
-          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-2.5">
-            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+          <div class="p-4 rounded-2xl border-2 theme-stage-box space-y-2.5">
+            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-card-border);">
               <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">4</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">📝 Observações</h3>
             </div>
             <div>
-              <input type="text" id="booking-notes" placeholder="Ex: pele sensível, alergia a perfume, nó atrás da orelha..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white" />
+              <input type="text" id="booking-notes" placeholder="Ex: pele sensível, alergia a perfume, nó atrás da orelha..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" />
             </div>
           </div>
 
           <!-- MOLDURA ETAPA 5: DATA DO ATENDIMENTO E HORÁRIO (NO FINAL) -->
-          <div class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 space-y-3.5">
-            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+          <div class="p-4 rounded-2xl border-2 theme-stage-box space-y-3.5">
+            <div class="flex items-center gap-2 border-b pb-2" style="border-color: var(--brand-card-border);">
               <span class="w-5 h-5 rounded-full brand-primary-bg text-[11px] font-bold flex items-center justify-center">5</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 uppercase tracking-wide">📅 Data e Horário do Atendimento</h3>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Data do Atendimento *</label>
-                <input type="date" id="booking-date" onchange="updateSubmitButtonLabel()" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white font-semibold" />
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Data do Atendimento *</label>
+                <input type="date" id="booking-date" onchange="updateSubmitButtonLabel()" oninput="clearError(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white font-semibold" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Horário *</label>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Horário *</label>
                 <div id="time-slots" class="grid grid-cols-4 gap-1.5"></div>
               </div>
             </div>
@@ -290,11 +316,11 @@
 
       <!-- ABA 2: PETS NA FILA (HOJE) -->
       <div id="client-sec-fila" class="hidden space-y-3">
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2" style="border-color: var(--brand-card-border);">
+          <div class="flex items-center justify-between border-b pb-2.5 mb-3" style="border-color: var(--brand-card-border);">
             <div>
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">📋 Pets na Fila de Hoje</h3>
-              <p class="text-[11px] text-slate-400">Pets agendados para hoje aparecem aqui automaticamente.</p>
+              <p class="text-[11px] text-slate-500">Pets agendados para hoje aparecem aqui automaticamente.</p>
             </div>
             <span id="counter-badge-active" class="text-xs brand-primary-bg px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
@@ -304,8 +330,8 @@
 
       <!-- ABA 3: AGENDA (FUTUROS E REMARCAÇÕES) -->
       <div id="client-sec-agenda" class="hidden space-y-3">
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-3" style="border-color: var(--brand-card-border);">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-3" style="border-color: var(--brand-card-border);">
             <div>
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">📅 Agenda de Marcações</h3>
               <p class="text-[11px] text-slate-500">Consulte horários marcados, remarque para outro dia ou cancele.</p>
@@ -316,10 +342,10 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-1.5">
-            <button onclick="setAgendaFilter('tomorrow')" id="agfilter-tomorrow" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Amanhã</button>
-            <button onclick="setAgendaFilter('7d')" id="agfilter-7d" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Próx. 7 Dias</button>
+            <button onclick="setAgendaFilter('tomorrow')" id="agfilter-tomorrow" class="agfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">Amanhã</button>
+            <button onclick="setAgendaFilter('7d')" id="agfilter-7d" class="agfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">Próx. 7 Dias</button>
             <button onclick="setAgendaFilter('future')" id="agfilter-future" class="agfilter-btn px-2.5 py-1.5 rounded-lg brand-primary-bg text-xs font-bold">Todos Futuros</button>
-            <button onclick="setAgendaFilter('all')" id="agfilter-all" class="agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Hoje + Futuros</button>
+            <button onclick="setAgendaFilter('all')" id="agfilter-all" class="agfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">Hoje + Futuros</button>
             <div class="flex items-center gap-1 ml-auto">
               <input type="date" id="agenda-specific-date" onchange="setAgendaFilter('date')" class="px-2 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
             </div>
@@ -331,8 +357,8 @@
 
       <!-- ABA 4: PETS FINALIZADOS (CONTROLE OPERACIONAL DO DIA) -->
       <div id="client-sec-finalizados" class="hidden space-y-3">
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-3" style="border-color: var(--brand-card-border);">
+          <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--brand-card-border);">
             <div>
               <h3 class="font-bold text-slate-800 text-sm sm:text-base">✅ Pets Finalizados Hoje (Operacional)</h3>
               <p class="text-[11px] text-slate-500">Controle de produção do dia: quem foi atendido, serviços feitos e status do pagamento.</p>
@@ -398,8 +424,8 @@
         </div>
 
         <!-- Bloco 1 do Caixa: Pets Aguardando Pagamento -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-3" style="border-color: var(--brand-card-border);">
+          <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--brand-card-border);">
             <div>
               <h3 class="font-bold text-slate-800 text-sm">⏳ Aguardando Recebimento (Banho & Tosa)</h3>
               <p class="text-[11px] text-slate-500">Pets na loja ou finalizados que ainda não tiveram pagamento registrado.</p>
@@ -410,14 +436,14 @@
         </div>
 
         <!-- Bloco 2 do Caixa: Lançamentos Pagos e Sangrias do Dia -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border-2 space-y-3" style="border-color: var(--brand-card-border);">
+          <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--brand-card-border);">
             <h3 class="font-bold text-slate-800 text-sm">🧾 Movimentações Registradas no Caixa Hoje</h3>
             <span id="pdv-movements-count" class="text-xs bg-green-100 text-green-800 px-2.5 py-1 rounded-full font-bold">0</span>
           </div>
           <div id="pdv-movements-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
 
-          <div class="pt-3 border-t border-slate-200">
+          <div class="pt-3 border-t" style="border-color: var(--brand-card-border);">
             <button onclick="baterEEncerrarCaixa()" class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow flex items-center justify-center gap-2">
               🔒 Bater e Encerrar Caixa do Dia
             </button>
@@ -470,43 +496,43 @@
       <!-- SUB-ABA 1: RESUMO DO DIA (HOJE) -->
       <div id="admin-sec-fila" class="space-y-4">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Na Fila Hoje</span>
+          <div class="bg-white p-3 rounded-2xl border-2 theme-stage-box shadow-sm text-center">
+            <span class="text-[10px] text-slate-600 font-semibold uppercase">Na Fila Hoje</span>
             <p id="stat-total" class="font-brand text-xl font-bold text-slate-800">0</p>
           </div>
-          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Finalizados Hoje</span>
+          <div class="bg-white p-3 rounded-2xl border-2 theme-stage-box shadow-sm text-center">
+            <span class="text-[10px] text-slate-600 font-semibold uppercase">Finalizados Hoje</span>
             <p id="stat-ready" class="font-brand text-xl font-bold brand-primary-text">0</p>
           </div>
-          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Caixa Recebido</span>
+          <div class="bg-white p-3 rounded-2xl border-2 theme-stage-box shadow-sm text-center">
+            <span class="text-[10px] text-slate-600 font-semibold uppercase">Caixa Recebido</span>
             <p id="stat-revenue" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
           </div>
-          <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center border-b-4" style="border-bottom-color: var(--brand-accent);">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">Ticket Médio</span>
+          <div class="bg-white p-3 rounded-2xl border-2 theme-stage-box shadow-sm text-center border-b-4" style="border-bottom-color: var(--brand-accent);">
+            <span class="text-[10px] text-slate-600 font-semibold uppercase">Ticket Médio</span>
             <p id="stat-ticket" class="font-brand text-xl font-bold brand-accent-text">R$ 0,00</p>
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm space-y-3">
-          <h3 class="font-bold text-sm text-slate-800 border-b border-slate-100 pb-2.5">Movimento de Hoje</h3>
+        <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
+          <h3 class="font-bold text-sm text-slate-800 border-b pb-2.5" style="border-color: var(--brand-card-border);">Movimento de Hoje</h3>
           <div id="admin-bookings-list" class="space-y-3"></div>
         </div>
       </div>
 
       <!-- SUB-ABA 2: HISTÓRICO & INTELIGÊNCIA DE GESTÃO -->
       <div id="admin-sec-historico" class="hidden space-y-4">
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <div class="border-b border-slate-100 pb-3 space-y-3">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
+          <div class="border-b pb-3 space-y-3" style="border-color: var(--brand-card-border);">
             <div class="flex items-center justify-between">
               <h3 class="font-bold text-slate-800 text-base">📊 Inteligência & Histórico de Caixa</h3>
-              <span id="hist-records-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 brand-primary-text">0 registros</span>
+              <span id="hist-records-badge" class="text-xs font-bold px-2.5 py-1 rounded-full theme-stage-box border brand-primary-text">0 registros</span>
             </div>
 
             <div class="flex flex-wrap items-center gap-1.5">
-              <button onclick="setHistoryFilter('today')" id="hfilter-today" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Hoje</button>
-              <button onclick="setHistoryFilter('7d')" id="hfilter-7d" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">7 dias</button>
-              <button onclick="setHistoryFilter('30d')" id="hfilter-30d" class="hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">30 dias</button>
+              <button onclick="setHistoryFilter('today')" id="hfilter-today" class="hfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">Hoje</button>
+              <button onclick="setHistoryFilter('7d')" id="hfilter-7d" class="hfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">7 dias</button>
+              <button onclick="setHistoryFilter('30d')" id="hfilter-30d" class="hfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">30 dias</button>
               <button onclick="setHistoryFilter('all')" id="hfilter-all" class="hfilter-btn px-2.5 py-1.5 rounded-lg brand-primary-bg text-xs font-bold">Tudo</button>
               <div class="flex items-center gap-1 ml-auto">
                 <span class="text-[11px] font-semibold text-slate-500">Data:</span>
@@ -516,36 +542,36 @@
           </div>
 
           <div class="grid grid-cols-3 gap-2.5">
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
-              <span class="text-[10px] text-slate-500 font-bold uppercase">Atendimentos</span>
+            <div class="theme-stage-box p-3 rounded-xl border text-center">
+              <span class="text-[10px] text-slate-600 font-bold uppercase">Atendimentos</span>
               <p id="hist-kpi-count" class="font-brand text-xl font-bold text-slate-800">0</p>
             </div>
-            <div class="bg-green-50/70 p-3 rounded-xl border border-green-200 text-center">
+            <div class="bg-green-50/90 p-3 rounded-xl border border-green-200 text-center">
               <span class="text-[10px] text-green-700 font-bold uppercase">Faturamento</span>
               <p id="hist-kpi-rev" class="font-brand text-xl font-bold text-[#6AB43E]">R$ 0,00</p>
             </div>
-            <div class="bg-pink-50/70 p-3 rounded-xl border border-pink-200 text-center">
+            <div class="bg-pink-50/90 p-3 rounded-xl border border-pink-200 text-center">
               <span class="text-[10px] text-pink-700 font-bold uppercase">Ticket Médio</span>
               <p id="hist-kpi-ticket" class="font-brand text-xl font-bold brand-accent-text">R$ 0,00</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="p-3 rounded-xl theme-stage-box border">
               <span class="text-[10px] font-bold brand-primary-text uppercase block">📅 Dia Mais Movimentado</span>
               <strong id="hist-insight-day" class="text-sm text-slate-800 mt-0.5 block">—</strong>
             </div>
-            <div class="p-3 rounded-xl bg-amber-50/60 border border-amber-100">
+            <div class="p-3 rounded-xl bg-amber-50/80 border border-amber-200">
               <span class="text-[10px] font-bold text-amber-700 uppercase block">⏰ Horário de Pico</span>
               <strong id="hist-insight-hour" class="text-sm text-slate-800 mt-0.5 block">—</strong>
             </div>
-            <div class="p-3 rounded-xl bg-purple-50/60 border border-purple-100">
+            <div class="p-3 rounded-xl bg-purple-50/80 border border-purple-200">
               <span class="text-[10px] font-bold text-purple-700 uppercase block">🏆 Serviço Campeão</span>
               <strong id="hist-insight-service" class="text-sm text-slate-800 mt-0.5 block">—</strong>
             </div>
           </div>
 
-          <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-2">
+          <div class="theme-stage-box rounded-xl p-3.5 border space-y-2">
             <h4 class="text-xs font-bold text-slate-700 uppercase">📈 Distribuição por Tipo de Serviço</h4>
             <div id="hist-services-breakdown" class="space-y-2 text-xs"></div>
           </div>
@@ -564,16 +590,16 @@
 
       <!-- SUB-ABA 3: CLIENTES & BACKUP -->
       <div id="admin-sec-clientes" class="hidden space-y-4">
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-3" style="border-color: var(--brand-card-border);">
             <div>
               <h3 class="font-bold text-slate-800 text-base">👥 Base de Clientes Cadastrados</h3>
               <p class="text-[11px] text-emerald-600 font-semibold">☁️ Sincronizado na nuvem (Supabase) + opção de exportar planilha.</p>
             </div>
-            <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 brand-primary-text">0 cadastrados</span>
+            <span id="client-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full theme-stage-box border brand-primary-text">0 cadastrados</span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 theme-stage-box p-3 rounded-xl border">
             <button onclick="exportClientsCSV()" class="py-2 px-3 rounded-lg bg-[#6AB43E] hover:bg-[#5ca034] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
               📥 Baixar Excel (CSV)
             </button>
@@ -588,14 +614,14 @@
 
           <div class="space-y-2">
             <input type="text" id="admin-client-search" oninput="renderClientsList()" placeholder="🔍 Buscar por nome, pet, telefone ou endereço..." 
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none" />
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none bg-white" />
             
             <div class="flex flex-wrap items-center gap-1.5">
               <span class="text-[11px] font-bold text-slate-500">Ordenar:</span>
               <button onclick="setClientSort('az')" id="csort-az" class="csort-btn px-2.5 py-1 rounded-lg brand-primary-bg text-[11px] font-bold">A - Z (Tutor)</button>
-              <button onclick="setClientSort('pet_az')" id="csort-pet_az" class="csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">A - Z (Pet)</button>
-              <button onclick="setClientSort('recent')" id="csort-recent" class="csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">Mais Recentes</button>
-              <button onclick="setClientSort('visits')" id="csort-visits" class="csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">Mais Frequentes</button>
+              <button onclick="setClientSort('pet_az')" id="csort-pet_az" class="csort-btn px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-[11px] font-bold">A - Z (Pet)</button>
+              <button onclick="setClientSort('recent')" id="csort-recent" class="csort-btn px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-[11px] font-bold">Mais Recentes</button>
+              <button onclick="setClientSort('visits')" id="csort-visits" class="csort-btn px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-[11px] font-bold">Mais Frequentes</button>
             </div>
           </div>
 
@@ -605,20 +631,20 @@
 
       <!-- SUB-ABA 4: CLIENTES SUMIDOS (REAQUECER) -->
       <div id="admin-sec-reaquecer" class="hidden space-y-4">
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <div class="border-b border-slate-100 pb-3 space-y-2">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
+          <div class="border-b pb-3 space-y-2" style="border-color: var(--brand-card-border);">
             <h3 class="font-bold text-slate-800 text-base">🔥 Clientes Sumidos (Reaquecimento)</h3>
             <p class="text-xs text-slate-500">Selecione quantos dias sem vir para encontrar clientes sumidos, escolha ou edite a mensagem e envie direto no WhatsApp.</p>
             
             <div class="flex flex-wrap items-center gap-2 pt-1">
               <span class="text-xs font-bold text-slate-600">Filtro Rápido:</span>
-              <button onclick="setReheatDays(7)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">7 dias</button>
-              <button onclick="setReheatDays(15)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">15 dias</button>
-              <button onclick="setReheatDays(30)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">30 dias</button>
-              <button onclick="setReheatDays(45)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">45 dias</button>
-              <button onclick="setReheatDays(60)" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">60 dias</button>
+              <button onclick="setReheatDays(7)" class="px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">7 dias</button>
+              <button onclick="setReheatDays(15)" class="px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">15 dias</button>
+              <button onclick="setReheatDays(30)" class="px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">30 dias</button>
+              <button onclick="setReheatDays(45)" class="px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">45 dias</button>
+              <button onclick="setReheatDays(60)" class="px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold">60 dias</button>
               <div class="flex items-center gap-1 ml-auto">
-                <input type="number" id="reheat-days-input" value="30" oninput="renderReheatList()" class="w-16 px-2 py-1 rounded border border-slate-300 text-xs font-bold text-center" />
+                <input type="number" id="reheat-days-input" value="30" oninput="renderReheatList()" class="w-16 px-2 py-1 rounded border border-slate-300 text-xs font-bold text-center bg-white" />
                 <span class="text-xs text-slate-600">dias</span>
               </div>
             </div>
@@ -630,7 +656,7 @@
 
       <!-- SUB-ABA 5: PORTES -->
       <div id="admin-sec-portes" class="hidden space-y-5">
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <h3 class="font-bold text-slate-800 text-base">🐶 Categorias / Portes de Cães e Gatos</h3>
           <p class="text-xs text-slate-500">Edite os nomes e descrições abaixo ou cadastre um novo porte/categoria:</p>
           
@@ -640,7 +666,7 @@
             💾 Salvar Alterações nas Categorias
           </button>
 
-          <div class="pt-4 border-t border-slate-200 space-y-2.5 bg-slate-50 p-3.5 rounded-xl border">
+          <div class="pt-4 border-t space-y-2.5 theme-stage-box p-3.5 rounded-xl border">
             <span class="block text-xs font-bold text-slate-700">➕ Cadastrar Novo Porte ou Categoria</span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <input type="text" id="new-size-name" placeholder="Nome (ex: Gato Pelo Longo)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-semibold" />
@@ -655,8 +681,8 @@
 
       <!-- SUB-ABA 6: PREÇOS -->
       <div id="admin-sec-precos" class="hidden space-y-5">
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
+          <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--brand-card-border);">
             <h3 class="font-bold text-slate-800 text-base">💰 Tabela de Preços dos Serviços (R$)</h3>
             <button onclick="openNewServiceModal()" class="px-3 py-1.5 brand-primary-bg rounded-xl text-xs font-bold">+ Novo</button>
           </div>
@@ -666,10 +692,10 @@
           </button>
         </div>
 
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <h3 class="font-bold text-slate-800 text-base">✨ Gerenciar Serviços Adicionais</h3>
           <div id="admin-extras-editor" class="space-y-3"></div>
-          <div class="pt-3 border-t border-slate-200 space-y-2.5 bg-slate-50 p-3.5 rounded-xl border">
+          <div class="pt-3 border-t space-y-2.5 theme-stage-box p-3.5 rounded-xl border">
             <span class="block text-xs font-bold text-slate-700">➕ Cadastrar Novo Adicional</span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <input type="text" id="new-extra-name" placeholder="Nome (ex: Escovação de Dentes)" class="min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
@@ -689,7 +715,7 @@
       <div id="admin-sec-horarios" class="hidden space-y-5">
         
         <!-- BLOCO A: IDENTIDADE VISUAL (2 LOGOS + ZOOM SEM ESTICAR A BARRA) -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <div>
             <h3 class="font-bold text-slate-800 text-base">🖼️ Logos da Loja (Símbolo + Nome Separados)</h3>
             <p class="text-xs text-slate-500 mt-0.5">Envie até 2 imagens independentes. O zoom amplia <strong>apenas a logo</strong> sem aumentar a altura da barra superior.</p>
@@ -697,7 +723,7 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- LOGO 1: SÍMBOLO REDONDO -->
-            <div class="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 space-y-3">
+            <div class="p-3.5 rounded-2xl border-2 theme-stage-box space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-800">🔵 Logo 1: Símbolo (Redonda)</span>
                 <button type="button" onclick="removeLogoPart('symbol')" class="text-[11px] text-red-500 font-bold underline">Remover</button>
@@ -711,14 +737,14 @@
                 <span id="preview-symbol-placeholder" class="text-[11px] text-slate-400">Sem símbolo enviado</span>
               </div>
               <div class="flex items-center justify-between gap-2">
-                <button type="button" onclick="adjustDualLogoZoom('symbol', -0.1)" class="px-2.5 py-1 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖</button>
-                <span id="zoom-symbol-label" class="text-[11px] font-bold text-slate-600">Zoom: 100%</span>
+                <button type="button" onclick="adjustDualLogoZoom('symbol', -0.1)" class="px-2.5 py-1 bg-white border border-slate-300 text-slate-800 font-bold rounded-lg text-xs">➖</button>
+                <span id="zoom-symbol-label" class="text-[11px] font-bold text-slate-700">Zoom: 100%</span>
                 <button type="button" onclick="adjustDualLogoZoom('symbol', 0.1)" class="px-2.5 py-1 brand-primary-bg font-bold rounded-lg text-xs">➕</button>
               </div>
             </div>
 
             <!-- LOGO 2: NOME / LOGOTIPO RETANGULAR -->
-            <div class="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 space-y-3">
+            <div class="p-3.5 rounded-2xl border-2 theme-stage-box space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-800">▭ Logo 2: Nome (Retangular)</span>
                 <button type="button" onclick="removeLogoPart('name')" class="text-[11px] text-red-500 font-bold underline">Remover</button>
@@ -730,8 +756,8 @@
                 <span id="preview-name-placeholder" class="text-[11px] text-slate-400">Sem nome/banner enviado</span>
               </div>
               <div class="flex items-center justify-between gap-2">
-                <button type="button" onclick="adjustDualLogoZoom('name', -0.1)" class="px-2.5 py-1 bg-slate-200 text-slate-800 font-bold rounded-lg text-xs">➖</button>
-                <span id="zoom-name-label" class="text-[11px] font-bold text-slate-600">Zoom: 100%</span>
+                <button type="button" onclick="adjustDualLogoZoom('name', -0.1)" class="px-2.5 py-1 bg-white border border-slate-300 text-slate-800 font-bold rounded-lg text-xs">➖</button>
+                <span id="zoom-name-label" class="text-[11px] font-bold text-slate-700">Zoom: 100%</span>
                 <button type="button" onclick="adjustDualLogoZoom('name', 0.1)" class="px-2.5 py-1 brand-primary-bg font-bold rounded-lg text-xs">➕</button>
               </div>
             </div>
@@ -739,7 +765,7 @@
         </div>
 
         <!-- BLOCO B: CORES DO APLICATIVO (5 PALETAS DO SETOR PET + EXTRAÇÃO PELA LOGO) -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 class="font-bold text-slate-800 text-base">🎨 Cores e Tema Visual do Aplicativo</h3>
@@ -754,7 +780,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="theme-presets-grid"></div>
 
           <!-- Ajuste Fino Manual de Cor -->
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="p-3 rounded-xl theme-stage-box border flex flex-wrap items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2">
               <label class="font-bold text-slate-700">Cor Principal:</label>
               <input type="color" id="cfg-color-primary" onchange="applyCustomManualColors()" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent" />
@@ -763,18 +789,18 @@
               <label class="font-bold text-slate-700">Cor de Destaque:</label>
               <input type="color" id="cfg-color-accent" onchange="applyCustomManualColors()" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent" />
             </div>
-            <span id="active-theme-label" class="text-[11px] font-bold text-slate-500">Tema ativo: Recanto Original</span>
+            <span id="active-theme-label" class="text-[11px] font-bold text-slate-600">Tema ativo: Recanto Original</span>
           </div>
         </div>
 
         <!-- BLOCO C: DADOS CADASTRAIS DA LOJA -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
           <h3 class="font-bold text-slate-800 text-base">📍 Dados da Loja e Senha</h3>
-          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome da Loja</label><input type="text" id="cfg-store-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
-          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título do Banner</label><input type="text" id="cfg-banner-title" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
-          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Endereço Completo</label><input type="text" id="cfg-store-address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
-          <div><label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp da Loja (com DDD)</label><input type="text" id="cfg-whatsapp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
-          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Senha PIN do Painel</label><input type="text" id="cfg-pin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nome da Loja</label><input type="text" id="cfg-store-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título do Banner</label><input type="text" id="cfg-banner-title" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Endereço Completo</label><input type="text" id="cfg-store-address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">WhatsApp da Loja (com DDD)</label><input type="text" id="cfg-whatsapp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" /></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Senha PIN do Painel</label><input type="text" id="cfg-pin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white" /></div>
           <button onclick="saveStoreDataConfig()" class="w-full py-3.5 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-sm shadow">
             💾 Salvar Logos, Cores e Dados na Nuvem
           </button>
@@ -791,11 +817,11 @@
         <h3 class="font-bold text-slate-800 text-base">💳 Receber Pagamento</h3>
         <button onclick="closeCheckoutModal()" class="text-xs text-slate-400 font-bold">✕</button>
       </div>
-      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+      <div class="p-3 rounded-xl theme-stage-box border space-y-1">
         <p id="checkout-item-title" class="font-bold text-sm text-slate-800"></p>
-        <p id="checkout-item-sub" class="text-xs text-slate-500"></p>
+        <p id="checkout-item-sub" class="text-xs text-slate-600"></p>
         <div class="pt-1 flex items-baseline justify-between">
-          <span class="text-xs font-semibold text-slate-500">Valor a Cobrar (R$):</span>
+          <span class="text-xs font-semibold text-slate-600">Valor a Cobrar (R$):</span>
           <input type="number" step="0.5" id="checkout-final-amount" oninput="updateCheckoutChange()" class="w-28 text-right font-brand text-xl font-bold brand-accent-text px-2 py-1 rounded-lg border border-slate-300 bg-white" />
         </div>
       </div>
@@ -930,7 +956,7 @@
 
   <div id="pin-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xs w-full p-5 space-y-4 text-center shadow-xl">
-      <div class="w-12 h-12 rounded-full bg-slate-100 brand-accent-text flex items-center justify-center mx-auto font-bold text-xl">🔒</div>
+      <div class="w-12 h-12 rounded-full theme-stage-box border brand-accent-text flex items-center justify-center mx-auto font-bold text-xl">🔒</div>
       <div>
         <h3 class="font-bold text-slate-800 text-base">Acesso Restrito — Gestor</h3>
         <p class="text-xs text-slate-500 mt-0.5">Digite sua senha (Padrão: <strong>1234</strong>)</p>
@@ -943,11 +969,11 @@
     </div>
   </div>
 
-  <footer class="bg-white border-t border-slate-200 mt-10 py-5 px-4 text-center text-xs text-slate-500 space-y-2">
-    <p class="font-bold text-slate-700" id="footer-store-name">Recanto Petshop</p>
+  <footer class="theme-footer border-t-2 mt-10 py-5 px-4 text-center text-xs text-slate-600 space-y-2">
+    <p class="font-bold text-slate-800" id="footer-store-name">Recanto Petshop</p>
     <p id="footer-store-address">📍 Endereço</p>
     <div class="pt-2">
-      <button onclick="openPinModal()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-slate-800 border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50">
+      <button onclick="openPinModal()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-slate-900 border border-slate-300 rounded-lg px-3 py-1.5 bg-white shadow-sm">
         🔒 Painel de Controle do Dono (Senha: 1234)
       </button>
     </div>
@@ -1027,7 +1053,6 @@
     };
 
     let config = JSON.parse(localStorage.getItem('recanto_cfg_v25')) || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-    // Migração suave de logo antiga (se existir) para o novo modelo de 2 logos
     if (config.logoBase64 && !config.logoSymbolBase64 && !config.logoNameBase64) {
       config.logoNameBase64 = config.logoBase64;
       delete config.logoBase64;
@@ -1064,7 +1089,7 @@
       isCustomService: false
     };
 
-    // ================= MOTOR DE TEMAS E CORES =================
+    // ================= MOTOR DE TEMAS E CORES (TODA A INTERFACE) =================
     function shadeHexColor(hex, percent) {
       let num = parseInt(hex.replace('#', ''), 16);
       let amt = Math.round(2.55 * percent);
@@ -1074,11 +1099,14 @@
       return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
     }
 
-    function hexToRgba(hex, alpha) {
+    function mixWithWhite(hex, whiteRatio) {
       let c = hex.replace('#', '');
       if (c.length === 3) c = c.split('').map(x => x + x).join('');
       const num = parseInt(c, 16);
-      return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+      const r = Math.round(((num >> 16) & 255) * (1 - whiteRatio) + 255 * whiteRatio);
+      const g = Math.round(((num >> 8) & 255) * (1 - whiteRatio) + 255 * whiteRatio);
+      const b = Math.round((num & 255) * (1 - whiteRatio) + 255 * whiteRatio);
+      return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
     }
 
     function applyBrandTheme() {
@@ -1087,10 +1115,12 @@
       const root = document.documentElement;
       root.style.setProperty('--brand-primary', primary);
       root.style.setProperty('--brand-primary-dark', shadeHexColor(primary, -16));
-      root.style.setProperty('--brand-primary-soft', hexToRgba(primary, 0.08));
-      root.style.setProperty('--brand-primary-border', hexToRgba(primary, 0.32));
+      root.style.setProperty('--brand-page-bg', mixWithWhite(primary, 0.92));
+      root.style.setProperty('--brand-card-bg', mixWithWhite(primary, 0.84));
+      root.style.setProperty('--brand-card-border', mixWithWhite(primary, 0.62));
       root.style.setProperty('--brand-accent', accent);
-      root.style.setProperty('--brand-accent-soft', hexToRgba(accent, 0.09));
+      root.style.setProperty('--brand-accent-bg', mixWithWhite(accent, 0.88));
+      root.style.setProperty('--brand-accent-border', mixWithWhite(accent, 0.65));
 
       const pInput = document.getElementById('cfg-color-primary');
       const aInput = document.getElementById('cfg-color-accent');
@@ -1111,7 +1141,7 @@
       grid.innerHTML = THEME_PRESETS.map(t => {
         const isActive = config.themeId === t.id;
         return `
-          <button type="button" onclick="selectThemePreset('${t.id}')" class="p-3 rounded-xl border-2 text-left transition-all ${isActive ? 'border-slate-900 bg-slate-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'}">
+          <button type="button" onclick="selectThemePreset('${t.id}')" class="p-3 rounded-xl border-2 text-left transition-all ${isActive ? 'border-slate-900 shadow-sm' : 'border-slate-200 hover:border-slate-300'}" style="background-color: ${mixWithWhite(t.primary, 0.88)};">
             <div class="flex items-center justify-between mb-1.5">
               <div class="flex items-center gap-1.5">
                 <span class="w-4 h-4 rounded-full border border-black/10" style="background-color: ${t.primary};"></span>
@@ -1120,7 +1150,7 @@
               ${isActive ? '<span class="text-[10px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-full">Ativo</span>' : ''}
             </div>
             <strong class="block text-xs text-slate-800">${t.name}</strong>
-            <span class="block text-[10px] text-slate-500 mt-0.5">${t.desc}</span>
+            <span class="block text-[10px] text-slate-600 mt-0.5">${t.desc}</span>
           </button>
         `;
       }).join('');
@@ -1207,7 +1237,7 @@
         config.primaryColor = primaryHex;
         config.accentColor = accentHex;
         applyBrandTheme();
-        alert('✨ Cores extraídas da sua logo e aplicadas no visual do app! Clique em "Salvar Logos, Cores e Dados na Nuvem" para gravar.');
+        alert('✨ Cores extraídas da sua logo e aplicadas em todo o visual do app! Clique em "Salvar Logos, Cores e Dados na Nuvem" para gravar.');
       };
       img.src = src;
     }
@@ -1577,7 +1607,7 @@
       if (el.id.includes('custom-service')) {
         el.classList.add('border-amber-300');
       } else {
-        el.classList.add('border-slate-200');
+        el.classList.add('border-slate-300');
       }
     }
 
@@ -1715,7 +1745,7 @@
         if (t === tab) {
           btn.className = spanClass + 'px-2 py-2.5 rounded-lg text-xs font-bold bg-white shadow-sm brand-primary-text transition-colors flex items-center justify-center gap-1';
         } else {
-          btn.className = spanClass + 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-300 transition-colors flex items-center justify-center gap-1';
+          btn.className = spanClass + 'px-2 py-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white/60 transition-colors flex items-center justify-center gap-1';
         }
       });
       if (tab !== 'novo') {
@@ -1737,10 +1767,10 @@
       clientState.species = sp;
       document.getElementById('sp-dog').className = sp === 'Cachorro'
         ? 'py-2.5 px-3 rounded-xl border text-xs font-bold brand-primary-bg'
-        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white';
+        : 'py-2.5 px-3 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold bg-white';
       document.getElementById('sp-cat').className = sp === 'Gato'
         ? 'py-2.5 px-3 rounded-xl border text-xs font-bold brand-primary-bg'
-        : 'py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold bg-white';
+        : 'py-2.5 px-3 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold bg-white';
     }
 
     function renderSizesClient() {
@@ -1748,7 +1778,7 @@
       grid.innerHTML = config.sizes.map(sz => {
         const isSel = clientState.sizeId === sz.id;
         return `
-          <button type="button" onclick="selectSize('${sz.id}')" class="size-btn ${isSel ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2.5 px-2.5 rounded-xl border text-left transition-all">
+          <button type="button" onclick="selectSize('${sz.id}')" class="size-btn ${isSel ? 'selected' : 'border-slate-300 text-slate-700 bg-white'} py-2.5 px-2.5 rounded-xl border text-left transition-all">
             <span class="block text-xs font-bold leading-tight">${sz.name}</span>
             <span class="block text-[10px] opacity-80 mt-0.5 leading-tight">${sz.subtitle}</span>
           </button>
@@ -1802,7 +1832,7 @@
         const selected = clientState.selectedService === srv.id;
         const price = srv.prices[clientState.sizeId] ?? 0;
         return `
-          <div onclick="selectService('${srv.id}')" class="service-card ${selected ? 'selected' : ''} cursor-pointer p-3.5 rounded-xl border border-slate-200 transition-all bg-slate-50/60">
+          <div onclick="selectService('${srv.id}')" class="service-card ${selected ? 'selected' : ''} cursor-pointer p-3.5 rounded-xl border transition-all">
             <div class="flex items-center justify-between">
               <h3 class="font-bold text-sm text-slate-800">${srv.name}</h3>
               <span class="font-brand text-base font-bold brand-accent-text">R$ ${formatMoney(price)}</span>
@@ -1817,7 +1847,7 @@
       grid.innerHTML = config.extras.map(ex => {
         const active = clientState.selectedExtras.includes(ex.id);
         return `
-          <div onclick="toggleExtra('${ex.id}')" class="cursor-pointer p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${active ? 'border-[#6AB43E] bg-green-50 text-slate-800' : 'border-slate-200 text-slate-600 bg-slate-50/60'}">
+          <div onclick="toggleExtra('${ex.id}')" class="cursor-pointer p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${active ? 'border-[#6AB43E] bg-green-50 text-slate-800' : 'theme-stage-box text-slate-700'}">
             <span>+ ${ex.name}</span>
             <span class="font-bold text-[#6AB43E]">R$ ${formatMoney(ex.price)}</span>
           </div>
@@ -1828,7 +1858,7 @@
     function renderTimeSlots() {
       const grid = document.getElementById('time-slots');
       grid.innerHTML = config.timeSlots.map(t => `
-        <button type="button" onclick="selectTime('${t}')" class="time-btn ${clientState.selectedTime === t ? 'selected' : 'border-slate-200 text-slate-700 bg-white'} py-2 rounded-xl border text-xs font-bold">
+        <button type="button" onclick="selectTime('${t}')" class="time-btn ${clientState.selectedTime === t ? 'selected' : 'border-slate-300 text-slate-700 bg-white'} py-2 rounded-xl border text-xs font-bold">
           ${t}
         </button>
       `).join('');
@@ -1877,7 +1907,7 @@
       );
       
       if (matches.length === 0) {
-        box.innerHTML = `<div class="p-2.5 text-xs text-slate-400 bg-slate-50 rounded-xl">Nenhum cliente encontrado.</div>`;
+        box.innerHTML = `<div class="p-2.5 text-xs text-slate-500 bg-white rounded-xl">Nenhum cliente encontrado.</div>`;
         box.classList.remove('hidden'); 
         return;
       }
@@ -1887,7 +1917,7 @@
         const safePet = c.petName.replace(/'/g, "\\'");
         const safeAddr = (c.address || '').replace(/'/g, "\\'");
         return `
-          <div onclick="selectClientForBooking('${safeOwner}', '${c.phone}', '${safePet}', '${safeAddr}')" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between text-xs">
+          <div onclick="selectClientForBooking('${safeOwner}', '${c.phone}', '${safePet}', '${safeAddr}')" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer flex items-center justify-between text-xs shadow-sm">
             <div>
               <strong>🐶 ${c.petName}</strong> (${c.ownerName}) — 📞 ${c.phone}
               ${c.address ? `<span class="block text-[10px] text-slate-500">📍 ${c.address}</span>` : ''}
@@ -1928,7 +1958,7 @@
       requiredFields.forEach(id => {
         const el = document.getElementById(id);
         if (!el.value.trim()) {
-          el.classList.remove('border-slate-200', 'border-amber-300');
+          el.classList.remove('border-slate-300', 'border-amber-300');
           el.classList.add('border-red-500', 'bg-red-50');
           if (!firstInvalid) firstInvalid = el;
         }
@@ -2159,7 +2189,7 @@
     function setAgendaFilter(mode) {
       agendaFilterMode = mode;
       document.querySelectorAll('.agfilter-btn').forEach(btn => {
-        btn.className = 'agfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold';
+        btn.className = 'agfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold';
       });
       if (mode !== 'date') {
         const activeBtn = document.getElementById('agfilter-' + mode);
@@ -2212,11 +2242,11 @@
       list.innerHTML = filtered.map(b => {
         const isToday = b.date === todayStr;
         return `
-          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+          <div class="p-3.5 rounded-xl border theme-stage-box space-y-2">
             <div class="flex items-center justify-between">
               <div>
                 <span class="font-bold text-sm text-slate-800">🐾 ${b.petName}</span>
-                <span class="text-xs text-slate-500 ml-1">(${b.ownerName})</span>
+                <span class="text-xs text-slate-600 ml-1">(${b.ownerName})</span>
               </div>
               <span class="font-brand text-sm font-bold brand-accent-text">R$ ${formatMoney(b.total)}</span>
             </div>
@@ -2224,12 +2254,12 @@
               <span class="px-2.5 py-1 rounded-lg font-bold ${isToday ? 'brand-primary-bg' : 'brand-accent-bg'}">
                 📅 ${formatDateBR(b.date)} às ${b.time || '--:--'}
               </span>
-              <span class="text-slate-600">📞 ${b.ownerPhone}</span>
+              <span class="text-slate-700">📞 ${b.ownerPhone}</span>
             </div>
-            <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
-            ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded">⚠️ Obs: ${b.notes}</p>` : ''}
-            <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200">
-              <button onclick="openRescheduleModal(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-[11px] font-bold flex items-center gap-1">
+            <p class="text-xs text-slate-700"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
+            ${b.notes ? `<p class="text-[11px] text-amber-800 bg-amber-50 px-2 py-1 rounded">⚠️ Obs: ${b.notes}</p>` : ''}
+            <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t" style="border-color: var(--brand-card-border);">
+              <button onclick="openRescheduleModal(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-[11px] font-bold flex items-center gap-1">
                 📅 Remarcar
               </button>
               <button onclick="confirmScheduleWhatsApp(${b.id})" class="px-2.5 py-1.5 rounded-lg bg-[#6AB43E] text-white text-[11px] font-bold flex items-center gap-1">
@@ -2269,7 +2299,7 @@
           : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">⏳ Aguardando Pagamento</span>`;
 
         return `
-          <div class="p-3.5 rounded-xl border ${payInfo ? 'border-slate-200 bg-slate-50' : 'border-amber-300 bg-amber-50/40'} space-y-2">
+          <div class="p-3.5 rounded-xl border ${payInfo ? 'theme-stage-box' : 'border-amber-300 bg-amber-50/70'} space-y-2">
             <div class="flex flex-wrap items-center justify-between gap-1">
               <div>
                 <span class="font-bold text-sm text-slate-800">🐾 ${b.petName}</span>
@@ -2278,12 +2308,12 @@
               </div>
               <span class="font-brand text-sm font-bold brand-accent-text">R$ ${formatMoney(payInfo ? payInfo.amount : b.total)}</span>
             </div>
-            <div class="text-xs text-slate-600 space-y-0.5">
+            <div class="text-xs text-slate-700 space-y-0.5">
               <p><strong>Serviço realizado:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
               <p><strong>Tutor:</strong> ${b.ownerName} • 📞 ${b.ownerPhone} ${b.ownerAddress ? `• 📍 ${b.ownerAddress}` : ''}</p>
-              <p class="text-[11px] text-slate-400">🕒 Atendimento de ${formatDateBR(b.date)} às ${b.time || '--:--'}</p>
+              <p class="text-[11px] text-slate-500">🕒 Atendimento de ${formatDateBR(b.date)} às ${b.time || '--:--'}</p>
             </div>
-            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t" style="border-color: var(--brand-card-border);">
               <button onclick="changeStatus(${b.id}, 'Pronto')" class="text-[11px] text-blue-600 font-semibold underline">
                 ↩️ Voltar p/ Fila
               </button>
@@ -2292,7 +2322,7 @@
                   💰 Cobrar no Caixa
                 </button>
               ` : `
-                <button onclick="undoBookingPayment(${b.id})" class="text-[11px] text-slate-400 underline">
+                <button onclick="undoBookingPayment(${b.id})" class="text-[11px] text-slate-500 underline">
                   Estornar Pagamento
                 </button>
               `}
@@ -2325,7 +2355,7 @@
         pendingListEl.innerHTML = `<p class="text-center py-4 text-xs text-slate-400">Todos os atendimentos de hoje já foram pagos! 🎉</p>`;
       } else {
         pendingListEl.innerHTML = pendingBookings.map(b => `
-          <div class="p-3 rounded-xl border border-amber-200 bg-amber-50/50 flex items-center justify-between gap-2">
+          <div class="p-3 rounded-xl border border-amber-200 bg-amber-50/70 flex items-center justify-between gap-2">
             <div>
               <div class="flex items-center gap-1.5">
                 <strong class="text-sm text-slate-800">🐾 ${b.petName}</strong>
@@ -2352,15 +2382,15 @@
         movementsHtml.push({
           time: info.paidAt || '',
           html: `
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+            <div class="p-2.5 rounded-xl border theme-stage-box flex items-center justify-between text-xs">
               <div>
-                <span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 font-bold text-[10px] mr-1">${info.method}</span>
-                <strong class="text-slate-800">🐾 ${info.petName}</strong> <span class="text-slate-500">(${info.ownerName})</span>
-                <span class="block text-[11px] text-slate-500 mt-0.5">${info.serviceName}</span>
+                <span class="px-2 py-0.5 rounded bg-white border border-slate-200 brand-primary-text font-bold text-[10px] mr-1">${info.method}</span>
+                <strong class="text-slate-800">🐾 ${info.petName}</strong> <span class="text-slate-600">(${info.ownerName})</span>
+                <span class="block text-[11px] text-slate-600 mt-0.5">${info.serviceName}</span>
               </div>
               <div class="text-right shrink-0">
                 <span class="font-brand text-sm font-bold text-[#6AB43E]">+ R$ ${formatMoney(amt)}</span>
-                <button onclick="undoBookingPayment(${id})" class="block text-[10px] text-slate-400 underline">Estornar</button>
+                <button onclick="undoBookingPayment(${id})" class="block text-[10px] text-slate-500 underline">Estornar</button>
               </div>
             </div>
           `
@@ -2373,14 +2403,14 @@
         movementsHtml.push({
           time: qs.createdAt || '',
           html: `
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+            <div class="p-2.5 rounded-xl border theme-stage-box flex items-center justify-between text-xs">
               <div>
                 <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-[10px] mr-1">${qs.method}</span>
                 <strong class="text-slate-800">🛍️ ${qs.desc}</strong>
               </div>
               <div class="text-right shrink-0">
                 <span class="font-brand text-sm font-bold text-[#6AB43E]">+ R$ ${formatMoney(amt)}</span>
-                <button onclick="removeQuickSale(${qs.id})" class="block text-[10px] text-red-400 underline">Remover</button>
+                <button onclick="removeQuickSale(${qs.id})" class="block text-[10px] text-red-500 underline">Remover</button>
               </div>
             </div>
           `
@@ -2394,14 +2424,14 @@
         movementsHtml.push({
           time: wd.createdAt || '',
           html: `
-            <div class="p-2.5 rounded-xl border border-amber-200 bg-amber-50/60 flex items-center justify-between text-xs">
+            <div class="p-2.5 rounded-xl border border-amber-200 bg-amber-50/80 flex items-center justify-between text-xs">
               <div>
                 <span class="px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold text-[10px] mr-1">Sangria</span>
                 <strong class="text-slate-800">➖ ${wd.desc}</strong>
               </div>
               <div class="text-right shrink-0">
                 <span class="font-brand text-sm font-bold text-amber-700">- R$ ${formatMoney(amt)}</span>
-                <button onclick="removeWithdrawal(${wd.id})" class="block text-[10px] text-red-400 underline">Remover</button>
+                <button onclick="removeWithdrawal(${wd.id})" class="block text-[10px] text-red-500 underline">Remover</button>
               </div>
             </div>
           `
@@ -2660,10 +2690,10 @@
       const payInfo = pdvState.paidBookings[b.id];
       const payBadge = payInfo
         ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 ml-1">💚 Pago (${payInfo.method})</span>`
-        : `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-200 text-slate-600 ml-1">⏳ A pagar</span>`;
+        : `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-white/80 border border-slate-200 text-slate-600 ml-1">⏳ A pagar</span>`;
 
       const controlsHtml = isAdmin ? '' : `
-        <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200 mt-2">
+        <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t mt-2" style="border-color: var(--brand-card-border);">
           <select onchange="changeStatus(${b.id}, this.value)" class="text-[11px] border border-slate-300 rounded-lg px-2 py-2 bg-white font-semibold flex-1 min-w-[130px]">
             <option value="Aguardando" ${b.status === 'Aguardando' ? 'selected' : ''}>⏳ Aguardando</option>
             <option value="No Banho / Tosa" ${b.status === 'No Banho / Tosa' ? 'selected' : ''}>🛁 No Banho</option>
@@ -2678,7 +2708,7 @@
       `;
 
       return `
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+        <div class="p-3.5 rounded-xl border theme-stage-box space-y-2">
           <div class="flex flex-wrap items-center justify-between gap-1">
             <div>
               <span class="font-bold text-sm text-slate-800">${b.petName}</span>
@@ -2687,9 +2717,9 @@
             </div>
             <span class="font-brand text-sm font-bold brand-accent-text">R$ ${formatMoney(b.total)}</span>
           </div>
-          <p class="text-xs text-slate-600"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
-          <p class="text-[11px] text-slate-500">🕒 ${formatDateBR(b.date)} às ${b.time || '--:--'} • 👤 ${b.ownerName}</p>
-          ${b.notes ? `<p class="text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded mt-1">⚠️ Obs: ${b.notes}</p>` : ''}
+          <p class="text-xs text-slate-700"><strong>Serviço:</strong> ${b.serviceName} ${b.extras?.length ? `(+ ${b.extras.join(', ')})` : ''}</p>
+          <p class="text-[11px] text-slate-600">🕒 ${formatDateBR(b.date)} às ${b.time || '--:--'} • 👤 ${b.ownerName}</p>
+          ${b.notes ? `<p class="text-[11px] text-amber-800 bg-amber-50 px-2 py-1 rounded mt-1">⚠️ Obs: ${b.notes}</p>` : ''}
           ${controlsHtml}
         </div>
       `;
@@ -2725,7 +2755,7 @@
     function setHistoryFilter(mode) {
       historyFilterMode = mode;
       document.querySelectorAll('.hfilter-btn').forEach(btn => {
-        btn.className = 'hfilter-btn px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold';
+        btn.className = 'hfilter-btn px-2.5 py-1.5 rounded-lg theme-stage-box border text-slate-700 text-xs font-bold';
       });
       if (mode !== 'date') {
         const activeBtn = document.getElementById('hfilter-' + mode);
@@ -2774,7 +2804,7 @@
           regListEl.innerHTML = `<p class="text-xs text-slate-400">Nenhum fechamento de caixa arquivado ainda.</p>`;
         } else {
           regListEl.innerHTML = pdvState.closedRegisters.map(reg => `
-            <div class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/40 text-xs space-y-1">
+            <div class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/70 text-xs space-y-1">
               <div class="flex items-center justify-between">
                 <strong class="text-slate-800">📅 Fechamento: ${formatDateBR(reg.date)}</strong>
                 <span class="font-brand text-sm font-bold text-[#6AB43E]">Total: R$ ${formatMoney(reg.totalEntries)}</span>
@@ -2836,7 +2866,7 @@
               <span>${name}</span>
               <span>${count} (${pct}%)</span>
             </div>
-            <div class="w-full bg-slate-200 rounded-full h-2">
+            <div class="w-full bg-white rounded-full h-2">
               <div class="h-2 rounded-full" style="width: ${pct}%; background-color: var(--brand-primary);"></div>
             </div>
           </div>
@@ -2844,11 +2874,11 @@
       }).join('');
 
       document.getElementById('hist-detailed-list').innerHTML = filtered.map(r => `
-        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+        <div class="p-3 rounded-xl border theme-stage-box flex items-center justify-between text-xs">
           <div>
-            <strong class="text-slate-800">🐾 ${r.petName}</strong> <span class="text-slate-500">(${r.ownerName})</span>
-            <span class="block text-slate-600 mt-0.5">${r.serviceName}</span>
-            <span class="block text-[10px] text-slate-400 mt-0.5">📅 ${r.date} às ${r.time || '--:--'}</span>
+            <strong class="text-slate-800">🐾 ${r.petName}</strong> <span class="text-slate-600">(${r.ownerName})</span>
+            <span class="block text-slate-700 mt-0.5">${r.serviceName}</span>
+            <span class="block text-[10px] text-slate-500 mt-0.5">📅 ${r.date} às ${r.time || '--:--'}</span>
           </div>
           <span class="font-brand text-sm font-bold text-[#6AB43E] shrink-0">R$ ${formatMoney(r.total)}</span>
         </div>
@@ -2859,7 +2889,7 @@
     function setClientSort(mode) {
       clientSortMode = mode;
       document.querySelectorAll('.csort-btn').forEach(btn => {
-        btn.className = 'csort-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold';
+        btn.className = 'csort-btn px-2.5 py-1 rounded-lg theme-stage-box border text-slate-700 text-[11px] font-bold';
       });
       const active = document.getElementById('csort-' + mode);
       if (active) active.className = 'csort-btn px-2.5 py-1 rounded-lg brand-primary-bg text-[11px] font-bold';
@@ -2913,12 +2943,12 @@
         const safeOwner = c.ownerName.replace(/'/g, "\\'");
         const safePet = c.petName.replace(/'/g, "\\'");
         return `
-          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+          <div class="p-3.5 rounded-xl border theme-stage-box space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
               <span class="text-xs px-2 py-0.5 rounded-full bg-white border border-slate-200 brand-primary-text font-bold">🐾 Pet: ${c.petName}</span>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 text-xs text-slate-600 pt-1">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 text-xs text-slate-700 pt-1">
               <div>📞 <strong>Tel:</strong> ${c.phone}</div>
               <div>🔄 <strong>Frequência:</strong> ${c.visitsCount} visita(s)</div>
               <div>📅 <strong>Última Visita:</strong> ${c.lastVisitDate || 'N/A'}</div>
@@ -2927,8 +2957,8 @@
               <span>📍 <strong>Endereço:</strong> ${c.address || 'Não informado'}</span>
               <button onclick="editClientAddress(${c.id})" class="text-[11px] font-bold brand-primary-text underline shrink-0 ml-2">✏️ Editar</button>
             </div>
-            <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
-              <span class="text-slate-500"><strong>Último Serviço:</strong> ${c.lastService || 'Banho'}</span>
+            <div class="flex items-center justify-between pt-2 border-t text-xs" style="border-color: var(--brand-card-border);">
+              <span class="text-slate-600"><strong>Último Serviço:</strong> ${c.lastService || 'Banho'}</span>
               <button onclick="callClientWhatsApp('${c.phone}', '${safeOwner}', '${safePet}')" class="px-3 py-1 bg-[#6AB43E] text-white font-bold rounded-lg">💬 Enviar WhatsApp</button>
             </div>
           </div>
@@ -2961,7 +2991,7 @@
 
     function exportFullBackup() {
       const backupData = {
-        version: 'v31',
+        version: 'v32',
         exportedAt: new Date().toISOString(),
         config,
         pdvState,
@@ -3054,13 +3084,13 @@
       container.innerHTML = inactiveClients.map((c, idx) => {
         const defaultMsg = `Olá, ${c.ownerName}! 🐾 Sentimos falta do(a) ${c.petName} aqui no ${config.storeName}! Já faz um tempinho desde o último banho. Que tal agendarmos um horário esta semana para ele(a) ficar cheiroso(a)? ✨`;
         return `
-          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2">
+          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/70 space-y-2">
             <div class="flex items-center justify-between">
               <div>
                 <span class="font-bold text-sm text-slate-800">${c.ownerName}</span>
                 <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold ml-1">🐾 Pet: ${c.petName}</span>
               </div>
-              <span class="text-xs text-slate-500">Última visita: <strong>${c.lastVisitDate || 'Desconhecida'}</strong></span>
+              <span class="text-xs text-slate-600">Última visita: <strong>${c.lastVisitDate || 'Desconhecida'}</strong></span>
             </div>
             
             <div class="space-y-1">
@@ -3142,7 +3172,7 @@
 
     function renderAdminEditors() {
       document.getElementById('admin-sizes-editor').innerHTML = config.sizes.map((sz, idx) => `
-        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+        <div class="p-3 rounded-xl border theme-stage-box flex items-center justify-between gap-2">
           <input type="text" id="edit-sz-name-${idx}" value="${sz.name}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white w-1/3" />
           <input type="text" id="edit-sz-sub-${idx}" value="${sz.subtitle}" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white flex-1" />
           <button onclick="deleteSizeCategory('${sz.id}')" class="text-xs text-red-500 font-bold px-2 py-1">🗑️</button>
@@ -3150,7 +3180,7 @@
       `).join('');
       
       document.getElementById('admin-services-editor').innerHTML = config.services.map((srv, sIdx) => `
-        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+        <div class="p-4 rounded-xl border theme-stage-box space-y-3">
           <div class="flex items-center justify-between gap-2">
             <input type="text" id="edit-srv-name-${sIdx}" value="${srv.name}" class="font-bold text-sm text-slate-800 bg-white px-3 py-1.5 rounded-lg border border-slate-300 flex-1" />
             <button onclick="deleteService('${srv.id}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold flex items-center shrink-0">🗑️</button>
@@ -3167,11 +3197,11 @@
       `).join('');
       
       document.getElementById('admin-extras-editor').innerHTML = config.extras.map((ex, eIdx) => `
-        <div class="flex items-center gap-1.5 p-2 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden w-full">
-          <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-slate-50" />
+        <div class="flex items-center gap-1.5 p-2 rounded-xl border theme-stage-box shadow-sm overflow-hidden w-full">
+          <input type="text" id="edit-extra-name-${eIdx}" value="${ex.name}" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg border border-slate-300 text-[11px] font-semibold text-slate-800 bg-white" />
           <div class="flex items-center gap-1 shrink-0">
-            <span class="text-[10px] text-slate-500 font-bold">R$</span>
-            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold brand-accent-text bg-slate-50 text-center" />
+            <span class="text-[10px] text-slate-600 font-bold">R$</span>
+            <input type="number" step="0.5" id="edit-extra-price-${eIdx}" value="${ex.price}" class="w-12 px-1 py-1.5 rounded-lg border border-slate-300 text-[11px] font-bold brand-accent-text bg-white text-center" />
           </div>
           <button onclick="deleteExtra('${ex.id}')" class="text-red-500 hover:bg-red-50 rounded-lg shrink-0 px-1" title="Excluir">🗑️</button>
         </div>
